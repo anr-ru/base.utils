@@ -14,6 +14,28 @@
     <name>Base Utils Project</name>
     <description>A set of utils, used in projects</description>
     
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>http://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:ssh://@github.com/anr-ru/base.utils.git</connection>
+        <url>https://github.com/anr-ru/base.utils/</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>alex</id>
+            <name>Alexey Romanchuk</name>
+            <email>alexey.p.romanchuk@gmail.com</email>
+            <timezone>5</timezone>
+        </developer>
+    </developers>    
+
     
     <dependencies>
         <dependency>
