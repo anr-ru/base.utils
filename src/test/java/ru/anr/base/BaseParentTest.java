@@ -108,4 +108,18 @@ public class BaseParentTest extends BaseParent {
         l = set(r);
         Assert.assertEquals(0, l.size());
     }
+
+    /**
+     * Tests for inject method
+     */
+    @Test
+    public void testInject() {
+
+        SampleObject o = new SampleObject();
+        Assert.assertNull(o.getValue());
+
+        inject(o, "value", "xxx");
+
+        Assert.assertNotNull(o.getValue());
+    }
 }
