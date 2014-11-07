@@ -55,6 +55,7 @@
             <artifactId>spring-context</artifactId>
         </dependency>
 
+        <!-- tests dependencies -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>

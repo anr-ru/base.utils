@@ -5,9 +5,12 @@ package ru.anr.base;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * BaseParent tests
@@ -19,6 +22,11 @@ import org.junit.Test;
  */
 
 public class BaseParentTest extends BaseParent {
+
+    /**
+     * Logger
+     */
+    private static final Logger logger = LoggerFactory.getLogger(BaseParentTest.class);
 
     /**
      * Test method for {@link ru.anr.base.BaseParent#list(S[])}.
@@ -121,5 +129,50 @@ public class BaseParentTest extends BaseParent {
         inject(o, "value", "xxx");
 
         Assert.assertNotNull(o.getValue());
+    }
+
+    /**
+     * Tests for get method
+     */
+    @Test
+    public void testGet() {
+
+        List<String> l = list();
+        Assert.assertNull(get(l));
+        Assert.assertNull(get(null));
+
+        l = list("x", "y");
+        Assert.assertEquals("x", get(l));
+
+        Set<String> s = set();
+        Assert.assertNull(get(s));
+
+        s = set("x", "y");
+        Assert.assertEquals("x", get(s));
+    }
+
+    /**
+     * Tests for get method
+     */
+    @Test
+    public void testFilter() {
+
+        List<String> list = list("xx", "xy", "yy");
+        Assert.assertEquals(list("xx", "xy"), filter(list, p -> p.startsWith("x")));
+        Assert.assertEquals(list("yy"), filter(list, p -> p.startsWith("y")));
+
+        Assert.assertEquals(list(), filter(list, p -> p.startsWith("z"))); // empty
+
+        // Trying more complex algorithm
+        Predicate<String> predicate = p -> {
+
+            if (p.startsWith("x")) {
+                logger.info("found x: {}", p);
+                return p.endsWith("y");
+            }
+            return false;
+        };
+
+        Assert.assertEquals(list("xy"), filter(list, predicate));
     }
 }
