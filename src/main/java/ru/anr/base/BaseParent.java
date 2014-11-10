@@ -52,6 +52,21 @@ public class BaseParent {
     }
 
     /**
+     * Null-safe creation of list
+     *
+     * @param l
+     *            Original (possible null) list
+     * @return New list with elements from original one
+     *
+     * @param <S>
+     *            Type of elements
+     */
+    public static <S> List<S> list(List<S> l) {
+
+        return new ArrayList<S>(l);
+    }
+
+    /**
      * Short-cut for new List function
      *
      * @param array
