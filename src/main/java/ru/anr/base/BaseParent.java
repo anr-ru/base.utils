@@ -10,12 +10,16 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.FactoryUtils;
+import org.apache.commons.collections4.FunctorException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -165,6 +169,112 @@ public class BaseParent {
     public static <S> List<S> filter(Collection<S> coll, Predicate<S> predicate) {
 
         return coll.stream().filter(predicate).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
+     * Sleeping without {@link InterruptedException} try/catch necessary.
+     * 
+     * @param millis
+     *            Number of milliseconds
+     */
+    public static void sleep(long millis) {
+
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            // Ignore
+        }
+    }
+
+    /**
+     * Short-cut to return String, which givers an empty string in case of null
+     * value.
+     * 
+     * @param s
+     *            Original string
+     * @return Empty string is null
+     */
+    public static String nullSafe(String s) {
+
+        return (s == null) ? "" : s;
+    }
+
+    /**
+     * Converts array of any elements to Map<K,S> with specified casting to K
+     * and S types.
+     * 
+     * @param array
+     *            An array of some elements
+     * @return {@link Map}
+     * 
+     * @param <K>
+     *            Type of keys
+     * @param <T>
+     *            Type of array values
+     * @param <S>
+     *            Type of map values
+     */
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
+    public static <K, S, T> Map<K, S> toMap(T... array) {
+
+        Map<K, S> map = new HashMap<>();
+        if (array != null) {
+
+            if (array.length > 0) {
+
+                int l = (array.length % 2 == 0) ? array.length : (array.length + 1);
+
+                for (int i = 0; i < (l / 2); i = i + 1) {
+
+                    Object v = (2 * i + 1) >= array.length ? null : array[2 * i + 1];
+                    map.put((K) array[2 * i], (S) v);
+                }
+            }
+        }
+        return map;
+    }
+
+    /**
+     * Safe parsing of string to some {@link Number}
+     * 
+     * @param x
+     *            String value
+     * @param clazz
+     *            Class of Number object
+     * @return Parsed value or null if parsing was unsuccessful
+     * 
+     * @param <S>
+     *            Object class
+     */
+    public static <S extends Number> S parse(String x, Class<S> clazz) {
+
+        S v = null;
+        try {
+            v = inst(clazz, new Class<?>[]{ String.class }, new String[]{ x });
+        } catch (FunctorException | IllegalArgumentException ex) {
+            v = null;
+        }
+        return v;
+    }
+
+    /**
+     * Instantiation of object
+     * 
+     * @param clazz
+     *            Class to instantiate
+     * @param paramTypes
+     *            Constructor arguments
+     * @param args
+     *            Any arguments provided
+     * @return An object
+     * 
+     * @param <S>
+     *            Object class
+     */
+    public static <S> S inst(Class<S> clazz, Class<?>[] paramTypes, Object[] args) {
+
+        return FactoryUtils.instantiateFactory(clazz, paramTypes, args).create();
     }
 
     // //////////////////////////// TIME FUNCTIONS ///////////////////////////
