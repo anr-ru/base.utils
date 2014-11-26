@@ -1,6 +1,7 @@
-The project is licensed under The MIT License (MIT), http://opensource.org/licenses/MIT
+Base.Platform
 
-base.utils
-==========
+===========
+Base.Platform.Utils
+===========
 
 Base utils for all projects.

@@ -9,15 +9,15 @@
     </parent>
     
     <artifactId>base.utils</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5-SNAPSHOT</version>
 
     <name>Base Utils Project</name>
     <description>A set of utils, used in projects</description>
     
     <licenses>
         <license>
-            <name>The MIT License (MIT)</name>
-            <url>http://opensource.org/licenses/MIT</url>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
