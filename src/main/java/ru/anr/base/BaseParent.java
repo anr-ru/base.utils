@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -287,6 +288,16 @@ public class BaseParent {
     public static <S> S inst(Class<S> clazz, Class<?>[] paramTypes, Object[] args) {
 
         return FactoryUtils.instantiateFactory(clazz, paramTypes, args).create();
+    }
+
+    /**
+     * Generates 'GUID'
+     * 
+     * @return String with GUID
+     */
+    public static String guid() {
+
+        return UUID.randomUUID().toString();
     }
 
     // //////////////////////////// TIME FUNCTIONS ///////////////////////////
