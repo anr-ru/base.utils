@@ -15,6 +15,7 @@
  */
 package ru.anr.base;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -66,6 +67,52 @@ public class BaseParent {
     public static <S> List<S> list(S... array) {
 
         return new ArrayList<S>(Arrays.asList(array));
+    }
+
+    /**
+     * No-expection converting a string to byte array
+     * 
+     * @param s
+     *            String
+     * @param encoding
+     *            Encoding
+     * @return Array of bytes
+     */
+    public static byte[] bytes(String s, String encoding) {
+
+        try {
+            return s.getBytes(encoding);
+        } catch (UnsupportedEncodingException ex) {
+            throw new ApplicationException(ex);
+        }
+    }
+
+    /**
+     * Convering s to utf8 bytes
+     * 
+     * @param s
+     *            Original string
+     * @return Array of bytes
+     */
+    public static byte[] utf8(String s) {
+
+        return bytes(s, "utf8");
+    }
+
+    /**
+     * Convering bytes to Sring with utf8 encoding
+     * 
+     * @param b
+     *            Array of bytes
+     * @return A String
+     */
+    public static String utf8(byte[] b) {
+
+        try {
+            return new String(b, "utf8");
+        } catch (UnsupportedEncodingException ex) {
+            throw new ApplicationException(ex);
+        }
     }
 
     /**
