@@ -4,12 +4,11 @@
     
     <parent>    
         <groupId>ru.anr</groupId>
-        <artifactId>config.java</artifactId>
-        <version>0.9-SNAPSHOT</version>
+        <artifactId>base.platform.parent</artifactId>
+        <version>0.5-SNAPSHOT</version>
     </parent>
     
     <artifactId>base.utils</artifactId>
-    <version>0.5-SNAPSHOT</version>
 
     <name>Base Utils Project</name>
     <description>A set of utils, used in projects</description>
@@ -34,38 +33,17 @@
             <email>alexey.p.romanchuk@gmail.com</email>
             <timezone>5</timezone>
         </developer>
-    </developers>    
+    </developers>
 
-    
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-        	<groupId>org.apache.commons</groupId>
-        	<artifactId>commons-collections4</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-
-        <!-- tests dependencies -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-        </dependency>
-
     </dependencies>    
-    
+
 </project>
