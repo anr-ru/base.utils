@@ -23,6 +23,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -347,6 +348,22 @@ public class BaseParent {
         return UUID.randomUUID().toString();
     }
 
+    /**
+     * Clone the specified object, if allowed
+     * 
+     * @param o
+     *            Clonable
+     * @return Clone (or null, if the original object was null)
+     * 
+     * @param <S>
+     *            Object type
+     */
+    @SuppressWarnings("unchecked")
+    public static <S> S clone(Cloneable o) {
+
+        return (S) org.apache.commons.lang3.ObjectUtils.cloneIfPossible(o);
+    }
+
     // //////////////////////////// TIME FUNCTIONS ///////////////////////////
 
     /**
@@ -362,5 +379,19 @@ public class BaseParent {
     public static ZonedDateTime now() {
 
         return ZonedDateTime.now(DEFAULT_TIMEZONE);
+    }
+
+    /**
+     * We have to use old Date object, because Hibernate/JPA does not support
+     * Java 8 dates (see https://java.net/jira/browse/JPA_SPEC-63 or
+     * https://hibernate.atlassian.net/browse/HHH-8844).
+     * 
+     * @param dateTime
+     *            Date time in Java 8 format
+     * @return Old Date object
+     */
+    public static Date date(ZonedDateTime dateTime) {
+
+        return Date.from(dateTime.toInstant());
     }
 }
