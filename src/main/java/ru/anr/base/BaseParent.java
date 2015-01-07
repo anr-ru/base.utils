@@ -128,7 +128,7 @@ public class BaseParent {
      */
     public static <S> List<S> list(List<S> l) {
 
-        return new ArrayList<S>(l);
+        return l == null ? new ArrayList<S>() : new ArrayList<S>(l);
     }
 
     /**
