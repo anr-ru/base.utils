@@ -36,7 +36,7 @@ public class BaseParentTest extends BaseParent {
     /**
      * String for tests
      */
-    private String testString = "T123T";
+    private static final String TEST_STRING = "T123T";
 
     /**
      * Test method for {@link ru.anr.base.BaseParent#list(S[])}.
@@ -324,9 +324,9 @@ public class BaseParentTest extends BaseParent {
     @Test
     public void testBytes() {
 
-        byte[] b = utf8(testString);
+        byte[] b = utf8(TEST_STRING);
         String s1 = utf8(b);
-        Assert.assertEquals(testString, s1);
+        Assert.assertEquals(TEST_STRING, s1);
     }
 
     /**
@@ -337,8 +337,8 @@ public class BaseParentTest extends BaseParent {
 
         String s = null;
         Assert.assertNotNull(nullSafe(s));
-        s = testString;
-        Assert.assertEquals(testString, nullSafe(s));
+        s = TEST_STRING;
+        Assert.assertEquals(TEST_STRING, nullSafe(s));
     }
 
     /**
@@ -382,9 +382,9 @@ public class BaseParentTest extends BaseParent {
     public void testSafeEquals() {
 
         String s = null;
-        Assert.assertFalse(safeEquals(testString, s));
-        Assert.assertFalse(safeEquals(s, testString));
-        Assert.assertTrue(safeEquals(testString, testString));
+        Assert.assertFalse(safeEquals(TEST_STRING, s));
+        Assert.assertFalse(safeEquals(s, TEST_STRING));
+        Assert.assertTrue(safeEquals(TEST_STRING, TEST_STRING));
     }
 
 }
