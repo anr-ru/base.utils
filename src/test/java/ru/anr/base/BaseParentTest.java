@@ -4,6 +4,9 @@
 package ru.anr.base;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +34,11 @@ public class BaseParentTest extends BaseParent {
     private static final Logger logger = LoggerFactory.getLogger(BaseParentTest.class);
 
     /**
+     * String for tests
+     */
+    private String testString = "T123T";
+
+    /**
      * Test method for {@link ru.anr.base.BaseParent#list(S[])}.
      */
     @Test
@@ -51,6 +59,14 @@ public class BaseParentTest extends BaseParent {
 
         Assert.assertEquals(1, l.size());
         Assert.assertTrue(l.contains(null));
+
+        /*
+         * test null safe create
+         */
+        l = list("x", "y");
+        Assert.assertEquals(l, list(l));
+        l = null;
+        Assert.assertNotNull(list(l));
     }
 
     /**
@@ -301,4 +317,74 @@ public class BaseParentTest extends BaseParent {
         x = parse("64/f", BigDecimal.class);
         Assert.assertNull(x);
     }
+
+    /**
+     * test bytes
+     */
+    @Test
+    public void testBytes() {
+
+        byte[] b = utf8(testString);
+        String s1 = utf8(b);
+        Assert.assertEquals(testString, s1);
+    }
+
+    /**
+     * test nullSafe String
+     */
+    @Test
+    public void testNullSafe() {
+
+        String s = null;
+        Assert.assertNotNull(nullSafe(s));
+        s = testString;
+        Assert.assertEquals(testString, nullSafe(s));
+    }
+
+    /**
+     * test guid
+     */
+    @Test
+    public void testGuid() {
+
+        String s = guid();
+        Assert.assertNotNull(s);
+        Assert.assertEquals(36, s.length());
+    }
+
+    /**
+     * test Clone
+     */
+    @Test
+    public void testClone() {
+
+        Calendar calendar = Calendar.getInstance();
+        clone(calendar);
+        Assert.assertEquals(calendar, clone(calendar));
+    }
+
+    /**
+     * test nullSafe String
+     */
+    @Test
+    public void testDate() {
+
+        ZonedDateTime zdt = now();
+        Date date = date(zdt);
+        Assert.assertNotNull(date);
+        Assert.assertTrue(date.before(date(now())));
+    }
+
+    /**
+     * test safeEquals
+     */
+    @Test
+    public void testSafeEquals() {
+
+        String s = null;
+        Assert.assertFalse(safeEquals(testString, s));
+        Assert.assertFalse(safeEquals(s, testString));
+        Assert.assertTrue(safeEquals(testString, testString));
+    }
+
 }
