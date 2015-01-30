@@ -10,7 +10,7 @@
     
     <artifactId>base.utils</artifactId>
 
-    <name>Base Utils Project</name>
+    <name>Base Utils</name>
     <description>A set of utils, used in projects</description>
     
     <licenses>
