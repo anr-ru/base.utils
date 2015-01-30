@@ -109,6 +109,18 @@ public class BaseSpringParent extends BaseParent {
         return (S) ctx.getBean(name);
     }
 
+    /**
+     * Returns true if specified bean exists
+     * 
+     * @param name
+     *            Name of the bean
+     * @return true if bean exists
+     */
+    protected boolean hasBean(String name) {
+
+        return ctx.containsBean(name);
+    }
+
     // /////////////////////////////////////////////////////////////////////////
     // /// getters/setters
     // /////////////////////////////////////////////////////////////////////////
