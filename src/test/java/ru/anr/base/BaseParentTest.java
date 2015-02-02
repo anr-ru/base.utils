@@ -359,8 +359,8 @@ public class BaseParentTest extends BaseParent {
     public void testClone() {
 
         Calendar calendar = Calendar.getInstance();
-        clone(calendar);
-        Assert.assertEquals(calendar, clone(calendar));
+        cloneObject(calendar);
+        Assert.assertEquals(calendar, cloneObject(calendar));
     }
 
     /**

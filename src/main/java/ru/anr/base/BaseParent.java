@@ -359,7 +359,7 @@ public class BaseParent {
      *            Object type
      */
     @SuppressWarnings("unchecked")
-    public static <S> S clone(Cloneable o) {
+    public static <S> S cloneObject(Object o) {
 
         return (S) org.apache.commons.lang3.ObjectUtils.cloneIfPossible(o);
     }
