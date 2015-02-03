@@ -17,6 +17,7 @@ package ru.anr.base;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -346,6 +347,18 @@ public class BaseParent {
     public static String guid() {
 
         return UUID.randomUUID().toString();
+    }
+
+    /**
+     * Short-cut for creation of {@link BigDecimal}.
+     * 
+     * @param numberAsStr
+     *            String representation for decimal
+     * @return a new {@link BigDecimal}
+     */
+    public static final BigDecimal d(String numberAsStr) {
+
+        return new BigDecimal(numberAsStr);
     }
 
     /**
