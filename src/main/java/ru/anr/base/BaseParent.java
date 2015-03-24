@@ -18,6 +18,7 @@ package ru.anr.base;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -406,5 +407,37 @@ public class BaseParent {
     public static Date date(ZonedDateTime dateTime) {
 
         return Date.from(dateTime.toInstant());
+    }
+
+    /**
+     * convert From Gold Currency
+     * 
+     * @param sum
+     *            - sum
+     * @return sum for customer view
+     */
+    public static BigDecimal convertFromGoldCurrency(BigDecimal sum) {
+
+        BigDecimal returnSum = null;
+        if (sum != null) {
+            returnSum = sum.multiply(new BigDecimal(1000)).setScale(5, RoundingMode.DOWN);
+        }
+        return returnSum;
+    }
+
+    /**
+     * convert To Gold Currency
+     * 
+     * @param sum
+     *            - sum
+     * @return sum in core cold currency
+     */
+    public static BigDecimal convertToGoldCurrency(BigDecimal sum) {
+
+        BigDecimal returnSum = null;
+        if (sum != null) {
+            returnSum = sum.divide(new BigDecimal(1000)).setScale(8, RoundingMode.DOWN);
+        }
+        return returnSum;
     }
 }
