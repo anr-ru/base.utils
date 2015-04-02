@@ -8,7 +8,7 @@ package ru.anr.base;
  *
  *
  * @author Alexey Romanchuk
- * @created 03 нояб. 2014 г.
+ * @created Nov 3, 2014
  *
  */
 
