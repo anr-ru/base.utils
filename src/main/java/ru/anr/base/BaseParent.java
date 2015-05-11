@@ -377,6 +377,18 @@ public class BaseParent {
         return (S) org.apache.commons.lang3.ObjectUtils.cloneIfPossible(o);
     }
 
+    /**
+     * A short-cut for the most often variant of the function
+     * 
+     * @param c
+     *            A collection
+     * @return true, if it's empty
+     */
+    public static boolean notEmpty(Collection<?> c) {
+
+        return !CollectionUtils.isEmpty(c);
+    }
+
     // //////////////////////////// TIME FUNCTIONS ///////////////////////////
 
     /**
