@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
@@ -387,6 +388,34 @@ public class BaseParent {
     public static boolean notEmpty(Collection<?> c) {
 
         return !CollectionUtils.isEmpty(c);
+    }
+
+    /**
+     * A simpler form for stream collecting
+     * 
+     * @param stream
+     *            A stream
+     * @return A list
+     * @param <S>
+     *            Type of object
+     */
+    public static <S> List<S> list(Stream<S> stream) {
+
+        return stream.collect(Collectors.toList());
+    }
+
+    /**
+     * A simpler form for stream collecting
+     * 
+     * @param stream
+     *            A stream
+     * @return A set
+     * @param <S>
+     *            Type of object
+     */
+    public static <S> Set<S> set(Stream<S> stream) {
+
+        return stream.collect(Collectors.toSet());
     }
 
     // //////////////////////////// TIME FUNCTIONS ///////////////////////////
