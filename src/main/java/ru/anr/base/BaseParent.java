@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -296,6 +297,30 @@ public class BaseParent {
             }
         }
         return map;
+    }
+
+    /**
+     * Short-cut for simple mapping from a collection to a map
+     * 
+     * @param collection
+     *            The collection
+     * @param keyMapper
+     *            A key mapper
+     * @param valueMapper
+     *            A value mapper
+     * @return A new created map
+     * 
+     * @param <T>
+     *            Type of a collection item
+     * @param <K>
+     *            Type of the map key
+     * @param <U>
+     *            Type of the map value
+     */
+    public static <T, K, U> Map<K, U> toMap(Collection<T> collection, Function<? super T, ? extends K> keyMapper,
+            Function<? super T, ? extends U> valueMapper) {
+
+        return collection.stream().collect(Collectors.toMap(keyMapper, valueMapper));
     }
 
     /**
