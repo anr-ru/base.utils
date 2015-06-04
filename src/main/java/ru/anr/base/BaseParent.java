@@ -197,7 +197,7 @@ public class BaseParent {
      * @return Result of equals operation or false, if one or both arguments are
      *         null
      */
-    public boolean safeEquals(Object arg1, Object arg2) {
+    public static boolean safeEquals(Object arg1, Object arg2) {
 
         return ObjectUtils.nullSafeEquals(arg1, arg2);
     }
