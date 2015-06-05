@@ -43,6 +43,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * Base class, which contains a set of useful functions and short-cut to the
@@ -56,6 +57,15 @@ import org.springframework.util.ReflectionUtils;
  */
 
 public class BaseParent {
+
+    /**
+     * The great function to make Checkstyle think the class doesn't have static
+     * methods only
+     */
+    public void dummy() {
+
+        // Do nothing
+    }
 
     /**
      * Short-cut for new List function
@@ -212,7 +222,7 @@ public class BaseParent {
      * @param <S>
      *            Expected object class
      */
-    public static <S> S get(Collection<S> coll) {
+    public static <S> S first(Collection<S> coll) {
 
         return CollectionUtils.isEmpty(coll) ? null : coll.iterator().next();
     }
@@ -255,12 +265,12 @@ public class BaseParent {
      * value.
      * 
      * @param s
-     *            Original string
+     *            Original string (or even object)
      * @return Empty string is null
      */
-    public static String nullSafe(String s) {
+    public static String nullSafe(Object s) {
 
-        return (s == null) ? "" : s;
+        return (s == null) ? "" : s.toString();
     }
 
     /**
@@ -283,17 +293,14 @@ public class BaseParent {
     public static <K, S, T> Map<K, S> toMap(T... array) {
 
         Map<K, S> map = new HashMap<>();
-        if (array != null) {
+        if (array != null && array.length > 0) {
 
-            if (array.length > 0) {
+            int l = (array.length % 2 == 0) ? array.length : (array.length + 1);
 
-                int l = (array.length % 2 == 0) ? array.length : (array.length + 1);
+            for (int i = 0; i < (l / 2); i = i + 1) {
 
-                for (int i = 0; i < (l / 2); i = i + 1) {
-
-                    Object v = (2 * i + 1) >= array.length ? null : array[2 * i + 1];
-                    map.put((K) array[2 * i], (S) v);
-                }
+                Object v = (2 * i + 1) >= array.length ? null : array[2 * i + 1];
+                map.put((K) array[2 * i], (S) v);
             }
         }
         return map;
@@ -339,7 +346,7 @@ public class BaseParent {
 
         S v = null;
         try {
-            v = inst(clazz, new Class<?>[]{ String.class }, new String[]{ x });
+            v = inst(clazz, new Class<?>[]{ String.class }, x);
         } catch (FunctorException | IllegalArgumentException ex) {
             v = null;
         }
@@ -360,7 +367,7 @@ public class BaseParent {
      * @param <S>
      *            Object class
      */
-    public static <S> S inst(Class<S> clazz, Class<?>[] paramTypes, Object[] args) {
+    public static <S> S inst(Class<S> clazz, Class<?>[] paramTypes, Object... args) {
 
         return FactoryUtils.instantiateFactory(clazz, paramTypes, args).create();
     }
@@ -413,6 +420,30 @@ public class BaseParent {
     public static boolean notEmpty(Collection<?> c) {
 
         return !CollectionUtils.isEmpty(c);
+    }
+
+    /**
+     * A short-cut for the often used variant
+     * 
+     * @param s
+     *            A string
+     * @return true, if the string is NOT empty
+     */
+    public static boolean notEmpty(Object s) {
+
+        return !isEmpty(s);
+    }
+
+    /**
+     * A short-cut for the often used variant
+     * 
+     * @param s
+     *            A string
+     * @return true, if the string is empty
+     */
+    public static boolean isEmpty(Object s) {
+
+        return StringUtils.isEmpty(s);
     }
 
     /**

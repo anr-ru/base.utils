@@ -39,7 +39,7 @@ public class BaseParentTest extends BaseParent {
     private static final String TEST_STRING = "T123T";
 
     /**
-     * Test method for {@link ru.anr.base.BaseParent#list(S[])}.
+     * Test method for {@link ru.anr.base.BaseParent#list(Object...)}.
      */
     @Test
     public void testList() {
@@ -70,7 +70,7 @@ public class BaseParentTest extends BaseParent {
     }
 
     /**
-     * Test method for {@link ru.anr.base.BaseParent#set(S[])}.
+     * Test method for {@link ru.anr.base.BaseParent#set(Object...)}.
      */
     @Test
     public void testSet() {
@@ -93,7 +93,8 @@ public class BaseParentTest extends BaseParent {
     }
 
     /**
-     * Test method for {@link ru.anr.base.BaseParent#concat(S[], S[])}.
+     * Test method for
+     * {@link ru.anr.base.BaseParent#concat(Object[], Object...)}.
      */
     @Test
     public void testConcat() {
@@ -156,17 +157,17 @@ public class BaseParentTest extends BaseParent {
     public void testGet() {
 
         List<String> l = list();
-        Assert.assertNull(get(l));
-        Assert.assertNull(get(null));
+        Assert.assertNull(first(l));
+        Assert.assertNull(first(null));
 
         l = list("x", "y");
-        Assert.assertEquals("x", get(l));
+        Assert.assertEquals("x", first(l));
 
         Set<String> s = set();
-        Assert.assertNull(get(s));
+        Assert.assertNull(first(s));
 
         s = set("x", "y");
-        Assert.assertEquals("x", get(s));
+        Assert.assertEquals("x", first(s));
     }
 
     /**
