@@ -367,7 +367,7 @@ public class BaseParent {
      * @param <S>
      *            Object class
      */
-    public static <S> S inst(Class<S> clazz, Class<?>[] paramTypes, Object... args) {
+    public static <S> S inst(Class<? extends S> clazz, Class<?>[] paramTypes, Object... args) {
 
         return FactoryUtils.instantiateFactory(clazz, paramTypes, args).create();
     }
