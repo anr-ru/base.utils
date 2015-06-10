@@ -47,6 +47,22 @@ public class BaseSpringParent extends BaseParent {
     private ApplicationContext ctx;
 
     /**
+     * Default name for production profile
+     */
+    public static final String PRODUCTION_PROFILE = "production";
+
+    /**
+     * Checking for 'Production' mode
+     * 
+     * @return true, if 'production' profile found
+     */
+    protected boolean isProdMode() {
+
+        Set<String> profiles = getProfiles();
+        return profiles.contains(PRODUCTION_PROFILE);
+    }
+
+    /**
      * Checking all profile names
      * 
      * @return A set of current profile names
