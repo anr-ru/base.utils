@@ -44,7 +44,7 @@ public class BaseSpringParent extends BaseParent {
      * Context injection
      */
     @Autowired
-    private ApplicationContext ctx;
+    protected ApplicationContext ctx;
 
     /**
      * Default name for production profile
