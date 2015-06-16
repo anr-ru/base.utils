@@ -18,6 +18,7 @@ package ru.anr.base;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -392,6 +393,50 @@ public class BaseParent {
     public static final BigDecimal d(String numberAsStr) {
 
         return new BigDecimal(numberAsStr);
+    }
+
+    /**
+     * Short-cut for creation of {@link BigDecimal} from double value
+     * 
+     * @param value
+     *            Double value
+     * @return a new {@link BigDecimal}
+     */
+    public static final BigDecimal d(double value) {
+
+        return new BigDecimal(Double.toString(value));
+    }
+
+    /**
+     * Short-cut for set a scale for {@link BigDecimal} using the standard
+     * {@link RoundingMode#HALF_UP} mode (so called 'school' rounding).
+     * 
+     * @param d
+     *            A decimal value
+     * @param scale
+     *            The scale
+     * @return New {@link BigDecimal} in the specified scale
+     */
+    public static final BigDecimal scale(BigDecimal d, int scale) {
+
+        return d.setScale(scale, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * Short-cut for division with specific
+     * 
+     * @param a
+     *            A divided value
+     * @param b
+     *            A divisor
+     * 
+     * @param scale
+     *            The scale
+     * @return New {@link BigDecimal} in the specified scale
+     */
+    public static final BigDecimal div(BigDecimal a, BigDecimal b, int scale) {
+
+        return a.divide(b, scale, RoundingMode.HALF_UP);
     }
 
     /**
