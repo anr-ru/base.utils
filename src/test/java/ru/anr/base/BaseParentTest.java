@@ -317,6 +317,9 @@ public class BaseParentTest extends BaseParent {
 
         x = parse("64/f", BigDecimal.class);
         Assert.assertNull(x);
+
+        Long id = parse(null, Long.class);
+        Assert.assertNull(id);
     }
 
     /**
