@@ -34,6 +34,11 @@ public class ApplicationException extends NestedRuntimeException {
     private static final long serialVersionUID = -2729182111108737798L;
 
     /**
+     * A unique code of the error
+     */
+    private String errorId;
+
+    /**
      * Constructor
      * 
      * @param msg
@@ -66,5 +71,22 @@ public class ApplicationException extends NestedRuntimeException {
     public ApplicationException(Throwable cause) {
 
         this("", cause);
+    }
+
+    /**
+     * @return the errorId
+     */
+    public String getErrorId() {
+
+        return errorId;
+    }
+
+    /**
+     * @param errorId
+     *            the errorId to set
+     */
+    public void setErrorId(String errorId) {
+
+        this.errorId = errorId;
     }
 }
