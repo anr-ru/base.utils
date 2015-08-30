@@ -40,6 +40,7 @@ import java.util.stream.Stream;
 import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -548,5 +549,18 @@ public class BaseParent {
     public static Date date(ZonedDateTime dateTime) {
 
         return Date.from(dateTime.toInstant());
+    }
+
+    /**
+     * Instant logging (usually for testing)
+     * 
+     * @param msg
+     *            A log message
+     * @param arguments
+     *            A set of argument of the message
+     */
+    public static void log(String msg, Object... arguments) {
+
+        LoggerFactory.getLogger(BaseParent.class).info(msg, arguments);
     }
 }
