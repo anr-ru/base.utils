@@ -563,4 +563,18 @@ public class BaseParent {
 
         LoggerFactory.getLogger(BaseParent.class).info(msg, arguments);
     }
+
+    /**
+     * Instant logging for an error (usually for testing)
+     * 
+     * @param msg
+     *            A log message
+     * @param arguments
+     *            A set of argument of the message
+     */
+    public static void error(String msg, Object... arguments) {
+
+        LoggerFactory.getLogger(BaseParent.class).error(msg, arguments);
+    }
+
 }
