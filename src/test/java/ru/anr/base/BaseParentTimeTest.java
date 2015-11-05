@@ -3,8 +3,10 @@
  */
 package ru.anr.base;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,11 +42,23 @@ public class BaseParentTimeTest extends BaseParent {
         logger.info("{} - {}", t.toString(), ekb.toString());
 
         Assert.assertNotEquals(t, ekb);
-        // After Oct, 26 the difference is 5 hours
+        Assert.assertEquals(60 * 60 * 5, ekb.getOffset().getTotalSeconds() - t.getOffset().getTotalSeconds());
+    }
 
-        // TODO: restore that after finding a way up upgrade java time zone on
-        // Jenkins
-        // Assert.assertEquals(60 * 60 * 5, ekb.getOffset().getTotalSeconds() -
-        // t.getOffset().getTotalSeconds());
+    /**
+     * Working with transforming from old dates to zoned ones
+     */
+    @Test
+    public void conversionFromADateObject() {
+
+        ZonedDateTime now = now();
+
+        Date t = new Date(now.toInstant().toEpochMilli());
+        ZonedDateTime z = date(t);
+
+        Assert.assertEquals(now, z);
+
+        ZonedDateTime zx = ZonedDateTime.ofInstant(Instant.ofEpochMilli(t.getTime()), ZoneId.of("Asia/Yekaterinburg"));
+        Assert.assertNotEquals(now, zx);
     }
 }

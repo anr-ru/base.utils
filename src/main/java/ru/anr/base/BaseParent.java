@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -549,6 +550,19 @@ public class BaseParent {
     public static Date date(ZonedDateTime dateTime) {
 
         return Date.from(dateTime.toInstant());
+    }
+
+    /**
+     * Transforms an old date object to a zoned date using the default (UTC)
+     * time zone
+     * 
+     * @param oldDate
+     *            Some old date
+     * @return A zoned object
+     */
+    public static ZonedDateTime date(Date oldDate) {
+
+        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(oldDate.getTime()), DEFAULT_TIMEZONE);
     }
 
     /**
