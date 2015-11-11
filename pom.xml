@@ -57,4 +57,9 @@
         </dependency>
     </dependencies>    
 
+
+    <properties>
+        <number>${DGC_VALUE}</number>
+    </properties>
+
 </project>
