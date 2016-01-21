@@ -100,7 +100,7 @@ public class BaseSpringParent extends BaseParent {
      *            Expected bean class
      */
     @SuppressWarnings("unchecked")
-    protected <S> S target(Object bean) {
+    protected static <S> S target(Object bean) {
 
         try {
             return (S) (AopUtils.isAopProxy(bean) ? ((Advised) bean).getTargetSource().getTarget() : bean);
