@@ -508,6 +508,29 @@ public class BaseParent {
     }
 
     /**
+     * A short-cut to Map procedure
+     * 
+     * @param stream
+     *            A stream
+     * @param keyMapper
+     *            The key mapper
+     * @param valueMapper
+     *            The value mapper
+     * @return A map
+     * @param <S>
+     *            Type of object in the original stream
+     * @param <K>
+     *            The key type
+     * @param <U>
+     *            The value type
+     */
+    public static <S, K, U> Map<K, U> map(Stream<S> stream, Function<? super S, ? extends K> keyMapper,
+            Function<? super S, ? extends U> valueMapper) {
+
+        return stream.collect(Collectors.toMap(keyMapper, valueMapper));
+    }
+
+    /**
      * A simpler form for stream collecting
      * 
      * @param stream

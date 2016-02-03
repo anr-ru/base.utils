@@ -20,6 +20,25 @@ public class SampleObject {
     private String value;
 
     /**
+     * The index field
+     */
+    private Integer index;
+
+    /**
+     * Construction
+     * 
+     * @param value
+     *            The value
+     * @param index
+     *            The index
+     */
+    public SampleObject(String value, int index) {
+
+        this.value = value;
+        this.index = index;
+    }
+
+    /**
      * Reading a value
      * 
      * @return Value
@@ -37,5 +56,22 @@ public class SampleObject {
     public void setValue(String value) {
 
         this.value = value;
+    }
+
+    /**
+     * @return the index
+     */
+    public Integer getIndex() {
+
+        return index;
+    }
+
+    /**
+     * @param index
+     *            the index to set
+     */
+    public void setIndex(Integer index) {
+
+        this.index = index;
     }
 }

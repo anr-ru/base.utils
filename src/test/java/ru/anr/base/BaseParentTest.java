@@ -142,7 +142,7 @@ public class BaseParentTest extends BaseParent {
     @Test
     public void testInject() {
 
-        SampleObject o = new SampleObject();
+        SampleObject o = new SampleObject(null, 0);
         Assert.assertNull(o.getValue());
 
         inject(o, "value", "xxx");
@@ -392,4 +392,17 @@ public class BaseParentTest extends BaseParent {
         Assert.assertTrue(safeEquals(TEST_STRING, TEST_STRING));
     }
 
+    /**
+     * Mapper tests
+     */
+    @Test
+    public void testListToMap() {
+
+        List<SampleObject> list = list(new SampleObject("xxx", 1), new SampleObject("yyy", 2));
+        Map<String, Integer> map = map(list.stream(), SampleObject::getValue, SampleObject::getIndex);
+
+        Assert.assertEquals(2, map.size());
+        Assert.assertEquals(1, map.get("xxx").intValue());
+        Assert.assertEquals(2, map.get("yyy").intValue());
+    }
 }
