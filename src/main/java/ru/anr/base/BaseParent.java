@@ -544,6 +544,37 @@ public class BaseParent {
         return stream.collect(Collectors.toSet());
     }
 
+    /**
+     * The 'RunIgnoreErrors' interface
+     */
+    @FunctionalInterface
+    private interface RunIgnoreErrors {
+
+        /**
+         * @param params
+         *            Parameters
+         */
+        void run(Object... params);
+    }
+
+    /**
+     * Executes something specified in the callback but ignores any exceptions
+     * and writes them to the error log
+     * 
+     * @param callback
+     *            The callback to use
+     * @param params
+     *            A set of parameters
+     */
+    protected void runIgnored(RunIgnoreErrors callback, Object... params) {
+
+        try {
+            callback.run(params);
+        } catch (RuntimeException ignore) {
+            error("Ignored error: {}", nullSafe(ignore.getMessage()));
+        }
+    }
+
     // //////////////////////////// TIME FUNCTIONS ///////////////////////////
 
     /**
