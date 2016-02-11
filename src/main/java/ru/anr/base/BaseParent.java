@@ -548,7 +548,7 @@ public class BaseParent {
      * The 'RunIgnoreErrors' interface
      */
     @FunctionalInterface
-    private interface RunIgnoreErrors {
+    public interface RunIgnoreErrors {
 
         /**
          * @param params
