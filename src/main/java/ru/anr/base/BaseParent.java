@@ -277,8 +277,9 @@ public class BaseParent {
     }
 
     /**
-     * Converts array of any elements to Map<K,S> with specified casting to K
-     * and S types.
+     * Converts array of any elements to Map&lt;K,S&gt;
+     * 
+     * with specified casting to K and S types.
      * 
      * @param array
      *            An array of some elements

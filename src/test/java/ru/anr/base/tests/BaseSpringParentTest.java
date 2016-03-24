@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.anr.base.BaseSpringParent;
 
 /**
- * Tests for {@link BaseTestCase}
+ * Tests for {@link BaseSpringParent}.
  *
  *
  * @author Alexey Romanchuk
@@ -41,9 +41,7 @@ public class BaseSpringParentTest extends BaseSpringParent {
     }
 
     /**
-     * Test method for
-     * {@link ru.anr.base.tests.BaseTestCase#bean(java.lang.String, java.lang.Class)}
-     * .
+     * Test method for bean(...).
      */
     @Test
     public void testBean() {

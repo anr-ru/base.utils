@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.anr.base.BaseSpringParent;
 
 /**
- * Tests for {@link BaseTestCase}
+ * Tests for profiles.
  *
  *
  * @author Alexey Romanchuk
