@@ -571,6 +571,9 @@ public class BaseParent {
 
         try {
             callback.run(params);
+        } catch (AssertionError ignore) {
+            error("Ignored error: {}", nullSafe(ignore.getMessage()));
+
         } catch (RuntimeException ignore) {
             error("Ignored error: {}", nullSafe(ignore.getMessage()));
         }
