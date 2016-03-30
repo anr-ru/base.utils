@@ -509,6 +509,42 @@ public class BaseParent {
     }
 
     /**
+     * Calculates a total value for the specified stream. The given mapper
+     * function provides a conversion operation from an object of the type S to
+     * a {@link BigDecimal} value.
+     * 
+     * @param stream
+     *            The stream to use
+     * @param mapper
+     *            The mapper function
+     * @return The calculated result of decimal value
+     * @param <S>
+     *            The supposed type of objects in the stream
+     */
+    public static <S> BigDecimal total(Stream<S> stream, Function<? super S, BigDecimal> mapper) {
+
+        return stream.map(mapper).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * Calculates a total value for the specified stream. The given mapper
+     * function provides a conversion operation from an object of the type S to
+     * a {@link BigDecimal} value.
+     * 
+     * @param list
+     *            The list of objects
+     * @param mapper
+     *            The mapper function
+     * @return The calculated result of decimal value
+     * @param <S>
+     *            The supposed type of objects in the stream
+     */
+    public static <S> BigDecimal total(List<S> list, Function<? super S, BigDecimal> mapper) {
+
+        return total(list.stream(), mapper);
+    }
+
+    /**
      * A short-cut to Map procedure
      * 
      * @param stream
