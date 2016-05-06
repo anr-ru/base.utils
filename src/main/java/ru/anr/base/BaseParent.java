@@ -231,6 +231,21 @@ public class BaseParent {
     }
 
     /**
+     * A short-cut method for finding a first item in the given stream
+     * 
+     * @param stream
+     *            A stream
+     * @return A resulted value if exist, otherwise null
+     * 
+     * @param <S>
+     *            The type of the resulted value
+     */
+    public static <S> S first(Stream<S> stream) {
+
+        return (stream == null) ? null : stream.findFirst().orElse(null);
+    }
+
+    /**
      * Filters a specified collection according to predicate, which can be a
      * lambda expression.
      * 

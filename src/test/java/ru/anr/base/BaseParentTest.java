@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -151,14 +152,14 @@ public class BaseParentTest extends BaseParent {
     }
 
     /**
-     * Tests for get method
+     * Tests for the 'first' method
      */
     @Test
-    public void testGet() {
+    public void testFirst() {
 
         List<String> l = list();
         Assert.assertNull(first(l));
-        Assert.assertNull(first(null));
+        Assert.assertNull(first((Set<?>) null));
 
         l = list("x", "y");
         Assert.assertEquals("x", first(l));
@@ -168,6 +169,27 @@ public class BaseParentTest extends BaseParent {
 
         s = set("x", "y");
         Assert.assertEquals("x", first(s));
+    }
+
+    /**
+     * Tests for the 'first for a stream' method
+     */
+    @Test
+    public void testFirstForStream() {
+
+        List<String> l = list();
+        Assert.assertNull(first(l.stream()));
+        Assert.assertNull(first((Stream<String>) null));
+
+        l = list("x", "y");
+        Assert.assertEquals("x", first(l.stream()));
+
+        Set<String> s = set();
+        Assert.assertNull(first(s.stream()));
+
+        s = set("x", "y");
+        Assert.assertEquals("x", first(s.stream()));
+
     }
 
     /**
