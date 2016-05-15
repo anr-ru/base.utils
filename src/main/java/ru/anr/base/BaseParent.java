@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.Charset;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -69,6 +70,11 @@ public class BaseParent {
 
         // Do nothing
     }
+
+    /**
+     * The default encoding
+     */
+    public static final Charset DEFAULT_CHARSET = java.nio.charset.StandardCharsets.UTF_8;
 
     /**
      * Short-cut for new List function
