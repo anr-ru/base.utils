@@ -733,6 +733,8 @@ public class BaseParent {
      * 
      * @param secs
      *            The number of seconds
+     * @param sleepTime
+     *            Sleep time in milliseconds
      * @param logProgress
      *            true, if it is required to log the progress
      * @param callback
@@ -741,7 +743,8 @@ public class BaseParent {
      *            The arguments
      * @return true, if the the number of attempts has been exceeded
      */
-    public static boolean waitCondition(int secs, boolean logProgress, SleepCallback callback, Object... args) {
+    public static boolean waitCondition(int secs, int sleepTime, boolean logProgress, SleepCallback callback,
+            Object... args) {
 
         int counter = 0;
         Set<Integer> s = new HashSet<>(PERCENTS);
@@ -757,13 +760,33 @@ public class BaseParent {
                 }
                 s.removeAll(r);
             }
-            counter += 500;
+            counter += sleepTime;
 
             if (counter > (secs * 1000)) {
                 break;
             }
-            sleep(500);
+            sleep(sleepTime);
         }
         return counter > (secs * 1000);
     }
+
+    /**
+     * Performs an expectation cycle during the specified number of seconds and
+     * checks the condition on each iteration.
+     * 
+     * @param secs
+     *            The number of seconds
+     * @param logProgress
+     *            true, if it is required to log the progress
+     * @param callback
+     *            The callback
+     * @param args
+     *            The arguments
+     * @return true, if the the number of attempts has been exceeded
+     */
+    public static boolean waitCondition(int secs, boolean logProgress, SleepCallback callback, Object... args) {
+
+        return waitCondition(secs, 500, logProgress, callback, args);
+    }
+
 }
