@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -644,13 +645,29 @@ public class BaseParent {
     public static final ZoneId DEFAULT_TIMEZONE = ZoneOffset.UTC;
 
     /**
+     * A clock if we need to use different clocks (in tests, for example)
+     */
+    private static Clock clock;
+
+    /**
+     * Sets or changes the current clock
+     * 
+     * @param c
+     *            A clock
+     */
+    public static void setClock(Clock c) {
+
+        clock = c;
+    }
+
+    /**
      * Current time. It always is represented in UTC.
      * 
      * @return Time represented as {@link ZonedDateTime} object
      */
     public static ZonedDateTime now() {
 
-        return ZonedDateTime.now(DEFAULT_TIMEZONE);
+        return (clock == null) ? ZonedDateTime.now(DEFAULT_TIMEZONE) : ZonedDateTime.now(clock);
     }
 
     /**
