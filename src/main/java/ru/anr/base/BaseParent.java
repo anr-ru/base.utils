@@ -612,8 +612,10 @@ public class BaseParent {
         /**
          * @param params
          *            Parameters
+         * @throws Exception
+         *             An exception if occurs
          */
-        void run(Object... params);
+        void run(Object... params) throws Exception;
     }
 
     /**
@@ -633,6 +635,8 @@ public class BaseParent {
             error("Ignored error: {}", nullSafe(ignore.getMessage()));
 
         } catch (RuntimeException ignore) {
+            error("Ignored error: {}", nullSafe(ignore.getMessage()));
+        } catch (Exception ignore) {
             error("Ignored error: {}", nullSafe(ignore.getMessage()));
         }
     }
