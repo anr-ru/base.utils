@@ -531,6 +531,30 @@ public class BaseParent {
     }
 
     /**
+     * Determines whether the given collection contains specified strings or
+     * not. The parameter conjunction must be 'true' if we expect all strings to
+     * be included in the source collection, otherwise it is 'false' (That means
+     * at least one must be included).
+     * 
+     * @param coll
+     *            A source collection
+     * @param conjunction
+     *            true, if all inclusion are expected, or false, if at least
+     *            one.
+     * @param items
+     *            Expected strings
+     * @return true, if the given collection contains the specified items
+     *         according to the condition 'conjunction'.
+     */
+    protected static boolean contains(Collection<String> coll, boolean conjunction, String... items) {
+
+        Set<String> s = set(items);
+        return conjunction ? //
+                coll.containsAll(list(items)) : //
+                coll.stream().parallel().filter(a -> s.contains(a)).count() > 0;
+    }
+
+    /**
      * Calculates a total value for the specified stream. The given mapper
      * function provides a conversion operation from an object of the type S to
      * a {@link BigDecimal} value.
