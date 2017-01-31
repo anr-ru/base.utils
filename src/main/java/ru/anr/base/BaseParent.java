@@ -614,6 +614,22 @@ public class BaseParent {
     }
 
     /**
+     * Get first key without value
+     * 
+     * @param <T>
+     *            type of keys
+     * @param map
+     *            map
+     * @param keys
+     *            keys
+     * @return first key without value or <code>null</code>
+     */
+    public static <T> List<T> getEmptyKeys(Map<T, ?> map, List<T> keys) {
+
+        return list(keys.stream().filter(key -> map.get(key) == null));
+    }
+
+    /**
      * A simpler form for stream collecting
      * 
      * @param stream
