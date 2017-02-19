@@ -16,6 +16,7 @@
 package ru.anr.base;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -87,9 +88,31 @@ public final class ParseUtils extends BaseParent {
      */
     public static String regexp(String text, String pattern, Integer... groups) {
 
+        List<String> list = regexpGroups(text, pattern, groups);
+        return list == null ? null : list.stream().collect(Collectors.joining());
+    }
+
+    /**
+     * Parses a string via the provided regular expression and returns the given
+     * groups
+     * 
+     * @param text
+     *            An original text
+     * @param pattern
+     *            A pattern to use
+     * @param groups
+     *            Number of groups in the pattern
+     * @return A list of groups
+     */
+    public static List<String> regexpGroups(String text, String pattern, Integer... groups) {
+
         Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
         Matcher m = p.matcher(text);
 
-        return m.find() ? list(groups).stream().map(i -> m.group(i)).collect(Collectors.joining()) : null;
+        /*
+         * There can be conditional groups like (..)? which give null values
+         */
+        return m.find() ? list(list(groups).stream().map(i -> m.group(i)).filter(s -> s != null)) : null;
     }
+
 }

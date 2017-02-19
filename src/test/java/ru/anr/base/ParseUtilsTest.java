@@ -48,5 +48,8 @@ public class ParseUtilsTest extends BaseParent {
 
         Assert.assertNull(ParseUtils.regexp(s, "xxx", 1));
 
+        Assert.assertEquals(list("1", "2"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c><c>(\\d+)</c>", 1, 2));
+        Assert.assertEquals(list("1"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c>(<c>\\d[34]</c>)?", 1, 2));
+
     }
 }
