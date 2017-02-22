@@ -58,10 +58,6 @@
             <groupId>com.jamesmurty.utils</groupId>
             <artifactId>java-xmlbuilder</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.googlecode.libphonenumber</groupId>
-            <artifactId>libphonenumber</artifactId>
-        </dependency>
     </dependencies>
 
 

@@ -25,12 +25,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.jamesmurty.utils.XMLBuilder;
 
 /**
@@ -44,11 +40,6 @@ import com.jamesmurty.utils.XMLBuilder;
  */
 
 public final class ParseUtils extends BaseParent {
-
-    /**
-     * Logger
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);
 
     /**
      * Parse utilities
@@ -122,36 +113,5 @@ public final class ParseUtils extends BaseParent {
          * There can be conditional groups like (..)? which give null values
          */
         return m.find() ? list(list(groups).stream().map(i -> m.group(i)).filter(s -> s != null)) : null;
-    }
-
-    /**
-     * Parsing phone to the google's structure
-     *
-     * @param rawPhone
-     *            Original number
-     * @return Parsed structure if parsed, otherwise null
-     */
-    public static com.google.i18n.phonenumbers.Phonenumber.PhoneNumber parsePhone(String rawPhone) {
-
-        com.google.i18n.phonenumbers.Phonenumber.PhoneNumber rs = null;
-
-        // String value = StringUtils.startsWith(rawPhone, "+") ? rawPhone : '+'
-        // + rawPhone;
-        String value = rawPhone.charAt(0) == '+' ? rawPhone : '+' + rawPhone;
-        logger.debug("Try to parse the phone number: {}", rawPhone);
-
-        PhoneNumberUtil util = PhoneNumberUtil.getInstance();
-        try {
-
-            rs = util.parse(value, null);
-            if (!util.isPossibleNumber(rs)) {
-                rs = null;
-            }
-        } catch (NumberParseException ex) {
-
-            // Nothing to do
-            logger.info("Can't parse phone: {} with reason {}", rawPhone, ex.getMessage());
-        }
-        return rs;
     }
 }
