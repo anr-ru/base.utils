@@ -25,8 +25,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.jamesmurty.utils.XMLBuilder;
@@ -42,11 +40,6 @@ import com.jamesmurty.utils.XMLBuilder;
  */
 
 public final class ParseUtils extends BaseParent {
-
-    /**
-     * Logger
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);
 
     /**
      * Parse utilities
