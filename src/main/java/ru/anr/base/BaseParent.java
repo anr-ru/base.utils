@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -357,6 +358,33 @@ public class BaseParent {
     }
 
     /**
+     * A short-cut function to simplify the process of building a map from a
+     * collection when there can be non-unique keys.
+     * 
+     * @param collection
+     *            An original collection
+     * @param keyMapper
+     *            A key mapper
+     * @param valueMapper
+     *            A value mapper
+     * @param mergeFunction
+     *            A function to merge values conflicting by their key
+     * @return A new map
+     * 
+     * @param <T>
+     *            Type of a collection item
+     * @param <K>
+     *            Type of the map key
+     * @param <U>
+     *            Type of the map value
+     */
+    public static <T, K, U> Map<K, U> toMap(Collection<T> collection, Function<? super T, ? extends K> keyMapper,
+            Function<? super T, ? extends U> valueMapper, BinaryOperator<U> mergeFunction) {
+
+        return collection.stream().collect(Collectors.toConcurrentMap(keyMapper, valueMapper, mergeFunction));
+    }
+
+    /**
      * Safe parsing of string to some {@link Number}
      * 
      * @param x
@@ -588,29 +616,6 @@ public class BaseParent {
     public static <S> BigDecimal total(List<S> list, Function<? super S, BigDecimal> mapper) {
 
         return total(list.stream(), mapper);
-    }
-
-    /**
-     * A short-cut to Map procedure
-     * 
-     * @param stream
-     *            A stream
-     * @param keyMapper
-     *            The key mapper
-     * @param valueMapper
-     *            The value mapper
-     * @return A map
-     * @param <S>
-     *            Type of object in the original stream
-     * @param <K>
-     *            The key type
-     * @param <U>
-     *            The value type
-     */
-    public static <S, K, U> Map<K, U> map(Stream<S> stream, Function<? super S, ? extends K> keyMapper,
-            Function<? super S, ? extends U> valueMapper) {
-
-        return stream.collect(Collectors.toMap(keyMapper, valueMapper));
     }
 
     /**

@@ -421,10 +421,35 @@ public class BaseParentTest extends BaseParent {
     public void testListToMap() {
 
         List<SampleObject> list = list(new SampleObject("xxx", 1), new SampleObject("yyy", 2));
-        Map<String, Integer> map = map(list.stream(), SampleObject::getValue, SampleObject::getIndex);
+        Map<String, Integer> map = toMap(list, SampleObject::getValue, SampleObject::getIndex);
 
         Assert.assertEquals(2, map.size());
         Assert.assertEquals(1, map.get("xxx").intValue());
         Assert.assertEquals(2, map.get("yyy").intValue());
     }
+
+    /**
+     * Mapping with merging tests
+     */
+    @Test
+    public void testListToMapWithMerging() {
+
+        List<SampleObject> list = list(new SampleObject("xx", 1), new SampleObject("yy", 2), new SampleObject("xx", 5),
+                new SampleObject("yy", 8), new SampleObject("xx", 32));
+
+        Map<String, Integer> map = toMap(list, SampleObject::getValue, SampleObject::getIndex, (v1, v2) -> v1 + v2);
+
+        Assert.assertEquals(2, map.size());
+        Assert.assertTrue(map.containsKey("xx"));
+        Assert.assertTrue(map.containsKey("yy"));
+        Assert.assertEquals(2 + 8, map.get("yy").intValue());
+        Assert.assertEquals(1 + 5 + 32, map.get("xx").intValue());
+
+        // Boundary cases
+        list = list();
+        map = toMap(list, SampleObject::getValue, SampleObject::getIndex, (v1, v2) -> v1 + v2);
+
+        Assert.assertEquals(0, map.size());
+    }
+
 }
