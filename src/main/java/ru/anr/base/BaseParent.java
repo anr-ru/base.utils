@@ -27,8 +27,10 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -734,6 +736,31 @@ public class BaseParent {
     }
 
     /**
+     * Transforms the given calendar value to a zoned date from the default
+     * (UTC) time zone.
+     * 
+     * @param calendar
+     *            Some calendar value
+     * @return A zoned date-time
+     */
+    public static ZonedDateTime date(Calendar calendar) {
+
+        return ZonedDateTime.ofInstant(calendar.toInstant(), DEFAULT_TIMEZONE);
+    }
+
+    /**
+     * Transforms the given zoned date-time object to a gregorian calendar
+     * 
+     * @param dateTime
+     *            A date-time object
+     * @return A calendar object
+     */
+    public static Calendar calendar(ZonedDateTime dateTime) {
+
+        return GregorianCalendar.from(dateTime);
+    }
+
+    /**
      * Transforms an old date object to a zoned date using the default (UTC)
      * time zone
      * 
@@ -744,6 +771,19 @@ public class BaseParent {
     public static ZonedDateTime date(Date oldDate) {
 
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(oldDate.getTime()), DEFAULT_TIMEZONE);
+    }
+
+    /**
+     * Checks the given date-time object was in the past
+     * 
+     * @param z
+     *            Some date-time object
+     * @return true, if the given date was in the past comparing with the
+     *         present time
+     */
+    public static boolean inPast(ZonedDateTime z) {
+
+        return z.isBefore(now());
     }
 
     /**
