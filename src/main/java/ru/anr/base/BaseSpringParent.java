@@ -126,6 +126,20 @@ public class BaseSpringParent extends BaseParent {
     }
 
     /**
+     * Returns a bean instance of the given class
+     * 
+     * @param clazz
+     *            The class of a bean
+     * @return A bean instance
+     * @param <S>
+     *            A type
+     */
+    protected <S> S bean(Class<S> clazz) {
+
+        return ctx.getBean(clazz);
+    }
+
+    /**
      * Returns true if specified bean exists
      * 
      * @param name
