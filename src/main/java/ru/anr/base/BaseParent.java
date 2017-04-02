@@ -15,6 +15,7 @@
  */
 package ru.anr.base;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -45,8 +46,10 @@ import java.util.stream.Stream;
 
 import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -895,4 +898,19 @@ public class BaseParent {
         return waitCondition(secs, 500, logProgress, callback, args);
     }
 
+    /**
+     * Reading a file from the class path
+     * 
+     * @param path
+     *            A path to the file's location
+     * @return The content as a string
+     */
+    public static String readAsString(String path) {
+
+        try {
+            return IOUtils.toString(new ClassPathResource(path).getInputStream());
+        } catch (IOException ex) {
+            throw new ApplicationException(ex);
+        }
+    }
 }
