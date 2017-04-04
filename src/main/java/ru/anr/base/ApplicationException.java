@@ -18,7 +18,7 @@ package ru.anr.base;
 import org.springframework.core.NestedRuntimeException;
 
 /**
- * Spring NestedRuntimeException instance used as own excepion type.
+ * An own wrap for Spring NestedRuntimeException.
  *
  *
  * @author Alexey Romanchuk
@@ -34,15 +34,15 @@ public class ApplicationException extends NestedRuntimeException {
     private static final long serialVersionUID = -2729182111108737798L;
 
     /**
-     * A unique code of the error
+     * The unique code of the error
      */
     private String errorId;
 
     /**
-     * Constructor
+     * Construction of an exception instance
      * 
      * @param msg
-     *            Error message
+     *            An error message
      */
     public ApplicationException(String msg) {
 
@@ -50,12 +50,12 @@ public class ApplicationException extends NestedRuntimeException {
     }
 
     /**
-     * Constructor
+     * Construction of an exception instance
      * 
      * @param msg
      *            An error message
      * @param cause
-     *            Root exception
+     *            The root exception
      */
     public ApplicationException(String msg, Throwable cause) {
 
@@ -63,15 +63,19 @@ public class ApplicationException extends NestedRuntimeException {
     }
 
     /**
-     * Constructor
+     * Construction of an exception instance
      * 
      * @param cause
-     *            Root exception
+     *            The root exception
      */
     public ApplicationException(Throwable cause) {
 
         this("", cause);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///// getters/setters
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * @return the errorId

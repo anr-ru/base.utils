@@ -57,10 +57,9 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Base class, which contains a set of useful functions and short-cut to the
- * functions.
+ * A base class which contains a set of useful functions and short-cuts.
  *
- * The main idea is to reduce a number of code lines in child projects.
+ * The main idea is to reduce the number of code lines in child projects.
  *
  * @author Alexey Romanchuk
  * @created Oct 29, 2014
@@ -70,8 +69,8 @@ import org.springframework.util.StringUtils;
 public class BaseParent {
 
     /**
-     * The great function to make Checkstyle think the class doesn't have static
-     * methods only
+     * A great function to make Checkstyle think the class has not only static
+     * methods.
      */
     public void dummy() {
 
@@ -84,14 +83,14 @@ public class BaseParent {
     public static final Charset DEFAULT_CHARSET = java.nio.charset.StandardCharsets.UTF_8;
 
     /**
-     * Short-cut for new List function
+     * A short-cut for the new list function
      *
      * @param array
-     *            Array of objects
-     * @return New list with elements from original array
+     *            An array of objects
+     * @return A new list with elements from the original array
      *
      * @param <S>
-     *            Type of elements
+     *            The type of elements
      */
     @SafeVarargs
     public static <S> List<S> list(S... array) {
@@ -100,13 +99,15 @@ public class BaseParent {
     }
 
     /**
-     * No-expection converting a string to byte array
+     * Converts a string in the given encoding to a byte array without throwing
+     * a checked exception.
+     * 
      * 
      * @param s
-     *            String
+     *            A string
      * @param encoding
-     *            Encoding
-     * @return Array of bytes
+     *            An encoding
+     * @return An array of bytes
      */
     public static byte[] bytes(String s, String encoding) {
 
@@ -118,42 +119,42 @@ public class BaseParent {
     }
 
     /**
-     * Convering s to utf8 bytes
+     * Converts a string to its utf-8 bytes
      * 
      * @param s
-     *            Original string
-     * @return Array of bytes
+     *            An original string
+     * @return An array of bytes
      */
     public static byte[] utf8(String s) {
 
-        return bytes(s, "utf8");
+        return bytes(s, DEFAULT_CHARSET.name());
     }
 
     /**
-     * Convering bytes to Sring with utf8 encoding
+     * Converts bytes to a string with the utf8 encoding
      * 
      * @param b
-     *            Array of bytes
-     * @return A String
+     *            An array of bytes
+     * @return A string
      */
     public static String utf8(byte[] b) {
 
         try {
-            return new String(b, "utf8");
+            return new String(b, DEFAULT_CHARSET.name());
         } catch (UnsupportedEncodingException ex) {
             throw new ApplicationException(ex);
         }
     }
 
     /**
-     * Null-safe creation of list
+     * Null-safe creation of a list
      *
      * @param l
-     *            Original (possible null) list
-     * @return New list with elements from original one
+     *            An original, possible, null list
+     * @return A new list with elements from the original one
      *
      * @param <S>
-     *            Type of elements
+     *            The type of elements
      */
     public static <S> List<S> list(List<S> l) {
 
@@ -161,14 +162,14 @@ public class BaseParent {
     }
 
     /**
-     * Short-cut for new List function
+     * A short-cut for creation of a set from an array.
      *
      * @param array
-     *            Array of objects
-     * @return New list with elements from original array
+     *            An array of objects
+     * @return A new set with elements from the original array
      *
      * @param <S>
-     *            Type of elements
+     *            The type of elements
      */
     @SafeVarargs
     public static <S> Set<S> set(S... array) {
@@ -177,16 +178,16 @@ public class BaseParent {
     }
 
     /**
-     * Concatination of two arrays
+     * Concatenation of two arrays into one
      *
      * @param array1
      *            The first array
      * @param array2
      *            The second
-     * @return Resulted array
+     * @return The resulted array
      *
      * @param <S>
-     *            Type of array elements
+     *            The type of array elements
      */
     @SafeVarargs
     public static <S> S[] concat(S[] array1, S... array2) {
@@ -195,14 +196,16 @@ public class BaseParent {
     }
 
     /**
-     * Injection of private field into object
+     * Injection of a private field into the given object. Of course, we are
+     * against such a technique :-). But still in tests this is a very
+     * convenient approach.
      *
      * @param target
-     *            Object
+     *            The target object
      * @param fieldName
-     *            Name of the field
+     *            The name of the field to inject
      * @param field
-     *            The field value
+     *            The field's value
      */
     public static void inject(Object target, String fieldName, Object field) {
 
@@ -214,14 +217,15 @@ public class BaseParent {
     }
 
     /**
-     * Returns a result of equals operation event if arguments are null.
+     * Returns the result of the equals operation even if the arguments are
+     * null.
      * 
      * @param arg1
      *            A first argument
      * @param arg2
      *            A second argument
-     * @return Result of equals operation or false, if one or both arguments are
-     *         null
+     * @return The result of the equals operation or false if one or both
+     *         arguments are null
      */
     public static boolean safeEquals(Object arg1, Object arg2) {
 
@@ -229,14 +233,14 @@ public class BaseParent {
     }
 
     /**
-     * Retrieving a first object of collection (depending on its iterating way)
+     * Retrieves the first object of a collection.
      * 
      * @param coll
-     *            Original collection
-     * @return Found object or null
+     *            An original collection
+     * @return The found object or null is the collection is empty
      * 
      * @param <S>
-     *            Expected object class
+     *            The type of elements
      */
     public static <S> S first(Collection<S> coll) {
 
@@ -244,14 +248,14 @@ public class BaseParent {
     }
 
     /**
-     * A short-cut method for finding a first item in the given stream
+     * A short-cut method for finding the first item in the given stream.
      * 
      * @param stream
      *            A stream
-     * @return A resulted value if exist, otherwise null
+     * @return The resulted value if it exists, otherwise null
      * 
      * @param <S>
-     *            The type of the resulted value
+     *            The type of stream's elements
      */
     public static <S> S first(Stream<S> stream) {
 
@@ -259,17 +263,17 @@ public class BaseParent {
     }
 
     /**
-     * Filters a specified collection according to predicate, which can be a
-     * lambda expression.
+     * Filters the given collection according to the specified predicate which
+     * can be a lambda expression.
      * 
      * @param coll
-     *            Original collection
+     *            An original collection
      * @param predicate
-     *            Predicated (can be a lambda expression)
-     * @return Filtered collection
+     *            A predicate (can be a lambda expression)
+     * @return The filtered collection
      * 
      * @param <S>
-     *            Class of collection items
+     *            The type of collection's items
      */
     public static <S> List<S> filter(Collection<S> coll, Predicate<S> predicate) {
 
@@ -277,10 +281,10 @@ public class BaseParent {
     }
 
     /**
-     * Sleeping without {@link InterruptedException} try/catch necessary.
+     * Sleeps ignoring {@link InterruptedException}.
      * 
      * @param millis
-     *            Number of milliseconds
+     *            A number of milliseconds
      */
     public static void sleep(long millis) {
 
@@ -292,12 +296,12 @@ public class BaseParent {
     }
 
     /**
-     * Short-cut to return String, which givers an empty string in case of null
-     * value.
+     * A short-cut method to do the toString() operation with checking the
+     * argument to be a possible null value value.
      * 
      * @param s
-     *            Original string (or even object)
-     * @return Empty string is null
+     *            An original object (can be null)
+     * @return A string which is not null
      */
     public static String nullSafe(Object s) {
 
@@ -305,18 +309,17 @@ public class BaseParent {
     }
 
     /**
-     * Converts array of any elements to Map&lt;K,S&gt;
-     * 
-     * with specified casting to K and S types.
+     * Converts an array of pairs of elements to a Map&lt;K,S&gt; object with
+     * casting to K and S types.
      * 
      * @param array
-     *            An array of some elements
-     * @return {@link Map}
+     *            Pairs (key, value) given as a plain array
+     * @return A new map
      * 
      * @param <K>
-     *            Type of keys
+     *            The type of keys
      * @param <T>
-     *            Type of array values
+     *            The type of values
      * @param <S>
      *            Type of map values
      */
@@ -339,10 +342,10 @@ public class BaseParent {
     }
 
     /**
-     * Short-cut for simple mapping from a collection to a map
+     * A short-cut method for simple mapping from a collection to a map
      * 
      * @param collection
-     *            The collection
+     *            A collection
      * @param keyMapper
      *            A key mapper
      * @param valueMapper
@@ -350,11 +353,11 @@ public class BaseParent {
      * @return A new created map
      * 
      * @param <T>
-     *            Type of a collection item
+     *            The type of collection items
      * @param <K>
-     *            Type of the map key
+     *            The type of map keys
      * @param <U>
-     *            Type of the map value
+     *            The type of map values
      */
     public static <T, K, U> Map<K, U> toMap(Collection<T> collection, Function<? super T, ? extends K> keyMapper,
             Function<? super T, ? extends U> valueMapper) {
@@ -377,7 +380,7 @@ public class BaseParent {
      * @return A new map
      * 
      * @param <T>
-     *            Type of a collection item
+     *            The type of a collection item
      * @param <K>
      *            Type of the map key
      * @param <U>
