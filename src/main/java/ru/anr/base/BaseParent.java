@@ -23,9 +23,11 @@ import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.time.Clock;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -915,5 +917,21 @@ public class BaseParent {
         } catch (IOException ex) {
             throw new ApplicationException(ex);
         }
+    }
+
+    /**
+     * Date formatting
+     * 
+     * @param date
+     *            Date
+     * @param locale
+     *            Locale
+     * @return formatted date
+     */
+    public static String formatDate(long date, String locale) {
+
+        return DateTimeFormatter.ofPattern(locale.equals("ru_RU") ? "dd.MM.yyyy HH:mm:ss z" : "dd/MM/yyyy HH:mm:ss z")
+                .withZone(ZoneOffset.systemDefault())
+                .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
     }
 }
