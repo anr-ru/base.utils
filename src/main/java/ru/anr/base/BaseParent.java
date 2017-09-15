@@ -930,7 +930,9 @@ public class BaseParent {
      */
     public static String formatDate(long date, String locale) {
 
-        return DateTimeFormatter.ofPattern(locale.equals("ru_RU") ? "dd.MM.yyyy HH:mm:ss z" : "dd/MM/yyyy HH:mm:ss z")
+        return DateTimeFormatter
+                .ofPattern(
+                        locale != null && locale.equals("ru_RU") ? "dd.MM.yyyy HH:mm:ss z" : "dd/MM/yyyy HH:mm:ss z")
                 .withZone(ZoneOffset.systemDefault())
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
     }
