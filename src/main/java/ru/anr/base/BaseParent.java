@@ -37,6 +37,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -50,6 +51,9 @@ import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.joda.time.format.PeriodFormat;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
@@ -920,8 +924,6 @@ public class BaseParent {
     }
 
     /**
-     * Date formatting
-     * 
      * @param date
      *            Date
      * @param locale
@@ -930,10 +932,24 @@ public class BaseParent {
      */
     public static String formatDate(long date, String locale) {
 
-        return DateTimeFormatter
-                .ofPattern(
-                        locale != null && locale.equals("ru_RU") ? "dd.MM.yyyy HH:mm:ss z" : "dd/MM/yyyy HH:mm:ss z")
+        return DateTimeFormatter.ofPattern("ru_RU".equals(locale) ? "dd.MM.yyyy HH:mm:ss z" : "dd/MM/yyyy HH:mm:ss z")
                 .withZone(ZoneOffset.systemDefault())
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
+    }
+
+    /**
+     * @param startDate
+     *            Start date
+     * @param endDate
+     *            End date
+     * @param locale
+     *            Locale
+     * @return formatted period without seconds
+     */
+    public static String formatPeriodWithoutSeconds(Calendar startDate, Calendar endDate, String locale) {
+
+        Period period = new Period(startDate.getTimeInMillis(), endDate.getTimeInMillis(),
+                PeriodType.standard().withSecondsRemoved().withMillisRemoved());
+        return PeriodFormat.wordBased(Locale.forLanguageTag(locale.replaceAll("_", "-"))).print(period);
     }
 }
