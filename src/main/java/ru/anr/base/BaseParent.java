@@ -924,6 +924,22 @@ public class BaseParent {
     }
 
     /**
+     * Reading a file from the class path
+     * 
+     * @param path
+     *            A path to the file's location
+     * @return The content as a byte array
+     */
+    public static byte[] readAsBytes(String path) {
+
+        try {
+            return IOUtils.toByteArray(new ClassPathResource(path).getInputStream());
+        } catch (IOException ex) {
+            throw new ApplicationException(ex);
+        }
+    }
+
+    /**
      * @param date
      *            Date
      * @param locale
