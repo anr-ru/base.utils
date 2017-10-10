@@ -315,6 +315,21 @@ public class BaseParent {
     }
 
     /**
+     * @param <T>
+     *            type of values
+     * @param oldValue
+     *            oldValue
+     * @param newValue
+     *            newValue
+     * @return if {@code newValue == null}, then return oldValue, else return
+     *         newValue
+     */
+    public static <T> T nullSafe(T oldValue, T newValue) {
+
+        return null == newValue ? oldValue : newValue;
+    }
+
+    /**
      * Converts an array of pairs of elements to a Map&lt;K,S&gt; object with
      * casting to K and S types.
      * 
