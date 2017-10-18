@@ -1,12 +1,14 @@
 /**
- * 
+ *
  */
 package ru.anr.base;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,11 +22,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * BaseParent tests
- * 
- * 
+ *
+ *
  * @author Alexey Romanchuk
  * @created Oct 29, 2014
- * 
+ *
  */
 
 public class BaseParentTest extends BaseParent {
@@ -450,6 +452,20 @@ public class BaseParentTest extends BaseParent {
         map = toMap(list, SampleObject::getValue, SampleObject::getIndex, (v1, v2) -> v1 + v2);
 
         Assert.assertEquals(0, map.size());
+    }
+
+    /**
+     * Test method for
+     * {@link BaseParent#getEmptyKeys(java.util.Map, java.util.List)}
+     */
+    @Test
+    public void testGetEmptyKeys() {
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("a", "");
+        map.put("b", "");
+        map.put("c", "");
+        Assert.assertEquals(Arrays.asList("d"), getEmptyKeys(map, Arrays.asList("a", "b", "d")));
     }
 
 }
