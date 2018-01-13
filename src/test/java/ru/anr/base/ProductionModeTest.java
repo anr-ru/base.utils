@@ -37,7 +37,7 @@ public class ProductionModeTest extends BaseSpringParent {
     }
 
     /**
-     * Test method for {@link ru.anr.base.BaseSpringParent#isProdMode()}
+     * Test method for the #isProdMode() method.
      */
     @Test
     public void testIsProdMode() {
