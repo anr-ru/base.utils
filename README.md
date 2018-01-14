@@ -20,4 +20,4 @@ To start, please add the dependency to your maven pom file.
   </dependencies>
 ```
 and then extend your class with the [BaseParent](./src/main/java/ru/anr/base/BaseParent.java) or
-[BaseSpringParent](../src/main/java/ru/anr/base/BaseSpringParent.java).
+[BaseSpringParent](./src/main/java/ru/anr/base/BaseSpringParent.java).

@@ -25,6 +25,21 @@
         <url>https://github.com/anr-ru/base.utils/</url>
         <tag>HEAD</tag>
     </scm>
+    
+	<distributionmanagement>
+	  <repository>
+	    <id>packagecloud-travis</id>
+	    <url>
+	      packagecloud+https://packagecloud.io/ruanr/baseutils
+	    </url>
+	  </repository>
+	  <snapshotrepository>
+	    <id>packagecloud-travis</id>
+	    <url>
+	      packagecloud+https://packagecloud.io/ruanr/baseutils
+	    </url>
+	  </snapshotrepository>
+	</distributionmanagement>
 
     <developers>
         <developer>
@@ -42,6 +57,11 @@
               <artifactId>wagon-webdav</artifactId>
               <version>1.0-beta-2</version>
            </extension>
+           <extension>
+		      <groupId>io.packagecloud.maven.wagon</groupId>
+		      <artifactId>maven-packagecloud-wagon</artifactId>
+		      <version>0.0.4</version>
+           </extension>           
         </extensions>
     </build>
 
