@@ -33,12 +33,12 @@
 	      packagecloud+https://packagecloud.io/ruanr/baseutils
 	    </url>
 	  </repository>
-	  <snapshotrepository>
+	  <snapshotRepository>
 	    <id>packagecloud-travis</id>
 	    <url>
 	      packagecloud+https://packagecloud.io/ruanr/baseutils
 	    </url>
-	  </snapshotrepository>
+	  </snapshotRepository>
 	</distributionManagement>
 
     <developers>
