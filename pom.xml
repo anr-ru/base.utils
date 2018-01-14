@@ -12,7 +12,7 @@
 
     <name>Base Utils</name>
     <description>A set of utils used in projects</description>
-    
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -26,7 +26,7 @@
         <tag>HEAD</tag>
     </scm>
     
-	<distributionmanagement>
+	<distributionManagement>
 	  <repository>
 	    <id>packagecloud-travis</id>
 	    <url>
@@ -39,7 +39,7 @@
 	      packagecloud+https://packagecloud.io/ruanr/baseutils
 	    </url>
 	  </snapshotrepository>
-	</distributionmanagement>
+	</distributionManagement>
 
     <developers>
         <developer>
