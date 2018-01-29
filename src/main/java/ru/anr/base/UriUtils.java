@@ -16,7 +16,7 @@
 package ru.anr.base;
 
 /**
- * Description ...
+ * Utilities for working with urls.
  *
  *
  * @author Alexey Romanchuk
