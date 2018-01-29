@@ -1,4 +1,4 @@
-## [Base.Platform Project](../base.platform.parent)
+## [Base.Platform Project](https://github.com/anr-ru/base.platform.parent)
 
 ### Base.Platform.Utils
 
