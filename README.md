@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/anr-ru/base.utils.svg?branch=master)](https://travis-ci.org/anr-ru/base.utils)
+
+
 ## [Base.Platform Project](https://github.com/anr-ru/base.platform.parent)
 
 ### Base.Platform.Utils
