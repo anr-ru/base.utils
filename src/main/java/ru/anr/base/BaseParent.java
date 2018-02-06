@@ -315,18 +315,22 @@ public class BaseParent {
     }
 
     /**
+     * 
+     * 
      * @param <T>
      *            type of values
-     * @param oldValue
-     *            oldValue
-     * @param newValue
-     *            newValue
-     * @return if {@code newValue == null}, then return oldValue, else return
-     *         newValue
+     * @param defaultValueIfPossibleNull
+     *            The value that is needed to be used if the possibleNullValue
+     *            is null
+     * @param possibleNullValue
+     *            The value that is needed to be check for null
+     * 
+     * @return if {@code possibleNullValue == null}, then return
+     *         defaultValueIfPossibleNull, else return possibleNullValue
      */
-    public static <T> T nullSafe(T oldValue, T newValue) {
+    public static <T> T nullSafe(T defaultValueIfPossibleNull, T possibleNullValue) {
 
-        return null == newValue ? oldValue : newValue;
+        return null == possibleNullValue ? defaultValueIfPossibleNull : possibleNullValue;
     }
 
     /**
