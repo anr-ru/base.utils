@@ -1,13 +1,18 @@
-# Base.Platform.Utils
+[![Build Status](https://travis-ci.org/anr-ru/base.utils.svg?branch=master)](https://travis-ci.org/anr-ru/base.utils)
+
+
+## [Base.Platform Project](https://github.com/anr-ru/base.platform.parent)
+
+### Base.Platform.Utils
 
 Base utilities for all projects. 
 
 The main idea of the project are *BaseParent* and *BaseSpringParent* classes which have lots of auxiliary functions (or
-short-cut functions) and can be used as parent classes in the hierarchy.
+short-cut functions) and can be used as parent classes in the hierarchy or can be imported statically.
 
-Such an approach allows to fast refer to the functions rights in a class.
+Such an approach allows to fast refer to some very often used functions right in a class.
 
-To start, please add the dependency to your maven pom file.
+To start, please add the dependency below to your maven pom file.
 ```xml
   <depepencies>
     ...
@@ -19,5 +24,5 @@ To start, please add the dependency to your maven pom file.
     ...
   </dependencies>
 ```
-and then extend your class with the [BaseParent](./src/main/java/ru/anr/base/BaseParent.java) or
+and start your class hierarchy from the [BaseParent](./src/main/java/ru/anr/base/BaseParent.java) or
 [BaseSpringParent](./src/main/java/ru/anr/base/BaseSpringParent.java).

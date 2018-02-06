@@ -554,6 +554,18 @@ public class BaseParent {
     }
 
     /**
+     * A short-cut for another variant of the check collection size function.
+     * 
+     * @param c
+     *            A collection
+     * @return true, if the collection is empty
+     */
+    public static boolean isEmpty(Collection<?> c) {
+
+        return CollectionUtils.isEmpty(c);
+    }
+
+    /**
      * A short-cut for the often used variant
      * 
      * @param s

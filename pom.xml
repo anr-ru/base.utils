@@ -30,13 +30,13 @@
 	  <repository>
 	    <id>packagecloud-travis</id>
 	    <url>
-	      packagecloud+https://packagecloud.io/ruanr/baseutils
+	      packagecloud+https://packagecloud.io/ruanr/baseplatform
 	    </url>
 	  </repository>
 	  <snapshotRepository>
 	    <id>packagecloud-travis</id>
 	    <url>
-	      packagecloud+https://packagecloud.io/ruanr/baseutils
+	      packagecloud+https://packagecloud.io/ruanr/baseplatform
 	    </url>
 	  </snapshotRepository>
 	</distributionManagement>
