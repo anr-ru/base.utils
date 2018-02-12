@@ -315,6 +315,24 @@ public class BaseParent {
     }
 
     /**
+     * A variant of the nullSafe(..) function for safe creation of models
+     * 
+     * @param value
+     *            A value to check before creation of a model
+     * @param callback
+     *            The callback used to specify the way of creation
+     * @return A model instance or null
+     * @param <S>
+     *            The class of the model
+     * @param <V>
+     *            The class of the value
+     */
+    protected <S, V> S nullSafe(V value, ValueCreator<S, V> callback) {
+
+        return (value == null) ? null : callback.newValue(value);
+    }
+
+    /**
      * 
      * 
      * @param <T>
