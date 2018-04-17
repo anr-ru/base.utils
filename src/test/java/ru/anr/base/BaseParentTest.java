@@ -468,4 +468,17 @@ public class BaseParentTest extends BaseParent {
         Assert.assertEquals(Arrays.asList("d"), getEmptyKeys(map, Arrays.asList("a", "b", "d")));
     }
 
+    /**
+     * Test method for {@link BaseParent#sha256(java.lang.String)}
+     */
+    @Test
+    public void testSha256() {
+
+        String s1 = "string1";
+        String s2 = "string2";
+        Assert.assertEquals(sha256(s1), sha256(s1));
+        Assert.assertNotEquals(sha256(s1), sha256(s2));
+
+    }
+
 }
