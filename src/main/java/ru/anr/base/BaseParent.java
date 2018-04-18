@@ -21,6 +21,8 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,6 +48,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
@@ -1016,5 +1020,23 @@ public class BaseParent {
         Period period = new Period(startDate.getTimeInMillis(), endDate.getTimeInMillis(),
                 PeriodType.standard().withSecondsRemoved().withMillisRemoved());
         return PeriodFormat.wordBased(Locale.forLanguageTag(locale.replaceAll("_", "-"))).print(period);
+    }
+
+    /**
+     * Hash string with sha256 algorithm
+     *
+     * @param s
+     *            The given string
+     * @return hashed string
+     */
+    public static String sha256(String s) {
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(s.getBytes());
+            return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new ApplicationException(ex);
+        }
     }
 }
