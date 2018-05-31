@@ -1019,7 +1019,9 @@ public class BaseParent {
 
         Period period = new Period(startDate.getTimeInMillis(), endDate.getTimeInMillis(),
                 PeriodType.standard().withSecondsRemoved().withMillisRemoved());
-        return PeriodFormat.wordBased(Locale.forLanguageTag(locale.replaceAll("_", "-"))).print(period);
+
+        String l = locale == null ? Locale.getDefault().toString() : locale;
+        return PeriodFormat.wordBased(Locale.forLanguageTag(l.replaceAll("_", "-"))).print(period);
     }
 
     /**
