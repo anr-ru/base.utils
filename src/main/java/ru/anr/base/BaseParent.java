@@ -1007,6 +1007,19 @@ public class BaseParent {
     }
 
     /**
+     * @param pattern
+     *            patter
+     * @param date
+     *            date
+     * @return formatted date
+     */
+    public static String formatDate(String pattern, Calendar date) {
+
+        return DateTimeFormatter.ofPattern(pattern)
+                .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTimeInMillis()), ZoneId.systemDefault()));
+    }
+
+    /**
      * @param startDate
      *            Start date
      * @param endDate

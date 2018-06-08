@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -481,4 +482,16 @@ public class BaseParentTest extends BaseParent {
 
     }
 
+    /**
+     * Test for {@link BaseParent#formatDate(String, Calendar)}
+     */
+    @Test
+    public void testFormatDate() {
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(2015, Calendar.SEPTEMBER, 21, 21, 00, 00);
+        Assert.assertEquals("21-09-2015 21:00:00", formatDate("dd-MM-yyyy HH:mm:ss", calendar));
+        calendar.set(1990, Calendar.SEPTEMBER, 9);
+        Assert.assertEquals("09-09-1990", formatDate("dd-MM-yyyy", calendar));
+    }
 }
