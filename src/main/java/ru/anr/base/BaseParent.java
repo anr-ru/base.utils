@@ -1015,7 +1015,7 @@ public class BaseParent {
      */
     public static String formatDate(String pattern, Calendar date) {
 
-        return DateTimeFormatter.ofPattern(pattern)
+        return null == date ? null : DateTimeFormatter.ofPattern(pattern)
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTimeInMillis()), ZoneId.systemDefault()));
     }
 
