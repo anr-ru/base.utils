@@ -291,6 +291,27 @@ public class BaseParent {
     }
 
     /**
+     * Adds an item to the given collection if the item is not null
+     * 
+     * @param coll
+     *            A collection
+     * @param item
+     *            Some item
+     * @param <S>
+     *            The type of the item
+     * @return true, if the item has been added
+     */
+    public static <S> boolean add(Collection<S> coll, S item) {
+
+        boolean rs = false;
+        if (item != null) {
+            coll.add(item);
+            rs = true;
+        }
+        return rs;
+    }
+
+    /**
      * Sleeps ignoring {@link InterruptedException}.
      * 
      * @param millis
