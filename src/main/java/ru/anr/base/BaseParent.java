@@ -109,6 +109,20 @@ public class BaseParent {
     }
 
     /**
+     * A short-cut method for building a list by a collection
+     * 
+     * @param collection
+     *            The collection to convert
+     * @return A list
+     * @param <S>
+     *            Type of items
+     */
+    public static <S> List<S> list(Collection<S> collection) {
+
+        return new ArrayList<S>(collection);
+    }
+
+    /**
      * Converts a string in the given encoding to a byte array without throwing
      * a checked exception.
      * 
@@ -355,6 +369,24 @@ public class BaseParent {
     protected <S, V> S nullSafe(V value, ValueCreator<S, V> callback) {
 
         return (value == null) ? null : callback.newValue(value);
+    }
+
+    /**
+     * A variant of the nullSafe(..) function for safe processing a possible
+     * null value.
+     * 
+     * @param value
+     *            The value to check before processing
+     * @param callback
+     *            The callback used to perform an operation under the value
+     * @param <V>
+     *            The class of the value
+     */
+    protected <V> void nullSafev(V value, ValueSetter<V> callback) {
+
+        if (value != null) {
+            callback.newValue(value);
+        }
     }
 
     /**
