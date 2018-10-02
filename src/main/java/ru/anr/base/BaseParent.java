@@ -955,6 +955,8 @@ public class BaseParent {
      * Performs an expectation cycle during the specified number of seconds and
      * checks the condition on each iteration.
      * 
+     * @param location
+     *            A short description for the wait condition
      * @param secs
      *            The number of seconds
      * @param sleepTime
@@ -967,8 +969,8 @@ public class BaseParent {
      *            The arguments
      * @return true, if the the number of attempts has been exceeded
      */
-    public static boolean waitCondition(int secs, int sleepTime, boolean logProgress, SleepCallback callback,
-            Object... args) {
+    public static boolean waitCondition(String location, int secs, int sleepTime, boolean logProgress,
+            SleepCallback callback, Object... args) {
 
         int counter = 0;
         Set<Integer> s = new HashSet<>(PERCENTS);
@@ -980,7 +982,7 @@ public class BaseParent {
 
             if (!r.isEmpty()) {
                 if (logProgress) {
-                    log("Wait Progress: {} %", r.get(0));
+                    log("{}: wait progress: {} %", location, r.get(0));
                 }
                 s.removeAll(r);
             }
@@ -998,6 +1000,9 @@ public class BaseParent {
      * Performs an expectation cycle during the specified number of seconds and
      * checks the condition on each iteration.
      * 
+     * @param location
+     *            A short description of the place where this wait condition is
+     *            used (for loggin purposes)
      * @param secs
      *            The number of seconds
      * @param logProgress
@@ -1008,9 +1013,10 @@ public class BaseParent {
      *            The arguments
      * @return true, if the the number of attempts has been exceeded
      */
-    public static boolean waitCondition(int secs, boolean logProgress, SleepCallback callback, Object... args) {
+    public static boolean waitCondition(String location, int secs, boolean logProgress, SleepCallback callback,
+            Object... args) {
 
-        return waitCondition(secs, 500, logProgress, callback, args);
+        return waitCondition(location, secs, 500, logProgress, callback, args);
     }
 
     /**
