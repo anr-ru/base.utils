@@ -1,16 +1,32 @@
 [![Build Status](https://travis-ci.org/anr-ru/base.utils.svg?branch=master)](https://travis-ci.org/anr-ru/base.utils)
 
 
-## [Base.Platform Project](https://github.com/anr-ru/base.platform.parent)
+## A part of [Base.Platform Project](https://github.com/anr-ru/base.platform.parent)
 
 ### Base.Platform.Utils
 
 Base utilities for all projects. 
 
-The main idea of the project are *BaseParent* and *BaseSpringParent* classes which have lots of auxiliary functions (or
-short-cut functions) and can be used as parent classes in the hierarchy or can be imported statically.
+The main idea of the project are [BaseParent](./src/main/java/ru/anr/base/BaseParent.java) and 
+[BaseSpringParent](./src/main/java/ru/anr/base/BaseSpringParent.java) (a child of BaseParent) classes which have
+lots of auxiliary functions (or short-cut functions). You can just start your classes hierarchy from these classes
+or import them statically.
 
 Such an approach allows to fast refer to some very often used functions right in a class.
+For example, 
+
+```java
+public class MyClass extends BaseSpringParent {
+
+    public void myFunc() {
+    
+        Map<String, Object> map = isProdMode() ? toMap("value", 3.14, "desc", "pi") :  toMap();
+        ...
+    }
+}
+```
+
+
 
 To start, please add the dependency below to your maven pom file.
 ```xml
@@ -19,10 +35,8 @@ To start, please add the dependency below to your maven pom file.
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.utils</artifactId>
-            <version>...</version>
+            <version>1.0.0</version>
         </dependency>
     ...
   </dependencies>
 ```
-and start your class hierarchy from the [BaseParent](./src/main/java/ru/anr/base/BaseParent.java) or
-[BaseSpringParent](./src/main/java/ru/anr/base/BaseSpringParent.java).
