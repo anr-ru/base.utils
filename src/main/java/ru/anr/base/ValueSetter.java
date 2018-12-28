@@ -16,7 +16,8 @@
 package ru.anr.base;
 
 /**
- * An auxiliary interface for {@link BaseParent#nullSafev(Object, ValueSetter)}.
+ * An auxiliary interface for implementing nullSafe(...) functions in
+ * {@link BaseParent}.
  *
  *
  * @author Alexey Romanchuk
