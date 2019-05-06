@@ -366,7 +366,7 @@ public class BaseParent {
      * @param <V>
      *            The class of the value
      */
-    protected <S, V> S nullSafe(V value, ValueCreator<S, V> callback) {
+    public static <S, V> S nullSafe(V value, ValueCreator<S, V> callback) {
 
         return (value == null) ? null : callback.newValue(value);
     }
@@ -382,7 +382,7 @@ public class BaseParent {
      * @param <V>
      *            The class of the value
      */
-    protected <V> void nullSafev(V value, ValueSetter<V> callback) {
+    public static <V> void nullSafev(V value, ValueSetter<V> callback) {
 
         if (value != null) {
             callback.newValue(value);
@@ -694,7 +694,7 @@ public class BaseParent {
      * @return true, if the given collection contains the specified items
      *         according to the condition 'conjunction'.
      */
-    protected static boolean contains(Collection<String> coll, boolean conjunction, String... items) {
+    public static boolean contains(Collection<String> coll, boolean conjunction, String... items) {
 
         Set<String> s = set(items);
         return conjunction ? //
@@ -792,7 +792,7 @@ public class BaseParent {
      * @param params
      *            A set of parameters
      */
-    protected void runIgnored(RunIgnoreErrors callback, Object... params) {
+    public static void runIgnored(RunIgnoreErrors callback, Object... params) {
 
         try {
             callback.run(params);
