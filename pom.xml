@@ -9,7 +9,7 @@
     </parent>
     
     <artifactId>base.utils</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>Base Utils</name>
     <description>A set of utils used in projects</description>
