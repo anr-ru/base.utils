@@ -494,4 +494,21 @@ public class BaseParentTest extends BaseParent {
         calendar.set(1990, Calendar.SEPTEMBER, 9);
         Assert.assertEquals("09-09-1990", formatDate("dd-MM-yyyy", calendar));
     }
+
+    /**
+     * Tests for
+     * {@link BaseParent#extract(java.util.Collection, ExtractCallback)}
+     */
+    @Test
+    public void testExtractKeys() {
+
+        List<ZonedDateTime> dates = list(//
+                ZonedDateTime.of(2017, 05, 12, 14, 15, 1, 0, DEFAULT_TIMEZONE),
+                ZonedDateTime.of(2018, 05, 12, 14, 15, 1, 0, DEFAULT_TIMEZONE));
+
+        Set<Integer> years = extract(dates, d -> d.getYear());
+
+        Assert.assertTrue(years.contains(2017));
+        Assert.assertTrue(years.contains(2018));
+    }
 }

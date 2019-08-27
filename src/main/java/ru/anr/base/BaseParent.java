@@ -1105,12 +1105,47 @@ public class BaseParent {
      */
     public static String sha256(String s) {
 
+        return digest(s, "SHA-256");
+    }
+
+    /**
+     * Generates the digest of the given string using the given algorithm
+     * 
+     * @param s
+     *            The string
+     * @param algorithm
+     *            The algorithm
+     * @return The resulted digest
+     */
+    public static String digest(String s, String algorithm) {
+
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md = MessageDigest.getInstance(algorithm);
             md.update(s.getBytes());
             return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
         } catch (NoSuchAlgorithmException ex) {
             throw new ApplicationException(ex);
         }
     }
+
+    /**
+     * This method convert the given collection of objects to a set of some
+     * unique key attributes. It can be used to fast check the object collection
+     * consist of required ones using just their keys.
+     * 
+     * @param coll
+     *            A collection
+     * @param callback
+     *            The callback for extracting the key from the given object
+     * @return A set of key attributes
+     * @param <S>
+     *            The type of the object in the collection
+     * @param <K>
+     *            The type of keys
+     */
+    public static <S, K> Set<K> extract(Collection<S> coll, ExtractCallback<S, K> callback) {
+
+        return set(coll.stream().map(o -> callback.extractKey(o)));
+    }
+
 }
