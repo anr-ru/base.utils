@@ -1,41 +1,35 @@
-/**
- * 
- */
 package ru.anr.base.tests;
 
-import java.util.Set;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.anr.base.BaseSpringParent;
+
+import java.util.Set;
 
 /**
  * Tests for {@link BaseSpringParent}.
  *
- *
  * @author Alexey Romanchuk
  * @created Nov 3, 2014
- *
  */
-@ActiveProfiles({ "xxx", "tests" })
-@RunWith(SpringJUnit4ClassRunner.class)
+@ActiveProfiles({"xxx", "tests"})
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BaseSpringParentTest.class)
-public class BaseSpringParentTest extends BaseSpringParent {
+class BaseSpringParentTest extends BaseSpringParent {
 
     /**
      * Define a test bean
-     * 
+     *
      * @return Bean instance
      */
     @Bean(name = "bean")
-    public String factory() {
+    String factory() {
 
         return "Factory";
     }
@@ -44,26 +38,26 @@ public class BaseSpringParentTest extends BaseSpringParent {
      * Test method for bean(...).
      */
     @Test
-    public void testBean() {
+    void testBean() {
 
         String x = bean("bean", String.class);
-        Assert.assertEquals("Factory", x);
+        Assertions.assertEquals("Factory", x);
     }
 
     /**
      * Testing for profiles
      */
     @Test
-    public void testProfiles() {
+    void testProfiles() {
 
         Set<String> profs = getProfiles();
-        Assert.assertEquals(2, profs.size());
-        Assert.assertTrue(profs.contains("xxx"));
-        Assert.assertTrue(profs.contains("tests"));
+        Assertions.assertEquals(2, profs.size());
+        Assertions.assertTrue(profs.contains("xxx"));
+        Assertions.assertTrue(profs.contains("tests"));
 
         Environment e = getEnv();
-        Assert.assertNotNull(e);
+        Assertions.assertNotNull(e);
 
-        Assert.assertEquals(set(e.getActiveProfiles()), profs);
+        Assertions.assertEquals(set(e.getActiveProfiles()), profs);
     }
 }

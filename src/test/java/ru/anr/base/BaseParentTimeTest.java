@@ -1,7 +1,9 @@
-/**
- * 
- */
 package ru.anr.base;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -10,21 +12,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Time functions tests.
  *
- *
  * @author Alexey Romanchuk
  * @created Nov 6, 2014
- *
  */
 
-public class BaseParentTimeTest extends BaseParent {
+class BaseParentTimeTest extends BaseParent {
 
     /**
      * Logger
@@ -35,7 +30,7 @@ public class BaseParentTimeTest extends BaseParent {
      * Testing for now. Now() provides the time in UTC time zone.
      */
     @Test
-    public void testDefaultTimeZone() {
+    void testDefaultTimeZone() {
 
         ZonedDateTime t = now();
 
@@ -43,65 +38,65 @@ public class BaseParentTimeTest extends BaseParent {
 
         logger.info("{} - {}", t.toString(), ekb.toString());
 
-        Assert.assertNotEquals(t, ekb);
-        Assert.assertEquals(60 * 60 * 5, ekb.getOffset().getTotalSeconds() - t.getOffset().getTotalSeconds());
+        Assertions.assertNotEquals(t, ekb);
+        Assertions.assertEquals(60 * 60 * 5, ekb.getOffset().getTotalSeconds() - t.getOffset().getTotalSeconds());
     }
 
     /**
      * Working with transforming from old dates to zoned ones
      */
     @Test
-    public void conversionFromADateObject() {
+    void conversionFromADateObject() {
 
         ZonedDateTime now = now();
 
         Date t = new Date(now.toInstant().toEpochMilli());
         ZonedDateTime z = date(t);
 
-        Assert.assertEquals(now, z);
+        Assertions.assertEquals(now, z);
 
         ZonedDateTime zx = ZonedDateTime.ofInstant(Instant.ofEpochMilli(t.getTime()), ZoneId.of("Asia/Yekaterinburg"));
-        Assert.assertNotEquals(now, zx);
+        Assertions.assertNotEquals(now, zx);
     }
 
     /**
      * Use case: conversions between zoned dates and basic ones
      */
     @Test
-    public void testDate() {
+    void testDate() {
 
         ZonedDateTime z = now();
         Date date = date(z);
 
         sleep(200);
-        Assert.assertTrue(date.before(date(now())));
-        Assert.assertTrue(z.isBefore(now()));
+        Assertions.assertTrue(date.before(date(now())));
+        Assertions.assertTrue(z.isBefore(now()));
 
         ZonedDateTime zx = date(date);
-        Assert.assertEquals(z, zx);
+        Assertions.assertEquals(z, zx);
     }
 
     /**
      * Use case: conversions between zoned dates and calendars
      */
     @Test
-    public void testCalendar() {
+    void testCalendar() {
 
         ZonedDateTime z = now();
         ZonedDateTime zx = date(GregorianCalendar.from(z));
 
-        Assert.assertEquals(z, zx);
+        Assertions.assertEquals(z, zx);
 
         sleep(200);
 
-        Assert.assertTrue(z.isBefore(now()));
+        Assertions.assertTrue(z.isBefore(now()));
     }
 
     /**
      * Use case: understanding zoned time conversions
      */
     @Test
-    public void testZoneConversions() {
+    void testZoneConversions() {
 
         ZonedDateTime z1 = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("Asia/Yekaterinburg"));
         ZonedDateTime z2 = ZonedDateTime.ofInstant(Instant.now().minusSeconds(2), ZoneId.of("Asia/Yekaterinburg"));
@@ -110,15 +105,15 @@ public class BaseParentTimeTest extends BaseParent {
 
         ZonedDateTime zx1 = date(c1); // to UTC
         ZonedDateTime zx2 = date(c2);
-        Assert.assertNotEquals(z1, zx1); // zones distinguish
-        Assert.assertNotEquals(z2, zx2); // zones distinguish
+        Assertions.assertNotEquals(z1, zx1); // zones distinguish
+        Assertions.assertNotEquals(z2, zx2); // zones distinguish
 
-        Assert.assertTrue(zx2.isBefore(zx1));
-        Assert.assertTrue(z2.isBefore(z1));
+        Assertions.assertTrue(zx2.isBefore(zx1));
+        Assertions.assertTrue(z2.isBefore(z1));
 
         sleep(200);
 
-        Assert.assertTrue(inPast(zx2));
-        Assert.assertTrue(inPast(zx1));
+        Assertions.assertTrue(inPast(zx2));
+        Assertions.assertTrue(inPast(zx1));
     }
 }

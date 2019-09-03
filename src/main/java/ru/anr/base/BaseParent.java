@@ -23,12 +23,7 @@ import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,9 +50,6 @@ import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-import org.joda.time.format.PeriodFormat;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.Assert;
@@ -1079,24 +1071,6 @@ public class BaseParent {
     }
 
     /**
-     * @param startDate
-     *            Start date
-     * @param endDate
-     *            End date
-     * @param locale
-     *            Locale
-     * @return formatted period without seconds
-     */
-    public static String formatPeriodWithoutSeconds(Calendar startDate, Calendar endDate, String locale) {
-
-        Period period = new Period(startDate.getTimeInMillis(), endDate.getTimeInMillis(),
-                PeriodType.standard().withSecondsRemoved().withMillisRemoved());
-
-        String l = locale == null ? Locale.getDefault().toString() : locale;
-        return PeriodFormat.wordBased(Locale.forLanguageTag(l.replaceAll("_", "-"))).print(period);
-    }
-
-    /**
      * Hash string with sha256 algorithm
      *
      * @param s
@@ -1145,7 +1119,7 @@ public class BaseParent {
      */
     public static <S, K> Set<K> extract(Collection<S> coll, ExtractCallback<S, K> callback) {
 
-        return set(coll.stream().map(o -> callback.extractKey(o)));
+        return set(coll.stream().map(callback::extractKey));
     }
 
 }
