@@ -8,6 +8,7 @@ services:
 cache:
   directories:
   - "$HOME/.cache"
+
 before_install:
   - cp ./.mvn/ci-settings.xml $HOME/.m2/settings.xml
 
@@ -19,8 +20,6 @@ test:
   provider: script
   script: "mvn -P ci install"
   skip_cleanup: false
-  on:
-    all_branches: true
 
 deploy:
   provider: script
