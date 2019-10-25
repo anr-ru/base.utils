@@ -12,14 +12,8 @@ cache:
 before_install:
   - cp ./.mvn/ci-settings.xml $HOME/.m2/settings.xml
 
-stages:
-  - test
-  - deploy
-
-test:
-  provider: script
-  script: "mvn -P ci install"
-  skip_cleanup: false
+script:
+  - "mvn -P ci install"
 
 deploy:
   provider: script
