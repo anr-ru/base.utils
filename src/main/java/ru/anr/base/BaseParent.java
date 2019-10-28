@@ -36,8 +36,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -427,7 +427,7 @@ public class BaseParent {
     @SuppressWarnings("unchecked")
     public static <K, S, T> Map<K, S> toMap(T... array) {
 
-        Map<K, S> map = new HashMap<>();
+        Map<K, S> map = new LinkedHashMap<>();
         if (array != null && array.length > 0) {
 
             int l = (array.length % 2 == 0) ? array.length : (array.length + 1);
