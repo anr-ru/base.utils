@@ -41,6 +41,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BinaryOperator;
@@ -406,6 +407,22 @@ public class BaseParent {
     public static <T> T nullSafe(T defaultValueIfPossibleNull, T possibleNullValue) {
 
         return null == possibleNullValue ? defaultValueIfPossibleNull : possibleNullValue;
+    }
+
+    /**
+     * Null-safe initialization
+     * 
+     * @param o
+     *            An object
+     * @param clazz
+     *            The class of the object
+     * @return The old object or a new created
+     * @param <S>
+     *            Object type
+     */
+    public static <S> S nullSafe(S o, Class<S> clazz) {
+
+        return Optional.ofNullable(o).orElse(inst(clazz, new Class<?>[]{}));
     }
 
     /**
