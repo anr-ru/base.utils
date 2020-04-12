@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.anr.base;
 
@@ -51,5 +51,21 @@ public class ParseUtilsTest extends BaseParent {
         Assert.assertEquals(list("1", "2"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c><c>(\\d+)</c>", 1, 2));
         Assert.assertEquals(list("1"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c>(<c>\\d[34]</c>)?", 1, 2));
 
+    }
+
+    private enum XXXEnum {
+        X, Y;
+    }
+
+    /**
+     * Tests for regular expressions
+     */
+    @Test
+    public void parseEnum() {
+
+        Assert.assertEquals(XXXEnum.X, ParseUtils.parseEnum(XXXEnum.class, "X"));
+        Assert.assertEquals(XXXEnum.Y, ParseUtils.parseEnum(XXXEnum.class, "Y"));
+        Assert.assertNull(ParseUtils.parseEnum(XXXEnum.class, null));
+        Assert.assertNull(ParseUtils.parseEnum(XXXEnum.class, "Z"));
     }
 }
