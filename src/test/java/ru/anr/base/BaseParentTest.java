@@ -3,23 +3,16 @@
  */
 package ru.anr.base;
 
-import java.math.BigDecimal;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * BaseParent tests
@@ -103,7 +96,7 @@ public class BaseParentTest extends BaseParent {
     @Test
     public void testConcat() {
 
-        String[] r = concat(new String[]{ "x", "y" }, "z");
+        String[] r = concat(new String[]{"x", "y"}, "z");
         Assert.assertEquals(3, r.length);
 
         Set<String> l = set(r);
@@ -114,7 +107,7 @@ public class BaseParentTest extends BaseParent {
         /*
          * 1. Boundary cases
          */
-        r = concat(new String[]{ "x", "y" });
+        r = concat(new String[]{"x", "y"});
         Assert.assertEquals(2, r.length);
 
         l = set(r);
@@ -229,7 +222,7 @@ public class BaseParentTest extends BaseParent {
         /*
          * Even number of elements
          */
-        String[] values = new String[]{ "x", "1", "y", "2" };
+        String[] values = new String[]{"x", "1", "y", "2"};
 
         Map<String, String> map = toMap(values);
 
@@ -242,7 +235,7 @@ public class BaseParentTest extends BaseParent {
         /*
          * Odd number of elements
          */
-        values = new String[]{ "x", "1", "y" };
+        values = new String[]{"x", "1", "y"};
 
         map = toMap(values);
         logger.debug("Map: {}", map);
@@ -274,7 +267,7 @@ public class BaseParentTest extends BaseParent {
         /*
          * One element array of Integer
          */
-        Integer[] ints = new Integer[]{ 64 };
+        Integer[] ints = new Integer[]{64};
 
         Map<String, Integer> mapi = toMap(ints);
         logger.debug("Map: {}", mapi);
@@ -285,7 +278,7 @@ public class BaseParentTest extends BaseParent {
         /*
          * Different type elements
          */
-        Object[] objs = new Object[]{ "x", 64, "y", true, "z" };
+        Object[] objs = new Object[]{"x", 64, "y", true, "z"};
 
         Map<String, Object> mapx = toMap(objs);
         logger.debug("Map: {}", mapx);
@@ -298,7 +291,7 @@ public class BaseParentTest extends BaseParent {
         /*
          * Lots of elements
          */
-        values = new String[]{ "x", "1", "y", "2", "z", "3", "w", "4", "v", "5" };
+        values = new String[]{"x", "1", "y", "2", "z", "3", "w", "4", "v", "5"};
         map = toMap(values);
 
         logger.debug("Map: {}", map);
@@ -313,7 +306,7 @@ public class BaseParentTest extends BaseParent {
         /*
          * Strange cases
          */
-        values = new String[]{ null, "1", "y", "2" };
+        values = new String[]{null, "1", "y", "2"};
         map = toMap(values);
 
         logger.debug("Map: {}", map);
@@ -510,5 +503,21 @@ public class BaseParentTest extends BaseParent {
 
         Assert.assertTrue(years.contains(2017));
         Assert.assertTrue(years.contains(2018));
+    }
+
+
+    /*
+     * Test for field() method
+     */
+    @Test
+    public void testField() {
+
+        SampleObject o = new SampleObject(null, -12);
+        Assert.assertNull(BaseParent.field(o, "value"));
+        Assert.assertEquals(Integer.valueOf(-12), (Integer) BaseParent.field(o, "index"));
+
+        o = new SampleObject("xxx", 1);
+        Assert.assertEquals("xxx", BaseParent.field(o, "value"));
+        Assert.assertEquals(Integer.valueOf(1), (Integer) BaseParent.field(o, "index"));
     }
 }

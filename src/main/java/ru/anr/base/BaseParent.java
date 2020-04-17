@@ -195,6 +195,23 @@ public class BaseParent {
     }
 
     /**
+     * Extracts the field value from the object using the reflection API.
+     *
+     * @param target    The target object
+     * @param fieldName The name of the field
+     * @param <S>       The type of resulted object
+     * @return The resulted object
+     */
+    public static <S> S field(Object target, String fieldName) {
+
+        Field f = ReflectionUtils.findField(target.getClass(), fieldName);
+        Assert.notNull(f);
+
+        ReflectionUtils.makeAccessible(f);
+        return (S) ReflectionUtils.getField(f, target);
+    }
+
+    /**
      * Returns the result of the equals operation even if the arguments are
      * null.
      *
