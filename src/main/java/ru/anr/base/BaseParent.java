@@ -1011,4 +1011,18 @@ public class BaseParent {
     public static <S extends Enum<S>> S parseEnum(Class<S> clazz, String strValue) {
         return ParseUtils.parseEnum(clazz, strValue);
     }
+
+    /**
+     * Parses the given string as the date according to the pattern. If nothing is parsed, the default value
+     * is used.
+     *
+     * @param strValue     The value to parse
+     * @param pattern      The pattern
+     * @param defaultValue The default value
+     * @return The resulted parsed value
+     */
+    public static ZonedDateTime parseDate(String strValue, String pattern, ZonedDateTime defaultValue) {
+        return ParseUtils.parseDate(strValue, pattern, defaultValue);
+    }
+
 }

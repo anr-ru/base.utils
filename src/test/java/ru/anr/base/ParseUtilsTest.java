@@ -6,6 +6,8 @@ package ru.anr.base;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.ZonedDateTime;
+
 /**
  * Description ...
  *
@@ -68,4 +70,24 @@ public class ParseUtilsTest extends BaseParent {
         Assert.assertNull(ParseUtils.parseEnum(XXXEnum.class, null));
         Assert.assertNull(ParseUtils.parseEnum(XXXEnum.class, "Z"));
     }
+
+    private ZonedDateTime date(int year, int month, int day, int hour, int minutes) {
+        return ZonedDateTime.of(year, month, day, hour, minutes, 0, 0, DEFAULT_TIMEZONE);
+    }
+
+    /**
+     * Tests for regular expressions
+     */
+    @Test
+    public void parseDate() {
+        Assert.assertEquals(date(2020, 5, 14, 0, 0),
+                ParseUtils.parseDate("2020-05-14", "yyyy-MM-dd", null));
+        Assert.assertEquals(date(2020, 5, 14, 5, 12),
+                ParseUtils.parseDate("2020-05-14 05:12", "yyyy-MM-dd HH:mm", null));
+
+        ZonedDateTime def = now();
+        // Wrong date
+        Assert.assertEquals(def, ParseUtils.parseDate("2020-xx-14 05:12", "yyyy-MM-dd HH:mm", def));
+    }
+
 }

@@ -16,12 +16,20 @@
 package ru.anr.base;
 
 import com.jamesmurty.utils.XMLBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,6 +44,12 @@ import java.util.stream.Collectors;
  */
 
 public final class ParseUtils extends BaseParent {
+
+    /**
+     * The logger
+     */
+    private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);
+
 
     /**
      * Parse utilities
@@ -118,6 +132,33 @@ public final class ParseUtils extends BaseParent {
             v = null;
         }
         return v;
+    }
+
+    public static ZonedDateTime parseDate(String value, String pattern, ZonedDateTime defaultValue) {
+
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern(pattern);
+        ZonedDateTime z = null;
+        try {
+
+            LocalDateTime t = parseLocal(value, parser);
+            z = ZonedDateTime.ofLocal(t, DEFAULT_TIMEZONE, ZoneOffset.UTC);
+
+        } catch (DateTimeParseException ex) {
+            logger.debug("Date parsing errors: {}", ex.getMessage());
+            z = defaultValue;
+        }
+        return z;
+    }
+
+    private static LocalDateTime parseLocal(String value, DateTimeFormatter formatter) {
+        LocalDateTime t = null;
+        try {
+            t = LocalDateTime.parse(value, formatter);
+        } catch (DateTimeParseException ex) {
+            LocalDate d = LocalDate.parse(value, formatter);
+            t = d.atStartOfDay();
+        }
+        return t;
     }
 
 }
