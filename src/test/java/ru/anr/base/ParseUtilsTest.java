@@ -76,18 +76,17 @@ public class ParseUtilsTest extends BaseParent {
     }
 
     /**
-     * Tests for regular expressions
+     * Tests for local date (without timezone) parser
      */
     @Test
     public void parseDate() {
         Assert.assertEquals(date(2020, 5, 14, 0, 0),
-                ParseUtils.parseDate("2020-05-14", "yyyy-MM-dd", null));
+                ParseUtils.parseLocalDate("2020-05-14", "yyyy-MM-dd", null));
         Assert.assertEquals(date(2020, 5, 14, 5, 12),
-                ParseUtils.parseDate("2020-05-14 05:12", "yyyy-MM-dd HH:mm", null));
+                ParseUtils.parseLocalDate("2020-05-14 05:12", "yyyy-MM-dd HH:mm", null));
 
         ZonedDateTime def = now();
         // Wrong date
-        Assert.assertEquals(def, ParseUtils.parseDate("2020-xx-14 05:12", "yyyy-MM-dd HH:mm", def));
+        Assert.assertEquals(def, ParseUtils.parseLocalDate("2020-xx-14 05:12", "yyyy-MM-dd HH:mm", def));
     }
-
 }

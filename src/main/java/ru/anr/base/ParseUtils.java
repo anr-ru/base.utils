@@ -134,7 +134,7 @@ public final class ParseUtils extends BaseParent {
         return v;
     }
 
-    public static ZonedDateTime parseDate(String value, String pattern, ZonedDateTime defaultValue) {
+    public static ZonedDateTime parseLocalDate(String value, String pattern, ZonedDateTime defaultValue) {
 
         DateTimeFormatter parser = DateTimeFormatter.ofPattern(pattern);
         ZonedDateTime z = null;

@@ -1021,8 +1021,8 @@ public class BaseParent {
      * @param defaultValue The default value
      * @return The resulted parsed value
      */
-    public static ZonedDateTime parseDate(String strValue, String pattern, ZonedDateTime defaultValue) {
-        return ParseUtils.parseDate(strValue, pattern, defaultValue);
+    public static ZonedDateTime parseLocalDate(String strValue, String pattern, ZonedDateTime defaultValue) {
+        return ParseUtils.parseLocalDate(strValue, pattern, defaultValue);
     }
 
 }
