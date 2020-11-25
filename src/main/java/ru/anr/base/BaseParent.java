@@ -1025,4 +1025,27 @@ public class BaseParent {
         return ParseUtils.parseLocalDate(strValue, pattern, defaultValue);
     }
 
+    /**
+     * Convers the given local date to the default zone 00:00 time.
+     *
+     * @param date The original date
+     * @return The resulted zoned date time object
+     */
+    public static ZonedDateTime fromLocal(LocalDate date) {
+        return ZonedDateTime.of(date, LocalTime.MIDNIGHT, DEFAULT_TIMEZONE);
+    }
+
+    /**
+     * Convert a calendar to a local date object
+     *
+     * @param calendar The calendar
+     * @return The resulted local date
+     */
+    public static LocalDate toLocal(Calendar calendar) {
+        return LocalDate.of(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
 }
