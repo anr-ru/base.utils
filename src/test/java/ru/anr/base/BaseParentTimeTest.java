@@ -51,12 +51,24 @@ class BaseParentTimeTest extends BaseParent {
         ZonedDateTime now = now();
 
         Date t = new Date(now.toInstant().toEpochMilli());
-        ZonedDateTime z = date(t);
 
-        Assertions.assertEquals(now, z);
+        int nanos = (now.getNano() / 1000000) * 1000000;
+        Assertions.assertEquals(now.withNano(nanos), date(t));
 
         ZonedDateTime zx = ZonedDateTime.ofInstant(Instant.ofEpochMilli(t.getTime()), ZoneId.of("Asia/Yekaterinburg"));
-        Assertions.assertNotEquals(now, zx);
+        Assertions.assertNotEquals(now.withNano(nanos), zx);
+        Assertions.assertEquals(now.withNano(nanos).toInstant(), zx.toInstant());
+
+        // Equals by the instant value but having different zone IDs
+        Assertions.assertNotEquals(now.withNano(nanos), date(GregorianCalendar.from(now)));
+        Assertions.assertEquals(now.withNano(nanos).toInstant(), date(GregorianCalendar.from(now)).toInstant());
+
+        Assertions.assertNotEquals(now.withNano(nanos), date(calendar(now)));
+        Assertions.assertEquals(now.withNano(nanos).toInstant(), date(calendar(now)).toInstant());
+
+        // By if the ZoneID is not UTC, everything is fine
+        Assertions.assertEquals(zx.withNano(nanos), date(calendar(zx)));
+        Assertions.assertEquals(zx.withNano(nanos).toInstant(), date(calendar(zx)).toInstant());
     }
 
     /**
@@ -72,8 +84,8 @@ class BaseParentTimeTest extends BaseParent {
         Assertions.assertTrue(date.before(date(now())));
         Assertions.assertTrue(z.isBefore(now()));
 
-        ZonedDateTime zx = date(date);
-        Assertions.assertEquals(z, zx);
+        int nanos = (z.getNano() / 1000000) * 1000000;
+        Assertions.assertEquals(z.withNano(nanos), date(date));
     }
 
     /**
@@ -83,12 +95,17 @@ class BaseParentTimeTest extends BaseParent {
     void testCalendar() {
 
         ZonedDateTime z = now();
-        ZonedDateTime zx = date(GregorianCalendar.from(z));
 
-        Assertions.assertEquals(z, zx);
+        /*
+         *  Two observations:
+         *  1. Calendars have 'milliseconds' not 'nano seconds'.
+         *  2. The zone ID are different for UTC for some reason ('Z' and 'UTC'). This leads to the inequity of time.
+         */
+        int nanos = (z.getNano() / 1000000) * 1000000;
+        Assertions.assertNotEquals(z.withNano(nanos), date(GregorianCalendar.from(z)));
+        Assertions.assertEquals(z.withNano(nanos).toInstant(), date(GregorianCalendar.from(z)).toInstant());
 
         sleep(200);
-
         Assertions.assertTrue(z.isBefore(now()));
     }
 

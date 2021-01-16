@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -15,15 +15,14 @@
  */
 package ru.anr.base;
 
+
 import org.springframework.core.NestedRuntimeException;
 
 /**
  * An own wrap for Spring NestedRuntimeException.
  *
- *
  * @author Alexey Romanchuk
  * @created Nov 6, 2014
- *
  */
 
 public class ApplicationException extends NestedRuntimeException {
@@ -46,9 +45,8 @@ public class ApplicationException extends NestedRuntimeException {
 
     /**
      * Construction of an exception instance
-     * 
-     * @param msg
-     *            An error message
+     *
+     * @param msg An error message
      */
     public ApplicationException(String msg) {
 
@@ -57,11 +55,9 @@ public class ApplicationException extends NestedRuntimeException {
 
     /**
      * Construction of a new exception object with logging full stack property.
-     * 
-     * @param msg
-     *            The message
-     * @param logFullStack
-     *            true, if we need the full exception stack to be logged.
+     *
+     * @param msg          The message
+     * @param logFullStack true, if we need the full exception stack to be logged.
      */
     public ApplicationException(String msg, boolean logFullStack) {
 
@@ -71,11 +67,9 @@ public class ApplicationException extends NestedRuntimeException {
 
     /**
      * Construction of an exception instance
-     * 
-     * @param msg
-     *            An error message
-     * @param cause
-     *            The root exception
+     *
+     * @param msg   An error message
+     * @param cause The root exception
      */
     public ApplicationException(String msg, Throwable cause) {
 
@@ -84,9 +78,8 @@ public class ApplicationException extends NestedRuntimeException {
 
     /**
      * Construction of an exception instance
-     * 
-     * @param cause
-     *            The root exception
+     *
+     * @param cause The root exception
      */
     public ApplicationException(Throwable cause) {
 
@@ -108,11 +101,12 @@ public class ApplicationException extends NestedRuntimeException {
     /**
      * @return the logFullStack
      */
-    public boolean isLogFullStack() { return logFullStack; }
+    public boolean isLogFullStack() {
+        return logFullStack;
+    }
 
     /**
-     * @param errorId
-     *            the errorId to set
+     * @param errorId the errorId to set
      */
     public void setErrorId(String errorId) {
 

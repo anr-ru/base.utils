@@ -15,18 +15,18 @@
  */
 package ru.anr.base;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-import org.joda.time.format.PeriodFormat;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.*;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.ReflectionUtils;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -56,51 +56,42 @@ import java.util.stream.Stream;
 public class BaseParent {
 
     /**
-     * A great function to make Checkstyle think the class has not only static
-     * methods.
-     */
-    public void dummy() {
-
-        // Do nothing
-    }
-
-    /**
      * The default encoding
      */
     public static final Charset DEFAULT_CHARSET = java.nio.charset.StandardCharsets.UTF_8;
 
     /**
-     * A short-cut for the new list function
+     * A short-cut function for creating a new list from an array
      *
-     * @param array An array of objects
+     * @param array The array of objects
      * @param <S>   The type of elements
-     * @return A new list with elements from the original array
+     * @return The resulted list with elements from the original array
      */
     @SafeVarargs
     public static <S> List<S> list(S... array) {
 
-        return new ArrayList<S>(Arrays.asList(array));
+        return new ArrayList<>(Arrays.asList(array));
     }
 
     /**
      * A short-cut method for building a list by a collection
      *
      * @param collection The collection to convert
-     * @param <S>        Type of items
-     * @return A list
+     * @param <S>        The type of items
+     * @return The resulted list
      */
     public static <S> List<S> list(Collection<S> collection) {
 
-        return new ArrayList<S>(collection);
+        return new ArrayList<>(collection);
     }
 
     /**
      * Converts a string in the given encoding to a byte array without throwing
      * a checked exception.
      *
-     * @param s        A string
-     * @param encoding An encoding
-     * @return An array of bytes
+     * @param s        The original string
+     * @param encoding The encoding
+     * @return The resulted array of bytes
      */
     public static byte[] bytes(String s, String encoding) {
 
@@ -114,8 +105,8 @@ public class BaseParent {
     /**
      * Converts a string to its utf-8 bytes
      *
-     * @param s An original string
-     * @return An array of bytes
+     * @param s The original string
+     * @return The resulted array of bytes
      */
     public static byte[] utf8(String s) {
 
@@ -146,7 +137,7 @@ public class BaseParent {
      */
     public static <S> List<S> list(List<S> l) {
 
-        return l == null ? new ArrayList<S>() : new ArrayList<S>(l);
+        return l == null ? new ArrayList<>() : new ArrayList<>(l);
     }
 
     /**
@@ -159,7 +150,7 @@ public class BaseParent {
     @SafeVarargs
     public static <S> Set<S> set(S... array) {
 
-        return new HashSet<S>(Arrays.asList(array));
+        return new HashSet<>(Arrays.asList(array));
     }
 
     /**
@@ -188,7 +179,7 @@ public class BaseParent {
     public static void inject(Object target, String fieldName, Object field) {
 
         Field f = ReflectionUtils.findField(target.getClass(), fieldName);
-        Assert.notNull(f);
+        Assert.notNull(f, "Field " + fieldName + " not defined");
 
         ReflectionUtils.makeAccessible(f);
         ReflectionUtils.setField(f, target, field);
@@ -199,13 +190,14 @@ public class BaseParent {
      *
      * @param target    The target object
      * @param fieldName The name of the field
-     * @param <S>       The type of resulted object
+     * @param <S>       The expected type of resulted object. The type casting is unsafe
+     *                  as we suppose the user expects the valid type.
      * @return The resulted object
      */
     public static <S> S field(Object target, String fieldName) {
 
         Field f = ReflectionUtils.findField(target.getClass(), fieldName);
-        Assert.notNull(f);
+        Assert.notNull(f, "Field " + fieldName + " not defined");
 
         ReflectionUtils.makeAccessible(f);
         return (S) ReflectionUtils.getField(f, target);
@@ -475,7 +467,7 @@ public class BaseParent {
      * @param numberAsStr String representation for decimal
      * @return a new {@link BigDecimal}
      */
-    public static final BigDecimal d(String numberAsStr) {
+    public static BigDecimal d(String numberAsStr) {
 
         return new BigDecimal(numberAsStr);
     }
@@ -486,7 +478,7 @@ public class BaseParent {
      * @param value Double value
      * @return a new {@link BigDecimal}
      */
-    public static final BigDecimal d(double value) {
+    public static BigDecimal d(double value) {
 
         return new BigDecimal(Double.toString(value));
     }
@@ -499,7 +491,7 @@ public class BaseParent {
      * @param scale The scale
      * @return New {@link BigDecimal} in the specified scale
      */
-    public static final BigDecimal scale(BigDecimal d, int scale) {
+    public static BigDecimal scale(BigDecimal d, int scale) {
 
         return d.setScale(scale, RoundingMode.HALF_UP);
     }
@@ -512,7 +504,7 @@ public class BaseParent {
      * @param scale The scale
      * @return New {@link BigDecimal} in the specified scale
      */
-    public static final BigDecimal div(BigDecimal a, BigDecimal b, int scale) {
+    public static BigDecimal div(BigDecimal a, BigDecimal b, int scale) {
 
         return a.divide(b, scale, RoundingMode.HALF_UP);
     }
@@ -570,8 +562,7 @@ public class BaseParent {
      * @return true, if the string is empty
      */
     public static boolean isEmpty(Object s) {
-
-        return StringUtils.isEmpty(s);
+        return org.apache.commons.lang3.ObjectUtils.isEmpty(s);
     }
 
     /**
@@ -602,9 +593,7 @@ public class BaseParent {
     public static boolean contains(Collection<String> coll, boolean conjunction, String... items) {
 
         Set<String> s = set(items);
-        return conjunction ? //
-                coll.containsAll(list(items)) : //
-                coll.stream().parallel().filter(a -> s.contains(a)).count() > 0;
+        return conjunction ? coll.containsAll(list(items)) : coll.stream().parallel().anyMatch(s::contains);
     }
 
     /**
@@ -686,13 +675,8 @@ public class BaseParent {
 
         try {
             callback.run(params);
-        } catch (AssertionError ignore) {
-            error("Ignored error: {}", nullSafe(ignore.getMessage()));
-
-        } catch (RuntimeException ignore) {
-            error("Ignored error: {}", nullSafe(ignore.getMessage()));
-        } catch (Exception ignore) {
-            error("Ignored error: {}", nullSafe(ignore.getMessage()));
+        } catch (AssertionError | Exception ex) {
+            error("Ignored error: {}", nullSafe(ex.getMessage()));
         }
     }
 
@@ -714,7 +698,6 @@ public class BaseParent {
      * @param c A clock
      */
     public static void setClock(Clock c) {
-
         clock = c;
     }
 
@@ -749,8 +732,7 @@ public class BaseParent {
      * @return A zoned date-time
      */
     public static ZonedDateTime date(Calendar calendar) {
-
-        return ZonedDateTime.ofInstant(calendar.toInstant(), DEFAULT_TIMEZONE);
+        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());
     }
 
     /**
@@ -896,7 +878,7 @@ public class BaseParent {
     public static String readAsString(String path) {
 
         try {
-            return IOUtils.toString(new ClassPathResource(path).getInputStream());
+            return IOUtils.toString(new ClassPathResource(path).getInputStream(), DEFAULT_CHARSET);
         } catch (IOException ex) {
             throw new ApplicationException(ex);
         }
@@ -918,41 +900,12 @@ public class BaseParent {
     }
 
     /**
-     * @param date   Date
-     * @param locale Locale
-     * @return formatted date
-     */
-    public static String formatDate(long date, String locale) {
-
-        return DateTimeFormatter.ofPattern("ru_RU".equals(locale) ? "dd.MM.yyyy HH:mm:ss z" : "dd/MM/yyyy HH:mm:ss z")
-                .withZone(ZoneOffset.systemDefault())
-                .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
-    }
-
-    /**
      * @param pattern patter
      * @param date    date
      * @return formatted date
      */
     public static String formatDate(String pattern, Calendar date) {
-
-        return null == date ? null : DateTimeFormatter.ofPattern(pattern)
-                .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTimeInMillis()), ZoneId.systemDefault()));
-    }
-
-    /**
-     * @param startDate Start date
-     * @param endDate   End date
-     * @param locale    Locale
-     * @return formatted period without seconds
-     */
-    public static String formatPeriodWithoutSeconds(Calendar startDate, Calendar endDate, String locale) {
-
-        Period period = new Period(startDate.getTimeInMillis(), endDate.getTimeInMillis(),
-                PeriodType.standard().withSecondsRemoved().withMillisRemoved());
-
-        String l = locale == null ? Locale.getDefault().toString() : locale;
-        return PeriodFormat.wordBased(Locale.forLanguageTag(l.replaceAll("_", "-"))).print(period);
+        return nullSafe(date, d -> DateTimeFormatter.ofPattern(pattern).format(date(date)));
     }
 
     /**
@@ -962,7 +915,6 @@ public class BaseParent {
      * @return hashed string
      */
     public static String sha256(String s) {
-
         return digest(s, "SHA-256");
     }
 
@@ -978,7 +930,7 @@ public class BaseParent {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             md.update(s.getBytes());
-            return DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+            return Hex.encodeHexString(md.digest()).toLowerCase(Locale.getDefault());
         } catch (NoSuchAlgorithmException ex) {
             throw new ApplicationException(ex);
         }

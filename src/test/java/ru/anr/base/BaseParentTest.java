@@ -471,6 +471,7 @@ class BaseParentTest extends BaseParent {
     void testFormatDate() {
 
         Calendar calendar = new GregorianCalendar();
+        calendar.setTimeZone(TimeZone.getTimeZone("Asia/Yekaterinburg"));
         calendar.set(2015, Calendar.SEPTEMBER, 21, 21, 0, 0);
         Assertions.assertEquals("21-09-2015 21:00:00", formatDate("dd-MM-yyyy HH:mm:ss", calendar));
         calendar.set(1990, Calendar.SEPTEMBER, 9);
@@ -502,11 +503,11 @@ class BaseParentTest extends BaseParent {
     public void testField() {
 
         SampleObject o = new SampleObject(null, -12);
-        Assert.assertNull(BaseParent.field(o, "value"));
-        Assert.assertEquals(Integer.valueOf(-12), (Integer) BaseParent.field(o, "index"));
+        Assertions.assertNull(BaseParent.field(o, "value"));
+        Assertions.assertEquals(Integer.valueOf(-12), (Integer) BaseParent.field(o, "index"));
 
         o = new SampleObject("xxx", 1);
-        Assert.assertEquals("xxx", BaseParent.field(o, "value"));
-        Assert.assertEquals(Integer.valueOf(1), (Integer) BaseParent.field(o, "index"));
+        Assertions.assertEquals("xxx", BaseParent.field(o, "value"));
+        Assertions.assertEquals(Integer.valueOf(1), (Integer) BaseParent.field(o, "index"));
     }
 }

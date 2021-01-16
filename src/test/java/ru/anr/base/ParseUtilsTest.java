@@ -1,4 +1,3 @@
-
 package ru.anr.base;
 
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +10,6 @@ import java.time.ZonedDateTime;
  *
  * @author Alexey Romanchuk
  * @created Apr 19, 2016
- *
  */
 
 public class ParseUtilsTest extends BaseParent {
@@ -48,7 +46,8 @@ public class ParseUtilsTest extends BaseParent {
         Assertions.assertNull(ParseUtils.regexp(s, "xxx", 1));
 
         Assertions.assertEquals(list("1", "2"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c><c>(\\d+)</c>", 1, 2));
-        Assertions.assertEquals(list("1"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c>(<c>\\d[34]</c>)?", 1, 2));}
+        Assertions.assertEquals(list("1"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c>(<c>\\d[34]</c>)?", 1, 2));
+    }
 
     private enum XXXEnum {
         X, Y;
@@ -60,10 +59,10 @@ public class ParseUtilsTest extends BaseParent {
     @Test
     public void parseEnum() {
 
-        Assert.assertEquals(XXXEnum.X, ParseUtils.parseEnum(XXXEnum.class, "X"));
-        Assert.assertEquals(XXXEnum.Y, ParseUtils.parseEnum(XXXEnum.class, "Y"));
-        Assert.assertNull(ParseUtils.parseEnum(XXXEnum.class, null));
-        Assert.assertNull(ParseUtils.parseEnum(XXXEnum.class, "Z"));
+        Assertions.assertEquals(XXXEnum.X, ParseUtils.parseEnum(XXXEnum.class, "X"));
+        Assertions.assertEquals(XXXEnum.Y, ParseUtils.parseEnum(XXXEnum.class, "Y"));
+        Assertions.assertNull(ParseUtils.parseEnum(XXXEnum.class, null));
+        Assertions.assertNull(ParseUtils.parseEnum(XXXEnum.class, "Z"));
     }
 
     private ZonedDateTime date(int year, int month, int day, int hour, int minutes) {
@@ -75,13 +74,13 @@ public class ParseUtilsTest extends BaseParent {
      */
     @Test
     public void parseDate() {
-        Assert.assertEquals(date(2020, 5, 14, 0, 0),
+        Assertions.assertEquals(date(2020, 5, 14, 0, 0),
                 ParseUtils.parseLocalDate("2020-05-14", "yyyy-MM-dd", null));
-        Assert.assertEquals(date(2020, 5, 14, 5, 12),
+        Assertions.assertEquals(date(2020, 5, 14, 5, 12),
                 ParseUtils.parseLocalDate("2020-05-14 05:12", "yyyy-MM-dd HH:mm", null));
 
         ZonedDateTime def = now();
         // Wrong date
-        Assert.assertEquals(def, ParseUtils.parseLocalDate("2020-xx-14 05:12", "yyyy-MM-dd HH:mm", def));
+        Assertions.assertEquals(def, ParseUtils.parseLocalDate("2020-xx-14 05:12", "yyyy-MM-dd HH:mm", def));
     }
 }
