@@ -39,6 +39,12 @@ public class ApplicationException extends NestedRuntimeException {
     private String errorId;
 
     /**
+     * true, if we need to log the full exception stack (or just the error
+     * message).
+     */
+    private boolean logFullStack = true;
+
+    /**
      * Construction of an exception instance
      * 
      * @param msg
@@ -47,6 +53,20 @@ public class ApplicationException extends NestedRuntimeException {
     public ApplicationException(String msg) {
 
         super(msg);
+    }
+
+    /**
+     * Construction of a new exception object with logging full stack property.
+     * 
+     * @param msg
+     *            The message
+     * @param logFullStack
+     *            true, if we need the full exception stack to be logged.
+     */
+    public ApplicationException(String msg, boolean logFullStack) {
+
+        super(msg);
+        this.logFullStack = logFullStack;
     }
 
     /**
@@ -84,6 +104,11 @@ public class ApplicationException extends NestedRuntimeException {
 
         return errorId;
     }
+
+    /**
+     * @return the logFullStack
+     */
+    public boolean isLogFullStack() { return logFullStack; }
 
     /**
      * @param errorId

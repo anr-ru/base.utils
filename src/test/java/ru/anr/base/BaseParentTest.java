@@ -493,4 +493,20 @@ class BaseParentTest extends BaseParent {
         Assertions.assertTrue(years.contains(2017));
         Assertions.assertTrue(years.contains(2018));
     }
+
+
+    /*
+     * Test for field() method
+     */
+    @Test
+    public void testField() {
+
+        SampleObject o = new SampleObject(null, -12);
+        Assert.assertNull(BaseParent.field(o, "value"));
+        Assert.assertEquals(Integer.valueOf(-12), (Integer) BaseParent.field(o, "index"));
+
+        o = new SampleObject("xxx", 1);
+        Assert.assertEquals("xxx", BaseParent.field(o, "value"));
+        Assert.assertEquals(Integer.valueOf(1), (Integer) BaseParent.field(o, "index"));
+    }
 }

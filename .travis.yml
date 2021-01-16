@@ -1,27 +1,22 @@
 sudo: false
+dist: trusty
 language: java
+jdk:
+  - oraclejdk8
 services:
 - docker
 cache:
   directories:
   - "$HOME/.cache"
+
 before_install:
   - cp ./.mvn/ci-settings.xml $HOME/.m2/settings.xml
 
-stages:
-  - test
-  - deploy
-test:
-  provider: script
-  script: "mvn -P ci install"
-  skip_cleanup: false
-  on:
-    all_branches: true
+script:
+  - "mvn -P ci install"
 
 deploy:
   provider: script
-  script: "mvn -P ci deploy"
+  script: "mvn -P ci deploy -DskipTests"
   skip_cleanup: false
-  condition: "$TRAVIS_TAG = ^v.*$"
-  on:
-    tags: true
+  condition: "$TRAVIS_TAG = ^v.*$ OR branch = master"
