@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -15,22 +15,20 @@
  */
 package ru.anr.base;
 
-import java.util.Set;
-
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
 
+import java.util.Set;
+
 /**
  * Base class for Spring-beans. Contains some internal spring hooks for
  * manipulation with beans and context.
- * 
- * 
+ *
  * @author Alexey Romanchuk
  * @created Oct 29, 2014
- * 
  */
 public class BaseSpringParent extends BaseParent {
 
@@ -53,7 +51,7 @@ public class BaseSpringParent extends BaseParent {
 
     /**
      * Checking for 'Production' mode
-     * 
+     *
      * @return true, if 'production' profile found
      */
     protected boolean isProdMode() {
@@ -64,7 +62,7 @@ public class BaseSpringParent extends BaseParent {
 
     /**
      * Checking all profile names
-     * 
+     *
      * @return A set of current profile names
      */
     protected Set<String> getProfiles() {
@@ -74,15 +72,11 @@ public class BaseSpringParent extends BaseParent {
 
     /**
      * Getting bean from context (a short-cut)
-     * 
-     * @param name
-     *            Name of bean
-     * @param clazz
-     *            Bean class
+     *
+     * @param name  Name of bean
+     * @param clazz Bean class
+     * @param <S>   Type of bean
      * @return Bean instance
-     * 
-     * @param <S>
-     *            Type of bean
      */
     protected <S> S bean(String name, Class<S> clazz) {
 
@@ -91,13 +85,10 @@ public class BaseSpringParent extends BaseParent {
 
     /**
      * Exctracts a bean target if it's a aop proxy
-     * 
-     * @param bean
-     *            Original (may be proxied) bean
+     *
+     * @param bean Original (may be proxied) bean
+     * @param <S>  Expected bean class
      * @return A target bean instance
-     * 
-     * @param <S>
-     *            Expected bean class
      */
     @SuppressWarnings("unchecked")
     protected static <S> S target(Object bean) {
@@ -111,13 +102,10 @@ public class BaseSpringParent extends BaseParent {
 
     /**
      * Getting bean from context (a short-cut)
-     * 
-     * @param name
-     *            Name of bean
+     *
+     * @param name Name of bean
+     * @param <S>  Type of bean
      * @return Bean instance
-     * 
-     * @param <S>
-     *            Type of bean
      */
     @SuppressWarnings("unchecked")
     protected <S> S bean(String name) {
@@ -127,12 +115,10 @@ public class BaseSpringParent extends BaseParent {
 
     /**
      * Returns a bean instance of the given class
-     * 
-     * @param clazz
-     *            The class of a bean
+     *
+     * @param clazz The class of a bean
+     * @param <S>   A type
      * @return A bean instance
-     * @param <S>
-     *            A type
      */
     protected <S> S bean(Class<S> clazz) {
 
@@ -141,9 +127,8 @@ public class BaseSpringParent extends BaseParent {
 
     /**
      * Returns true if specified bean exists
-     * 
-     * @param name
-     *            Name of the bean
+     *
+     * @param name Name of the bean
      * @return true if bean exists
      */
     protected boolean hasBean(String name) {
@@ -161,5 +146,15 @@ public class BaseSpringParent extends BaseParent {
     public Environment getEnv() {
 
         return env;
+    }
+
+    /**
+     * If we need to override the context source
+     *
+     * @param context The spring context
+     */
+    public void setCtx(ApplicationContext context) {
+        this.ctx = context;
+        this.env = context.getEnvironment();
     }
 }
