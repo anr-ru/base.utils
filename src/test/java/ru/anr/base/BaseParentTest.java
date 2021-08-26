@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.Predicate;
@@ -486,6 +487,13 @@ public class BaseParentTest extends BaseParent {
         Assert.assertEquals("21-09-2015 21:00:00", formatDate("dd-MM-yyyy HH:mm:ss", calendar));
         calendar.set(1990, Calendar.SEPTEMBER, 9);
         Assert.assertEquals("09-09-1990", formatDate("dd-MM-yyyy", calendar));
+
+        // Date Time
+        Assert.assertEquals("26 Aug 2021 10:00:00 (Asia/Singapore)",
+                formatDateTime(ZonedDateTime
+                                .of(2021, 8, 26, 10, 0, 0, 0,
+                                        ZoneId.of("Asia/Singapore")),
+                        "d MMM uuuu HH:mm:ss (VV)"));
     }
 
     /**
@@ -519,5 +527,17 @@ public class BaseParentTest extends BaseParent {
         o = new SampleObject("xxx", 1);
         Assert.assertEquals("xxx", BaseParent.field(o, "value"));
         Assert.assertEquals(Integer.valueOf(1), (Integer) BaseParent.field(o, "index"));
+    }
+
+    @Test
+    public void nullSafe() {
+
+        String s = "2";
+        Assert.assertEquals("23", nullSafe(s, x -> x + "3"));
+
+        Assert.assertEquals("23", safe(s, x -> x + "3").orElse("5"));
+
+        s = null;
+        Assert.assertEquals("5", safe(s, x -> x + "3").orElse("5"));
     }
 }

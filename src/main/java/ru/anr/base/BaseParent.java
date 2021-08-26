@@ -317,8 +317,21 @@ public class BaseParent {
      * @return A model instance or null
      */
     public static <S, V> S nullSafe(V value, ValueCreator<S, V> callback) {
-
         return (value == null) ? null : callback.newValue(value);
+    }
+
+    /**
+     * A bit safer variant of {@link #nullSafe(Object, ValueCreator)} when we provide an optional value
+     * for nullable result. This allows to treat the null value in the same code flow.
+     *
+     * @param value    The value
+     * @param callback The callback
+     * @param <S>      The type of the result value
+     * @param <V>      The original value type
+     * @return The resulted optional
+     */
+    public static <S, V> Optional<S> safe(V value, ValueCreator<S, V> callback) {
+        return (value == null) ? Optional.empty() : Optional.of(callback.newValue(value));
     }
 
     /**
@@ -939,6 +952,11 @@ public class BaseParent {
         return null == date ? null : DateTimeFormatter.ofPattern(pattern)
                 .format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTimeInMillis()), ZoneId.systemDefault()));
     }
+
+    public static String formatDateTime(ZonedDateTime dateTime, String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).format(dateTime);
+    }
+
 
     /**
      * @param startDate Start date
