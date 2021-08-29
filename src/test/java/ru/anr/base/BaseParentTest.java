@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.Predicate;
@@ -62,6 +61,19 @@ class BaseParentTest extends BaseParent {
     }
 
     /**
+     * Test method for {@link ru.anr.base.BaseParent#list(List)}
+     */
+    @Test
+    void testListByLisy() {
+
+        List<String> l = list("x", "y");
+        Assertions.assertEquals(list("x", "y"), list(l));
+
+        Assertions.assertEquals(list(), list(new ArrayList<>()));
+        Assertions.assertEquals(list(), list((List<String>) null));
+    }
+
+    /**
      * Test method for {@link ru.anr.base.BaseParent#set(Object...)}.
      */
     @Test
@@ -78,8 +90,8 @@ class BaseParentTest extends BaseParent {
          */
         l = set();
         Assertions.assertTrue(l.isEmpty());
-        l = set((String) null);
 
+        l = set((String) null);
         Assertions.assertEquals(1, l.size());
         Assertions.assertTrue(l.contains(null));
     }
@@ -138,8 +150,7 @@ class BaseParentTest extends BaseParent {
         Assertions.assertNull(o.getValue());
 
         inject(o, "value", "xxx");
-
-        Assertions.assertNotNull(o.getValue());
+        Assertions.assertEquals("xxx", o.getValue());
     }
 
     /**
@@ -377,7 +388,7 @@ class BaseParentTest extends BaseParent {
     }
 
     /**
-     * test nullSafe String
+     * test
      */
     @Test
     void testDate() {
@@ -440,7 +451,7 @@ class BaseParentTest extends BaseParent {
 
     /**
      * Test method for
-     * {@link BaseParent#getEmptyKeys(java.util.Map, java.util.List)}
+     * {@link BaseParent#getEmptyKeys(java.util.Map, java.util.Collection)}
      */
     @Test
     void testGetEmptyKeys() {
@@ -449,7 +460,7 @@ class BaseParentTest extends BaseParent {
         map.put("a", "");
         map.put("b", "");
         map.put("c", "");
-        Assertions.assertEquals(Collections.singletonList("d"), getEmptyKeys(map, Arrays.asList("a", "b", "d")));
+        Assertions.assertEquals(set("d"), getEmptyKeys(map, Arrays.asList("a", "b", "d")));
     }
 
     /**
@@ -466,29 +477,8 @@ class BaseParentTest extends BaseParent {
     }
 
     /**
-     * Test for {@link BaseParent#formatDate(String, Calendar)}
-     */
-    @Test
-    void testFormatDate() {
-
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTimeZone(TimeZone.getTimeZone("Asia/Yekaterinburg"));
-        calendar.set(2015, Calendar.SEPTEMBER, 21, 21, 0, 0);
-        Assertions.assertEquals("21-09-2015 21:00:00", formatDate("dd-MM-yyyy HH:mm:ss", calendar));
-        calendar.set(1990, Calendar.SEPTEMBER, 9);
-        Assertions.assertEquals("09-09-1990", formatDate("dd-MM-yyyy", calendar));
-
-        // Date Time
-        Assert.assertEquals("26 Aug 2021 10:00:00 (Asia/Singapore)",
-                formatDateTime(ZonedDateTime
-                                .of(2021, 8, 26, 10, 0, 0, 0,
-                                        ZoneId.of("Asia/Singapore")),
-                        "d MMM uuuu HH:mm:ss (VV)"));
-    }
-
-    /**
      * Tests for
-     * {@link BaseParent#extract(java.util.Collection, ExtractCallback)}
+     * {@link BaseParent#extract(java.util.Collection, java.util.function.Function)}
      */
     @Test
     void testExtractKeys() {
@@ -512,22 +502,143 @@ class BaseParentTest extends BaseParent {
 
         SampleObject o = new SampleObject(null, -12);
         Assertions.assertNull(BaseParent.field(o, "value"));
-        Assertions.assertEquals(Integer.valueOf(-12), (Integer) BaseParent.field(o, "index"));
+        Assertions.assertEquals(Integer.valueOf(-12), BaseParent.field(o, "index"));
 
         o = new SampleObject("xxx", 1);
         Assertions.assertEquals("xxx", BaseParent.field(o, "value"));
-        Assertions.assertEquals(Integer.valueOf(1), (Integer) BaseParent.field(o, "index"));
+        Assertions.assertEquals(Integer.valueOf(1), BaseParent.field(o, "index"));
     }
 
     @Test
     public void nullSafe() {
 
         String s = "2";
-        Assert.assertEquals("23", nullSafe(s, x -> x + "3"));
+        Assertions.assertEquals("23", nullSafe(s, x -> x + "3").orElse(null));
 
-        Assert.assertEquals("23", safe(s, x -> x + "3").orElse("5"));
+        Assertions.assertEquals("23", nullSafe(s, x -> x + "3").orElse("5"));
 
-        s = null;
-        Assert.assertEquals("5", safe(s, x -> x + "3").orElse("5"));
+        Assertions.assertEquals("5", nullSafe(null, x -> x + "3").orElse("5"));
+        nullSafe(null, x -> x + "3");
+    }
+
+    @Test
+    public void addToCollection() {
+
+        List<String> l = list("1", "2");
+        Assertions.assertTrue(add(l, "3"));
+        Assertions.assertEquals(list("1", "2", "3"), l);
+
+        Assertions.assertEquals(list("1", "2", "3", "4"),
+                safeAdd(l, "4"));
+    }
+
+    @Test
+    public void nullSafeByClass() {
+
+        SampleObject o = new SampleObject("2", 5);
+        Assertions.assertEquals(o, nullSafe(o, SampleObject.class));
+
+        SampleObject ox = nullSafe(null, SampleObject.class);
+        Assertions.assertEquals(0, ox.getIndex());
+        Assertions.assertNull(ox.getValue());
+    }
+
+    /**
+     * Tests for {@link #d(String)} and {@link #d(double)}.
+     */
+    @Test
+    public void testDecimal() {
+        // Same scale
+        Assertions.assertEquals(new BigDecimal("2.00"), d("2.00"));
+        Assertions.assertEquals(new BigDecimal("5"), d("5"));
+
+        // double
+        Assertions.assertEquals(new BigDecimal("2.0"), d(2.00));
+    }
+
+    /**
+     * Tests for {@link #scale(BigDecimal, int)}.
+     */
+    @Test
+    public void testDecimalScale() {
+
+        Assertions.assertEquals(new BigDecimal("2.00000"), scale(d("2.00"), 5));
+    }
+
+    /**
+     * Tests for {@link #div(BigDecimal, BigDecimal, int)}.
+     */
+    @Test
+    public void testDecimalDiv() {
+
+        Assertions.assertEquals(d("2.00000"),
+                div(d("12"), d("6"), 5));
+    }
+
+    /**
+     * Tests for {@link #notEmpty(Object)} and {@link #isEmpty(Object)}.
+     */
+    @Test
+    public void testEmptyObjects() {
+
+        List<String> l = list("1", "2");
+
+        Assertions.assertTrue(notEmpty(l));
+        Assertions.assertFalse(isEmpty(l));
+
+        Assertions.assertTrue(isEmpty(list()));
+        Assertions.assertTrue(isEmpty(null));
+
+        Assertions.assertFalse(notEmpty(list()));
+        Assertions.assertFalse(notEmpty(null));
+
+        Assertions.assertFalse(isEmpty("x"));
+        Assertions.assertTrue(isEmpty(null));
+        Assertions.assertTrue(isEmpty(""));
+        Assertions.assertTrue(isEmpty(toMap()));
+        Assertions.assertFalse(isEmpty(toMap("1", 2)));
+    }
+
+    @Test
+    public void testContains() {
+
+        List<String> l = list("1", "2");
+        Assertions.assertTrue(contains(l, true, "1", "2"));
+        Assertions.assertTrue(contains(l, false, "1"));
+        Assertions.assertTrue(contains(l, false, "2"));
+    }
+
+    @Test
+    public void testTotal() {
+        List<BigDecimal> l = list(d("1"), d("-2"), d("3"));
+        Assertions.assertEquals(d("6"), total(l, BigDecimal::abs));
+
+        List<SampleObject> lx = list(
+                new SampleObject("1", 0),
+                new SampleObject("-2", 0),
+                new SampleObject("3", 0));
+        Assertions.assertEquals(d("2"), total(lx, SampleObject::asDecimal));
+    }
+
+    @Test
+    public void testOfRunIgnored() {
+        runIgnored(x -> {
+            throw new NullPointerException("NPE");
+        }, "1", "2");
+    }
+
+    @Test
+    public void testWaitCondition() {
+        Assertions.assertTrue(
+                waitCondition("Text", 5, 200, true,
+                        args -> false, "1", 2)
+        );
+    }
+
+    @Test
+    public void testReadAsString() {
+        Assertions.assertEquals("# Standard properties\n" +
+                "spring.profiles.active=production\n" +
+                "value=${DGC_VALUE}\n", readAsString("./application.properties"));
     }
 }

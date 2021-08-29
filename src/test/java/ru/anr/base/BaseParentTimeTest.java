@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Time functions tests.
@@ -36,7 +35,7 @@ class BaseParentTimeTest extends BaseParent {
 
         ZonedDateTime ekb = ZonedDateTime.now(ZoneId.of("Asia/Yekaterinburg"));
 
-        logger.info("{} - {}", t.toString(), ekb.toString());
+        logger.info("{} - {}", t, ekb);
 
         Assertions.assertNotEquals(t, ekb);
         Assertions.assertEquals(60 * 60 * 5, ekb.getOffset().getTotalSeconds() - t.getOffset().getTotalSeconds());
@@ -132,5 +131,57 @@ class BaseParentTimeTest extends BaseParent {
 
         Assertions.assertTrue(inPast(zx2));
         Assertions.assertTrue(inPast(zx1));
+    }
+
+    /**
+     * Test for {@link BaseParent#formatDateTime(ZonedDateTime, String)}
+     */
+    @Test
+    void testFormatDate() {
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeZone(TimeZone.getTimeZone("Asia/Yekaterinburg"));
+        calendar.set(2015, Calendar.SEPTEMBER, 21, 21, 0, 0);
+        Assertions.assertEquals("21-09-2015 21:00:00", formatDateTime(date(calendar), "dd-MM-yyyy HH:mm:ss"));
+        calendar.set(1990, Calendar.SEPTEMBER, 9);
+        Assertions.assertEquals("09-09-1990", formatDateTime(date(calendar), "dd-MM-yyyy"));
+
+        // Date Time
+        Assertions.assertEquals("26 Aug 2021 10:00:00 (Asia/Singapore)",
+                formatDateTime(ZonedDateTime
+                                .of(2021, 8, 26, 10, 0, 0, 0,
+                                        ZoneId.of("Asia/Singapore")),
+                        "d MMM uuuu HH:mm:ss (VV)"));
+    }
+
+    @Test
+    void testFixedTime() {
+
+        ZonedDateTime t = now();
+        setClock(Clock.fixed(t.toInstant(), DEFAULT_TIMEZONE));
+
+        sleep(1000);
+        Assertions.assertEquals(now(), t);
+
+        setClock(null); // Reset
+    }
+
+    @Test
+    public void fromLocal() {
+        Assertions.assertEquals(
+                ZonedDateTime.of(2021, 8, 29, 0, 0, 0, 0, DEFAULT_TIMEZONE),
+                fromLocal(LocalDate.of(2021, 8, 29)));
+    }
+
+    @Test
+    public void toLocal() {
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeZone(TimeZone.getTimeZone("Asia/Yekaterinburg"));
+        calendar.set(2021, Calendar.AUGUST, 29, 21, 0, 0);
+
+        Assertions.assertEquals(
+                LocalDate.of(2021, 8, 29),
+                toLocal(calendar));
     }
 }

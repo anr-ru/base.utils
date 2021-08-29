@@ -30,7 +30,6 @@ class BaseSpringParentTest extends BaseSpringParent {
      */
     @Bean(name = "bean")
     String factory() {
-
         return "Factory";
     }
 
@@ -42,7 +41,22 @@ class BaseSpringParentTest extends BaseSpringParent {
 
         String x = bean("bean", String.class);
         Assertions.assertEquals("Factory", x);
+
+        x = bean("bean");
+        Assertions.assertEquals("Factory", x);
+
+        x = bean(String.class);
+        Assertions.assertEquals("Factory", x);
+        Assertions.assertTrue(hasBean("bean"));
     }
+
+    @Test
+    void testBeanTarget() {
+
+        String x = target(bean("bean", String.class));
+        Assertions.assertEquals("Factory", x);
+    }
+
 
     /**
      * Testing for profiles

@@ -39,6 +39,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -69,7 +70,6 @@ public class BaseParent {
      */
     @SafeVarargs
     public static <S> List<S> list(S... array) {
-
         return new ArrayList<>(Arrays.asList(array));
     }
 
@@ -81,7 +81,6 @@ public class BaseParent {
      * @return The resulted list
      */
     public static <S> List<S> list(Collection<S> collection) {
-
         return new ArrayList<>(collection);
     }
 
@@ -109,7 +108,6 @@ public class BaseParent {
      * @return The resulted array of bytes
      */
     public static byte[] utf8(String s) {
-
         return bytes(s, DEFAULT_CHARSET.name());
     }
 
@@ -131,13 +129,23 @@ public class BaseParent {
     /**
      * Null-safe creation of a list
      *
-     * @param l   An original, possible, null list
+     * @param l   The original, possibly, null list
      * @param <S> The type of elements
      * @return A new list with elements from the original one
      */
     public static <S> List<S> list(List<S> l) {
+        return nullSafe(l, ArrayList::new).orElse(new ArrayList<>());
+    }
 
-        return l == null ? new ArrayList<>() : new ArrayList<>(l);
+    /**
+     * A simpler shot-cut for collecting a stream to a list.
+     *
+     * @param stream The stream
+     * @param <S>    The object type
+     * @return The resulted list
+     */
+    public static <S> List<S> list(Stream<S> stream) {
+        return stream.collect(Collectors.toList());
     }
 
     /**
@@ -149,8 +157,18 @@ public class BaseParent {
      */
     @SafeVarargs
     public static <S> Set<S> set(S... array) {
-
         return new HashSet<>(Arrays.asList(array));
+    }
+
+    /**
+     * A simpler form for stream collecting
+     *
+     * @param stream A stream
+     * @param <S>    Type of object
+     * @return A set
+     */
+    public static <S> Set<S> set(Stream<S> stream) {
+        return stream.collect(Collectors.toSet());
     }
 
     /**
@@ -163,26 +181,26 @@ public class BaseParent {
      */
     @SafeVarargs
     public static <S> S[] concat(S[] array1, S... array2) {
-
         return ArrayUtils.addAll(array1, array2);
     }
 
     /**
      * Injection of a private field into the given object. Of course, we are
-     * against such a technique :-). But still in tests this is a very
-     * convenient approach.
+     * against such a technique :-).
      *
-     * @param target    The target object
-     * @param fieldName The name of the field to inject
-     * @param field     The field's value
+     * But still in tests this is a very convenient approach.
+     *
+     * @param target     The target object
+     * @param fieldName  The name of the field to inject
+     * @param fieldValue The field's value
      */
-    public static void inject(Object target, String fieldName, Object field) {
+    public static void inject(Object target, String fieldName, Object fieldValue) {
 
         Field f = ReflectionUtils.findField(target.getClass(), fieldName);
         Assert.notNull(f, "Field " + fieldName + " not defined");
 
         ReflectionUtils.makeAccessible(f);
-        ReflectionUtils.setField(f, target, field);
+        ReflectionUtils.setField(f, target, fieldValue);
     }
 
     /**
@@ -194,6 +212,7 @@ public class BaseParent {
      *                  as we suppose the user expects the valid type.
      * @return The resulted object
      */
+    @SuppressWarnings("unchecked")
     public static <S> S field(Object target, String fieldName) {
 
         Field f = ReflectionUtils.findField(target.getClass(), fieldName);
@@ -213,7 +232,6 @@ public class BaseParent {
      * arguments are null
      */
     public static boolean safeEquals(Object arg1, Object arg2) {
-
         return ObjectUtils.nullSafeEquals(arg1, arg2);
     }
 
@@ -225,7 +243,6 @@ public class BaseParent {
      * @return The found object or null is the collection is empty
      */
     public static <S> S first(Collection<S> coll) {
-
         return CollectionUtils.isEmpty(coll) ? null : coll.iterator().next();
     }
 
@@ -237,8 +254,8 @@ public class BaseParent {
      * @return The resulted value if it exists, otherwise null
      */
     public static <S> S first(Stream<S> stream) {
-
-        return (stream == null) ? null : stream.findFirst().orElse(null);
+        return nullSafe(stream, s -> s.findFirst().orElse(null))
+                .orElse(null);
     }
 
     /**
@@ -251,8 +268,7 @@ public class BaseParent {
      * @return The filtered collection
      */
     public static <S> List<S> filter(Collection<S> coll, Predicate<S> predicate) {
-
-        return coll.stream().filter(predicate).collect(Collectors.toCollection(ArrayList::new));
+        return coll.stream().filter(predicate).collect(Collectors.toList());
     }
 
     /**
@@ -263,8 +279,23 @@ public class BaseParent {
      * @param <S>  The type of the item
      * @return true, if the item has been added
      */
-    public static <S> boolean add(Collection<S> coll, S item) {
+    public static <S> Collection<S> safeAdd(Collection<S> coll, S item) {
+        if (item != null) {
+            coll.add(item);
+        }
+        return coll;
+    }
 
+    /**
+     * Adds the given value to the collection if the value is not null
+     * and return the updated collection.
+     *
+     * @param coll The updated collection
+     * @param item The item
+     * @param <S>  The type of object
+     * @return true, if the item was added
+     */
+    public static <S> boolean add(Collection<S> coll, S item) {
         boolean rs = false;
         if (item != null) {
             coll.add(item);
@@ -279,7 +310,6 @@ public class BaseParent {
      * @param millis A number of milliseconds
      */
     public static void sleep(long millis) {
-
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -295,26 +325,11 @@ public class BaseParent {
      * @return A string which is not null
      */
     public static String nullSafe(Object s) {
-
         return (s == null) ? "" : s.toString();
     }
 
     /**
-     * A variant of the nullSafe(..) function for safe creation of models
-     *
-     * @param value    A value to check before creation of a model
-     * @param callback The callback used to specify the way of creation
-     * @param <S>      The class of the model
-     * @param <V>      The class of the value
-     * @return A model instance or null
-     */
-    public static <S, V> S nullSafe(V value, ValueCreator<S, V> callback) {
-        return (value == null) ? null : callback.newValue(value);
-    }
-
-    /**
-     * A bit safer variant of {@link #nullSafe(Object, ValueCreator)} when we provide an optional value
-     * for nullable result. This allows to treat the null value in the same code flow.
+     * A function that allows to process correctly values that can be null.
      *
      * @param value    The value
      * @param callback The callback
@@ -322,48 +337,25 @@ public class BaseParent {
      * @param <V>      The original value type
      * @return The resulted optional
      */
-    public static <S, V> Optional<S> safe(V value, ValueCreator<S, V> callback) {
-        return (value == null) ? Optional.empty() : Optional.of(callback.newValue(value));
+    public static <S, V> Optional<S> nullSafe(V value, Function<V, S> callback) {
+        return (value == null) ? Optional.empty() : Optional.ofNullable(callback.apply(value));
     }
 
     /**
-     * A variant of the nullSafe(..) function for safe processing a possible
-     * null value.
+     * A null-safe initialization of object. If the original object is not
+     * null, then it is simply returned. But in case of null object, a new
+     * one is created.
+     * <p>
+     * This approach allows to safely get an instance of the object
+     * even if it is null.
+     * </p>
      *
-     * @param value    The value to check before processing
-     * @param callback The callback used to perform an operation under the value
-     * @param <V>      The class of the value
-     */
-    public static <V> void nullSafev(V value, ValueSetter<V> callback) {
-
-        if (value != null) {
-            callback.newValue(value);
-        }
-    }
-
-    /**
-     * @param <T>                        type of values
-     * @param defaultValueIfPossibleNull The value that is needed to be used if the possibleNullValue
-     *                                   is null
-     * @param possibleNullValue          The value that is needed to be check for null
-     * @return if {@code possibleNullValue == null}, then return
-     * defaultValueIfPossibleNull, else return possibleNullValue
-     */
-    public static <T> T nullSafe(T defaultValueIfPossibleNull, T possibleNullValue) {
-
-        return null == possibleNullValue ? defaultValueIfPossibleNull : possibleNullValue;
-    }
-
-    /**
-     * Null-safe initialization
-     *
-     * @param o     An object
+     * @param o     The original object (possibly, null)
      * @param clazz The class of the object
-     * @param <S>   Object type
+     * @param <S>   The object type
      * @return The old object or a new created
      */
     public static <S> S nullSafe(S o, Class<S> clazz) {
-
         return Optional.ofNullable(o).orElse(inst(clazz, new Class<?>[]{}));
     }
 
@@ -381,7 +373,7 @@ public class BaseParent {
     @SuppressWarnings("unchecked")
     public static <K, S, T> Map<K, S> toMap(T... array) {
 
-        Map<K, S> map = new LinkedHashMap<>();
+        Map<K, S> map = new LinkedHashMap<>(); // The order is important
         if (array != null && array.length > 0) {
 
             int l = (array.length % 2 == 0) ? array.length : (array.length + 1);
@@ -396,7 +388,15 @@ public class BaseParent {
     }
 
     /**
-     * A short-cut method for simple mapping from a collection to a map
+     * A short-cut method for simple mapping from a collection to a map.
+     * The simplest usage of the function is something like this:
+     * <pre>{@code}
+     *      List&lt;SampleObject&gt; s = list( new Sample("xxx", 1), new Sample("yyy", 2) );
+     *      Map&lt;String, Integer&gt; map = toMap(s, SampleObject::getValue, SampleObject::getIndex);
+     *
+     *      // The resulted map contains { "xxx": 1, "yyy": 2 }
+     *
+     * </pre>
      *
      * @param collection  A collection
      * @param keyMapper   A key mapper
@@ -406,7 +406,8 @@ public class BaseParent {
      * @param <U>         The type of map values
      * @return A new created map
      */
-    public static <T, K, U> Map<K, U> toMap(Collection<T> collection, Function<? super T, ? extends K> keyMapper,
+    public static <T, K, U> Map<K, U> toMap(Collection<T> collection,
+                                            Function<? super T, ? extends K> keyMapper,
                                             Function<? super T, ? extends U> valueMapper) {
 
         return collection.stream().collect(Collectors.toMap(keyMapper, valueMapper));
@@ -416,11 +417,19 @@ public class BaseParent {
      * A short-cut function to simplify the process of building a map from a
      * collection when there can be non-unique keys.
      *
-     * @param collection    An original collection
-     * @param keyMapper     A key mapper
-     * @param valueMapper   A value mapper
-     * @param mergeFunction A function to merge values conflicting by their key
-     * @param <T>           The type of a collection item
+     * <pre>{@code}
+     *      List&lt;SampleObject&gt; s = list( new Sample("xxx", 1), new Sample("xxx", 2) );
+     *      Map&lt;String, Integer&gt; map = toMap(s, SampleObject::getValue, SampleObject::getIndex, Integer::sum);
+     *
+     *      // The resulted map contains { "xxx": 3 }
+     *
+     * </pre>
+     *
+     * @param collection    The original collection
+     * @param keyMapper     The key mapper
+     * @param valueMapper   The value mapper
+     * @param mergeFunction The function to merge values conflicting by their key
+     * @param <T>           The type of collection item
      * @param <K>           Type of the map key
      * @param <U>           Type of the map value
      * @return A new map
@@ -432,72 +441,66 @@ public class BaseParent {
     }
 
     /**
-     * Safe parsing of string to some {@link Number}
+     * Safe parsing of string to some {@link Number} value.
      *
-     * @param x     String value
-     * @param clazz Class of Number object
-     * @param <S>   Object class
-     * @return Parsed value or null if parsing was unsuccessful
+     * @param x     The string value
+     * @param clazz The expected class of Number object
+     * @param <S>   The object type
+     * @return The resulted parsed value or null if parsing was unsuccessful
      */
     public static <S extends Number> S parse(String x, Class<S> clazz) {
-
         S v = null;
         try {
             v = inst(clazz, new Class<?>[]{String.class}, x);
-        } catch (FunctorException | IllegalArgumentException ex) {
-            v = null;
+        } catch (FunctorException | IllegalArgumentException ignored) {
         }
         return v;
     }
 
     /**
-     * Instantiation of object
+     * Instantiation of objects.
      *
-     * @param clazz      Class to instantiate
-     * @param paramTypes Constructor arguments
+     * @param clazz      the class to instantiate
+     * @param paramTypes the constructor arguments
      * @param args       Any arguments provided
-     * @param <S>        Object class
-     * @return An object
+     * @param <S>        The object type
+     * @return The resulted new object
      */
     public static <S> S inst(Class<? extends S> clazz, Class<?>[] paramTypes, Object... args) {
-
         return FactoryUtils.instantiateFactory(clazz, paramTypes, args).create();
     }
 
     /**
-     * Generates 'GUID'
+     * Generates 'GUID' (some unique string value).
      *
      * @return String with GUID
      */
     public static String guid() {
-
         return UUID.randomUUID().toString();
     }
 
     /**
-     * Short-cut for creation of {@link BigDecimal}.
+     * A short-cut for creation of {@link BigDecimal} from a string value.
      *
      * @param numberAsStr String representation for decimal
      * @return a new {@link BigDecimal}
      */
     public static BigDecimal d(String numberAsStr) {
-
         return new BigDecimal(numberAsStr);
     }
 
     /**
-     * Short-cut for creation of {@link BigDecimal} from double value
+     * A short-cut for creation of {@link BigDecimal} from double value
      *
      * @param value Double value
      * @return a new {@link BigDecimal}
      */
     public static BigDecimal d(double value) {
-
-        return new BigDecimal(Double.toString(value));
+        return d(Double.toString(value));
     }
 
     /**
-     * Short-cut for set a scale for {@link BigDecimal} using the standard
+     * A short-cut for setting a scale for {@link BigDecimal} using the standard
      * {@link RoundingMode#HALF_UP} mode (so called 'school' rounding).
      *
      * @param d     A decimal value
@@ -505,12 +508,11 @@ public class BaseParent {
      * @return New {@link BigDecimal} in the specified scale
      */
     public static BigDecimal scale(BigDecimal d, int scale) {
-
         return d.setScale(scale, RoundingMode.HALF_UP);
     }
 
     /**
-     * Short-cut for division with specific
+     * A short-cut for division with a specific scale for the result.
      *
      * @param a     A divided value
      * @param b     A divisor
@@ -523,39 +525,17 @@ public class BaseParent {
     }
 
     /**
-     * Clone the specified object, if allowed
+     * Clones the specified object if allowed
      *
-     * @param o   Clonable
+     * @param o   The value
      * @param <S> Object type
      * @return Clone (or null, if the original object was null)
      */
     @SuppressWarnings("unchecked")
     public static <S> S cloneObject(Object o) {
-
         return (S) org.apache.commons.lang3.ObjectUtils.cloneIfPossible(o);
     }
 
-    /**
-     * A short-cut for the most often variant of the function
-     *
-     * @param c A collection
-     * @return true, if it's empty
-     */
-    public static boolean notEmpty(Collection<?> c) {
-
-        return !CollectionUtils.isEmpty(c);
-    }
-
-    /**
-     * A short-cut for another variant of the check collection size function.
-     *
-     * @param c A collection
-     * @return true, if the collection is empty
-     */
-    public static boolean isEmpty(Collection<?> c) {
-
-        return CollectionUtils.isEmpty(c);
-    }
 
     /**
      * A short-cut for the often used variant
@@ -564,12 +544,12 @@ public class BaseParent {
      * @return true, if the string is NOT empty
      */
     public static boolean notEmpty(Object s) {
-
         return !isEmpty(s);
     }
 
     /**
-     * A short-cut for the often used variant
+     * A short-cut for the universal function to check emptiness
+     * of the given object regardless its type.
      *
      * @param s A string
      * @return true, if the string is empty
@@ -579,34 +559,24 @@ public class BaseParent {
     }
 
     /**
-     * A simpler form for stream collecting
-     *
-     * @param stream A stream
-     * @param <S>    Type of object
-     * @return A list
-     */
-    public static <S> List<S> list(Stream<S> stream) {
-
-        return stream.collect(Collectors.toList());
-    }
-
-    /**
-     * Determines whether the given collection contains specified strings or
-     * not. The parameter conjunction must be 'true' if we expect all strings to
+     * Determines whether the given collection contains specified objects or
+     * not. The parameter all must be 'true' if we expect all strings to
      * be included in the source collection, otherwise it is 'false' (That means
      * at least one must be included).
      *
-     * @param coll        A source collection
-     * @param conjunction true, if all inclusion are expected, or false, if at least
-     *                    one.
-     * @param items       Expected strings
+     * @param coll  A source collection
+     * @param all   true, if all inclusion are expected, or false, if at least
+     *              one.
+     * @param items Expected strings
      * @return true, if the given collection contains the specified items
      * according to the condition 'conjunction'.
      */
-    public static boolean contains(Collection<String> coll, boolean conjunction, String... items) {
-
-        Set<String> s = set(items);
-        return conjunction ? coll.containsAll(list(items)) : coll.stream().parallel().anyMatch(s::contains);
+    @SafeVarargs
+    public static <S> boolean contains(Collection<S> coll, boolean all, S... items) {
+        Set<S> s = set(items);
+        return all ?
+                coll.containsAll(list(items)) :
+                coll.stream().parallel().anyMatch(s::contains);
     }
 
     /**
@@ -620,7 +590,6 @@ public class BaseParent {
      * @return The calculated result of decimal value
      */
     public static <S> BigDecimal total(Stream<S> stream, Function<? super S, BigDecimal> mapper) {
-
         return stream.map(mapper).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -640,41 +609,15 @@ public class BaseParent {
     }
 
     /**
-     * Get first key without value
+     * Finds the keys that do not have values.
      *
-     * @param <T>  type of keys
-     * @param map  map
-     * @param keys keys
+     * @param <T>  The type of keys
+     * @param map  The map
+     * @param keys The list of keys
      * @return first key without value or <code>null</code>
      */
-    public static <T> List<T> getEmptyKeys(Map<T, ?> map, List<T> keys) {
-
-        return list(keys.stream().filter(key -> map.get(key) == null));
-    }
-
-    /**
-     * A simpler form for stream collecting
-     *
-     * @param stream A stream
-     * @param <S>    Type of object
-     * @return A set
-     */
-    public static <S> Set<S> set(Stream<S> stream) {
-
-        return stream.collect(Collectors.toSet());
-    }
-
-    /**
-     * The 'RunIgnoreErrors' interface
-     */
-    @FunctionalInterface
-    public interface RunIgnoreErrors {
-
-        /**
-         * @param params Parameters
-         * @throws Exception An exception if occurs
-         */
-        void run(Object... params) throws Exception;
+    public static <T> Set<T> getEmptyKeys(Map<T, ?> map, Collection<T> keys) {
+        return keys.stream().filter(key -> map.get(key) == null).collect(Collectors.toSet());
     }
 
     /**
@@ -684,11 +627,10 @@ public class BaseParent {
      * @param callback The callback to use
      * @param params   A set of parameters
      */
-    public static void runIgnored(RunIgnoreErrors callback, Object... params) {
-
+    public static void runIgnored(Consumer<Object[]> callback, Object... params) {
         try {
-            callback.run(params);
-        } catch (AssertionError | Exception ex) {
+            callback.accept(params);
+        } catch (Throwable ex) {
             error("Ignored error: {}", nullSafe(ex.getMessage()));
         }
     }
@@ -715,12 +657,11 @@ public class BaseParent {
     }
 
     /**
-     * Current time. It always is represented in UTC.
+     * The current time. It is always represented in UTC.
      *
      * @return Time represented as {@link ZonedDateTime} object
      */
     public static ZonedDateTime now() {
-
         return (clock == null) ? ZonedDateTime.now(DEFAULT_TIMEZONE) : ZonedDateTime.now(clock);
     }
 
@@ -730,10 +671,9 @@ public class BaseParent {
      * https://hibernate.atlassian.net/browse/HHH-8844).
      *
      * @param dateTime Date time in Java 8 format
-     * @return Old Date object
+     * @return The resulted old Date object
      */
     public static Date date(ZonedDateTime dateTime) {
-
         return Date.from(dateTime.toInstant());
     }
 
@@ -755,7 +695,6 @@ public class BaseParent {
      * @return A calendar object
      */
     public static Calendar calendar(ZonedDateTime dateTime) {
-
         return GregorianCalendar.from(dateTime);
     }
 
@@ -767,7 +706,6 @@ public class BaseParent {
      * @return A zoned object
      */
     public static ZonedDateTime date(Date oldDate) {
-
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(oldDate.getTime()), DEFAULT_TIMEZONE);
     }
 
@@ -779,9 +717,10 @@ public class BaseParent {
      * present time
      */
     public static boolean inPast(ZonedDateTime z) {
-
         return z.isBefore(now());
     }
+
+    ////////////////////////////////////////////////////////////
 
     /**
      * Instant logging (usually for testing)
@@ -790,7 +729,6 @@ public class BaseParent {
      * @param arguments A set of argument of the message
      */
     public static void log(String msg, Object... arguments) {
-
         LoggerFactory.getLogger(BaseParent.class).info(msg, arguments);
     }
 
@@ -801,23 +739,7 @@ public class BaseParent {
      * @param arguments A set of argument of the message
      */
     public static void error(String msg, Object... arguments) {
-
         LoggerFactory.getLogger(BaseParent.class).error(msg, arguments);
-    }
-
-    /**
-     * A callback used for waitCondition(...)
-     */
-    @FunctionalInterface
-    public interface SleepCallback {
-
-        /**
-         * Some action which should return true or false
-         *
-         * @param args Some arguments
-         * @return if true that means the cycle must be stopped
-         */
-        boolean doAction(Object... args);
     }
 
     /**
@@ -826,24 +748,24 @@ public class BaseParent {
     private static final Set<Integer> PERCENTS = set(10, 25, 50, 75, 90);
 
     /**
-     * Performs an expectation cycle during the specified number of seconds and
+     * Expects satisfaction of the callback condition during the specified number of seconds and
      * checks the condition on each iteration.
      *
-     * @param location    A short description for the wait condition
+     * @param location    The short description for the wait condition (useful in logs)
      * @param secs        The number of seconds
-     * @param sleepTime   Sleep time in milliseconds
+     * @param sleepTime   The sleep time in milliseconds
      * @param logProgress true, if it is required to log the progress
      * @param callback    The callback
      * @param args        The arguments
-     * @return true, if the the number of attempts has been exceeded
+     * @return true, if the number of attempts has been exceeded
      */
     public static boolean waitCondition(String location, int secs, int sleepTime, boolean logProgress,
-                                        SleepCallback callback, Object... args) {
+                                        Function<Object[], Boolean> callback, Object... args) {
 
         int counter = 0;
         Set<Integer> s = new HashSet<>(PERCENTS);
 
-        while (!callback.doAction(args)) {
+        while (!callback.apply(args)) {
 
             int tick = (100 * counter / (secs * 1000));
             List<Integer> r = filter(s, i -> i < tick);
@@ -852,7 +774,7 @@ public class BaseParent {
                 if (logProgress) {
                     log("{}: wait progress: {} %", location, r.get(0));
                 }
-                s.removeAll(r);
+                r.forEach(s::remove);
             }
             counter += sleepTime;
 
@@ -865,20 +787,19 @@ public class BaseParent {
     }
 
     /**
-     * Performs an expectation cycle during the specified number of seconds and
-     * checks the condition on each iteration.
+     * A variant {@link #waitCondition(String, int, int, boolean, Function, Object...)} when
+     * the sleep internal is fixed and equals to 500 ms.
      *
-     * @param location    A short description of the place where this wait condition is
-     *                    used (for loggin purposes)
+     * @param location    The short description of the place where this wait condition is
+     *                    used (for logging purposes)
      * @param secs        The number of seconds
      * @param logProgress true, if it is required to log the progress
      * @param callback    The callback
      * @param args        The arguments
-     * @return true, if the the number of attempts has been exceeded
+     * @return true, if the number of attempts has been exceeded
      */
-    public static boolean waitCondition(String location, int secs, boolean logProgress, SleepCallback callback,
+    public static boolean waitCondition(String location, int secs, boolean logProgress, Function<Object[], Boolean> callback,
                                         Object... args) {
-
         return waitCondition(location, secs, 500, logProgress, callback, args);
     }
 
@@ -889,12 +810,7 @@ public class BaseParent {
      * @return The content as a string
      */
     public static String readAsString(String path) {
-
-        try {
-            return IOUtils.toString(new ClassPathResource(path).getInputStream(), DEFAULT_CHARSET);
-        } catch (IOException ex) {
-            throw new ApplicationException(ex);
-        }
+        return utf8(readAsBytes(path));
     }
 
     /**
@@ -912,34 +828,8 @@ public class BaseParent {
         }
     }
 
-    /**
-     * @param pattern patter
-     * @param date    date
-     * @return formatted date
-     */
-    public static String formatDate(String pattern, Calendar date) {
-
-        return nullSafe(date, d -> DateTimeFormatter.ofPattern(pattern).format(date(date)));
-    }
-
     public static String formatDateTime(ZonedDateTime dateTime, String pattern) {
-        return DateTimeFormatter.ofPattern(pattern).format(dateTime);
-    }
-
-
-    /**
-     * @param startDate Start date
-     * @param endDate   End date
-     * @param locale    Locale
-     * @return formatted period without seconds
-     */
-    public static String formatPeriodWithoutSeconds(Calendar startDate, Calendar endDate, String locale) {
-
-        Period period = new Period(startDate.getTimeInMillis(), endDate.getTimeInMillis(),
-                PeriodType.standard().withSecondsRemoved().withMillisRemoved());
-
-        String l = locale == null ? Locale.getDefault().toString() : locale;
-        return PeriodFormat.wordBased(Locale.forLanguageTag(l.replaceAll("_", "-"))).print(period);
+        return nullSafe(dateTime, d -> DateTimeFormatter.ofPattern(pattern).format(d)).orElse(null);
     }
 
     /**
@@ -981,9 +871,8 @@ public class BaseParent {
      * @param <K>      The type of keys
      * @return A set of key attributes
      */
-    public static <S, K> Set<K> extract(Collection<S> coll, ExtractCallback<S, K> callback) {
-
-        return set(coll.stream().map(callback::extractKey));
+    public static <S, K> Set<K> extract(Collection<S> coll, Function<S, K> callback) {
+        return set(coll.stream().map(callback));
     }
 
     /**
@@ -1002,13 +891,12 @@ public class BaseParent {
      * Parses the given string as the date according to the pattern. If nothing is parsed, the default value
      * is used.
      *
-     * @param strValue     The value to parse
-     * @param pattern      The pattern
-     * @param defaultValue The default value
+     * @param strValue The value to parse
+     * @param pattern  The pattern
      * @return The resulted parsed value
      */
-    public static ZonedDateTime parseLocalDate(String strValue, String pattern, ZonedDateTime defaultValue) {
-        return ParseUtils.parseLocalDate(strValue, pattern, defaultValue);
+    public static Optional<LocalDateTime> parseLocal(String strValue, String pattern) {
+        return nullSafe(strValue, s -> ParseUtils.parseLocal(s, pattern));
     }
 
     /**

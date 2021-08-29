@@ -16,8 +16,6 @@
 package ru.anr.base;
 
 import com.jamesmurty.utils.XMLBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,14 +24,12 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Simplest parsing utilities for quick searching in XMLs or strings via regular
@@ -43,23 +39,13 @@ import java.util.stream.Collectors;
  * @created Mar 4, 2016
  */
 
-public final class ParseUtils extends BaseParent {
-
-    /**
-     * The logger
-     */
-    private static final Logger logger = LoggerFactory.getLogger(ParseUtils.class);
-
+public final class ParseUtils {
 
     /**
      * Parse utilities
      */
     private ParseUtils() {
-
         super();
-        /*
-         * Empty
-         */
     }
 
     /**
@@ -93,7 +79,7 @@ public final class ParseUtils extends BaseParent {
     public static String regexp(String text, String pattern, Integer... groups) {
 
         List<String> list = regexpGroups(text, pattern, groups);
-        return list == null ? null : list.stream().collect(Collectors.joining());
+        return list == null ? null : String.join("", list);
     }
 
     /**
@@ -113,7 +99,7 @@ public final class ParseUtils extends BaseParent {
         /*
          * There can be conditional groups like (..)? which give null values
          */
-        return m.find() ? list(list(groups).stream().map(i -> m.group(i)).filter(s -> s != null)) : null;
+        return m.find() ? BaseParent.list(BaseParent.list(groups).stream().map(m::group).filter(Objects::nonNull)) : null;
     }
 
     /**
@@ -128,37 +114,31 @@ public final class ParseUtils extends BaseParent {
         S v = null;
         try {
             v = Enum.valueOf(clazz, strValue);
-        } catch (NullPointerException | IllegalArgumentException ex) {
-            v = null;
+        } catch (NullPointerException | IllegalArgumentException ignored) {
         }
         return v;
     }
 
-    public static ZonedDateTime parseLocalDate(String value, String pattern, ZonedDateTime defaultValue) {
-
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern(pattern);
-        ZonedDateTime z = null;
+    /**
+     * Parses the given string value with the use of the given pattern.
+     *
+     * @param value   The value
+     * @param pattern The pattern
+     * @return The parsed local date/time object
+     */
+    public static LocalDateTime parseLocal(String value, String pattern) {
+        LocalDateTime t;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         try {
-
-            LocalDateTime t = parseLocal(value, parser);
-            z = ZonedDateTime.ofLocal(t, DEFAULT_TIMEZONE, ZoneOffset.UTC);
-
-        } catch (DateTimeParseException ex) {
-            logger.debug("Date parsing errors: {}", ex.getMessage());
-            z = defaultValue;
-        }
-        return z;
-    }
-
-    private static LocalDateTime parseLocal(String value, DateTimeFormatter formatter) {
-        LocalDateTime t = null;
-        try {
-            t = LocalDateTime.parse(value, formatter);
-        } catch (DateTimeParseException ex) {
-            LocalDate d = LocalDate.parse(value, formatter);
-            t = d.atStartOfDay();
+            return LocalDateTime.parse(value, formatter);
+        } catch (DateTimeParseException ex1) {
+            try {
+                LocalDate d = LocalDate.parse(value, formatter);
+                return d.atStartOfDay();
+            } catch (DateTimeParseException ex2) {
+                t = null;
+            }
         }
         return t;
     }
-
 }

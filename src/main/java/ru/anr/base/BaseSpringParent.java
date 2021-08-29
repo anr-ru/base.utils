@@ -24,8 +24,8 @@ import org.springframework.core.env.Environment;
 import java.util.Set;
 
 /**
- * Base class for Spring-beans. Contains some internal spring hooks for
- * manipulation with beans and context.
+ * The base class for Spring beans. It contains some internal spring hooks for
+ * manipulation with beans, the context and basic Spring infrastructure like profiles.
  *
  * @author Alexey Romanchuk
  * @created Oct 29, 2014
@@ -33,66 +33,62 @@ import java.util.Set;
 public class BaseSpringParent extends BaseParent {
 
     /**
-     * Environment injection
+     * The environment injection
      */
     @Autowired
     private Environment env;
 
     /**
-     * Context injection
+     * The context injection
      */
     @Autowired
     protected ApplicationContext ctx;
 
     /**
-     * Default name for production profile
+     * The default name for production profile
      */
     public static final String PRODUCTION_PROFILE = "production";
 
     /**
-     * Checking for 'Production' mode
+     * Checks for the 'production' mode
      *
-     * @return true, if 'production' profile found
+     * @return true, if 'production' profile found among the current Spring profiles.
      */
     protected boolean isProdMode() {
-
         Set<String> profiles = getProfiles();
         return profiles.contains(PRODUCTION_PROFILE);
     }
 
     /**
-     * Checking all profile names
+     * Returns all profile names.
      *
-     * @return A set of current profile names
+     * @return The resulted set of current profile names
      */
     protected Set<String> getProfiles() {
-
         return set(env.getActiveProfiles());
     }
 
     /**
-     * Getting bean from context (a short-cut)
+     * Returns a refernece to a bean from the context.
      *
-     * @param name  Name of bean
-     * @param clazz Bean class
-     * @param <S>   Type of bean
-     * @return Bean instance
+     * @param name  the name of bean
+     * @param clazz The bean's class
+     * @param <S>   The type of object
+     * @return the found bean instance
      */
     protected <S> S bean(String name, Class<S> clazz) {
-
         return ctx.getBean(name, clazz);
     }
 
     /**
-     * Exctracts a bean target if it's a aop proxy
+     * Extracts the bean's target if it is an AOP proxy.
      *
-     * @param bean Original (may be proxied) bean
-     * @param <S>  Expected bean class
-     * @return A target bean instance
+     * @param bean the original (maybe proxied) bean
+     * @param <S>  the expected bean object type
+     * @return The resulted target bean instance
      */
     @SuppressWarnings("unchecked")
     protected static <S> S target(Object bean) {
-
         try {
             return (S) (AopUtils.isAopProxy(bean) ? ((Advised) bean).getTargetSource().getTarget() : bean);
         } catch (Exception ex) {

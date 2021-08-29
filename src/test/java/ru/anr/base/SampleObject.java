@@ -1,7 +1,9 @@
 /**
- * 
+ *
  */
 package ru.anr.base;
+
+import java.math.BigDecimal;
 
 /**
  * A test object.
@@ -26,7 +28,7 @@ public class SampleObject {
 
     /**
      * Construction
-     * 
+     *
      * @param value
      *            The value
      * @param index
@@ -38,9 +40,13 @@ public class SampleObject {
         this.index = index;
     }
 
+    public SampleObject() {
+        this(null, 0);
+    }
+
     /**
      * Reading a value
-     * 
+     *
      * @return Value
      */
     public String getValue() {
@@ -49,7 +55,7 @@ public class SampleObject {
     }
 
     /**
-     * 
+     *
      * @param value
      *            the value field
      */
@@ -73,5 +79,9 @@ public class SampleObject {
     public void setIndex(Integer index) {
 
         this.index = index;
+    }
+
+    public BigDecimal asDecimal() {
+        return new BigDecimal(this.value);
     }
 }
