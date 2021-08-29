@@ -18,6 +18,6 @@ jobs:
 deploy:
   provider: script
   script: "mvn -P ci deploy -DskipTests"
-  skip_cleanup: false
-    on:
-      tags: true
+  cleanup: false
+  on:
+    tags: true
