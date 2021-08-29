@@ -309,8 +309,21 @@ public class BaseParent {
      * @return A model instance or null
      */
     public static <S, V> S nullSafe(V value, ValueCreator<S, V> callback) {
-
         return (value == null) ? null : callback.newValue(value);
+    }
+
+    /**
+     * A bit safer variant of {@link #nullSafe(Object, ValueCreator)} when we provide an optional value
+     * for nullable result. This allows to treat the null value in the same code flow.
+     *
+     * @param value    The value
+     * @param callback The callback
+     * @param <S>      The type of the result value
+     * @param <V>      The original value type
+     * @return The resulted optional
+     */
+    public static <S, V> Optional<S> safe(V value, ValueCreator<S, V> callback) {
+        return (value == null) ? Optional.empty() : Optional.of(callback.newValue(value));
     }
 
     /**
@@ -905,7 +918,28 @@ public class BaseParent {
      * @return formatted date
      */
     public static String formatDate(String pattern, Calendar date) {
+
         return nullSafe(date, d -> DateTimeFormatter.ofPattern(pattern).format(date(date)));
+    }
+
+    public static String formatDateTime(ZonedDateTime dateTime, String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).format(dateTime);
+    }
+
+
+    /**
+     * @param startDate Start date
+     * @param endDate   End date
+     * @param locale    Locale
+     * @return formatted period without seconds
+     */
+    public static String formatPeriodWithoutSeconds(Calendar startDate, Calendar endDate, String locale) {
+
+        Period period = new Period(startDate.getTimeInMillis(), endDate.getTimeInMillis(),
+                PeriodType.standard().withSecondsRemoved().withMillisRemoved());
+
+        String l = locale == null ? Locale.getDefault().toString() : locale;
+        return PeriodFormat.wordBased(Locale.forLanguageTag(l.replaceAll("_", "-"))).print(period);
     }
 
     /**
