@@ -4,16 +4,30 @@ language: java
 jdk:
   - openjdk11
 services:
-- docker
+  - docker
 cache:
   directories:
     - "$HOME/.cache"
 
+stages:
+  - build
+  - deploy
+
 before_install:
   - cp ./.mvn/ci-settings.xml $HOME/.m2/settings.xml
+  - wget -P $HOME https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+  - tar xzvf $HOME/apache-maven-3.6.3-bin.tar.gz -C $HOME
+  - export PATH=$HOME/apache-maven-3.6.3/bin:$PATH
+  - mvn -v
 
-script:
-  - "mvn -P ci install"
+
+build:
+  - provider: script
+    script: "mvn -P ci install"
+    skip_cleanup: false
+    branches:
+      only:
+        - master
 
 deploy:
   - provider: script
