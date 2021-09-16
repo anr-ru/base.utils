@@ -540,4 +540,17 @@ public class BaseParentTest extends BaseParent {
         s = null;
         Assert.assertEquals("5", safe(s, x -> x + "3").orElse("5"));
     }
+
+    @Test
+    public void abbreviate() {
+        String s = "abcdefghijklmnopqrstuvwxyz";
+        Assert.assertEquals(s, abbreviate(s, 27));
+        Assert.assertEquals(s, abbreviate(s, 26));
+        Assert.assertEquals("abcdefghijklmnopqrstuvwxy", abbreviate(s, 25));
+        Assert.assertEquals("abcdefghij", abbreviate(s, 10));
+        Assert.assertEquals("a", abbreviate(s, 1));
+        Assert.assertEquals("", abbreviate(s, 0));
+
+        Assert.assertNull(abbreviate(null, 0));
+    }
 }
