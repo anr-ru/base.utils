@@ -888,6 +888,34 @@ public class BaseParent {
     }
 
     /**
+     * Parsing a string via the provided regular expression and returns all found groups as a single string.
+     *
+     * @param text    The text to parse
+     * @param pattern The pattern to use
+     * @param groups  The number of groups in the regular expression to extract. If
+     *                more than one group is used, all the groups will be combined
+     *                as a single string
+     * @return The resulted value
+     */
+    public static String regexp(String text, String pattern, Integer... groups) {
+        return ParseUtils.regexp(text, pattern, groups);
+    }
+
+    /**
+     * Parses a string via the provided regular expression and returns the given
+     * groups.
+     *
+     * @param text    An original text
+     * @param pattern A pattern to use
+     * @param groups  Number of groups in the pattern
+     * @return A list of groups
+     */
+    public static List<String> regexpGroups(String text, String pattern, Integer... groups) {
+        return ParseUtils.regexpGroups(text, pattern, groups);
+    }
+
+
+    /**
      * Parses the given string as the date according to the pattern. If nothing is parsed, the default value
      * is used.
      *
