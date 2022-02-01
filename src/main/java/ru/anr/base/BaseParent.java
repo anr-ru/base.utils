@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -46,14 +46,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A base class which contains a set of useful functions and short-cuts.
+ * The base class which contains a set of useful functions and short-cuts.
  * <p>
- * The main idea is to reduce the number of code lines in child projects.
+ * The main idea is to reduce the number of code lines in child projects when using this
+ * class as the parent.
  *
  * @author Alexey Romanchuk
  * @created Oct 29, 2014
  */
-
 public class BaseParent {
 
     /**
@@ -74,7 +74,7 @@ public class BaseParent {
     }
 
     /**
-     * A short-cut method for building a list by a collection
+     * A short-cut method for building a list from a collection
      *
      * @param collection The collection to convert
      * @param <S>        The type of items
@@ -86,14 +86,13 @@ public class BaseParent {
 
     /**
      * Converts a string in the given encoding to a byte array without throwing
-     * a checked exception.
+     * the annoying {@link UnsupportedEncodingException} exception.
      *
      * @param s        The original string
      * @param encoding The encoding
      * @return The resulted array of bytes
      */
     public static byte[] bytes(String s, String encoding) {
-
         try {
             return s.getBytes(encoding);
         } catch (UnsupportedEncodingException ex) {
@@ -112,13 +111,12 @@ public class BaseParent {
     }
 
     /**
-     * Converts bytes to a string with the utf8 encoding
+     * Converts bytes to a string with the utf8 encoding without the {@link UnsupportedEncodingException} exception.
      *
-     * @param b An array of bytes
-     * @return A string
+     * @param b The array of bytes
+     * @return The resulted string
      */
     public static String utf8(byte[] b) {
-
         try {
             return new String(b, DEFAULT_CHARSET.name());
         } catch (UnsupportedEncodingException ex) {
@@ -127,9 +125,9 @@ public class BaseParent {
     }
 
     /**
-     * Null-safe creation of a list
+     * A null-safe creation of lists.
      *
-     * @param l   The original, possibly, null list
+     * @param l   The original, possibly, null value
      * @param <S> The type of elements
      * @return A new list with elements from the original one
      */
@@ -138,7 +136,7 @@ public class BaseParent {
     }
 
     /**
-     * A simpler shot-cut for collecting a stream to a list.
+     * A simpler shortcut for converting a stream to a list.
      *
      * @param stream The stream
      * @param <S>    The object type
@@ -149,7 +147,7 @@ public class BaseParent {
     }
 
     /**
-     * A short-cut for creation of a set from an array.
+     * A shortcut for the creation of a set from an array.
      *
      * @param array An array of objects
      * @param <S>   The type of elements
@@ -161,22 +159,22 @@ public class BaseParent {
     }
 
     /**
-     * A simpler form for stream collecting
+     * A simpler form for converting streams to sets.
      *
-     * @param stream A stream
-     * @param <S>    Type of object
-     * @return A set
+     * @param stream The stream to convert
+     * @param <S>    The type of object
+     * @return The resulted set
      */
     public static <S> Set<S> set(Stream<S> stream) {
         return stream.collect(Collectors.toSet());
     }
 
     /**
-     * Concatenation of two arrays into one
+     * The concatenation of two arrays into one.
      *
      * @param array1 The first array
-     * @param array2 The second
-     * @param <S>    The type of array elements
+     * @param array2 The second array
+     * @param <S>    The type of arrays' elements
      * @return The resulted array
      */
     @SafeVarargs
@@ -185,10 +183,9 @@ public class BaseParent {
     }
 
     /**
-     * Injection of a private field into the given object. Of course, we are
-     * against such a technique :-).
-     *
-     * But still in tests this is a very convenient approach.
+     * The injection of a private field into the given object. Of course, we are
+     * against such a technique in production, but sometimes it is the simplest and transparent
+     * way to test some internal things :-).
      *
      * @param target     The target object
      * @param fieldName  The name of the field to inject
@@ -204,12 +201,12 @@ public class BaseParent {
     }
 
     /**
-     * Extracts the field value from the object using the reflection API.
+     * Extracts the field's value from the object using the reflection API.
      *
      * @param target    The target object
      * @param fieldName The name of the field
-     * @param <S>       The expected type of resulted object. The type casting is unsafe
-     *                  as we suppose the user expects the valid type.
+     * @param <S>       The expected type of resulted object. The type casting is unsafe,
+     *                  but we suppose the user expects the valid type.
      * @return The resulted object
      */
     @SuppressWarnings("unchecked")
@@ -223,12 +220,12 @@ public class BaseParent {
     }
 
     /**
-     * Returns the result of the equals operation even if the arguments are
+     * Returns the result of the 'equals' operation even if the arguments are
      * null.
      *
-     * @param arg1 A first argument
-     * @param arg2 A second argument
-     * @return The result of the equals operation or false if one or both
+     * @param arg1 The first argument
+     * @param arg2 The second argument
+     * @return The result of the 'equals' operation. It will be false if one or both
      * arguments are null
      */
     public static boolean safeEquals(Object arg1, Object arg2) {
@@ -236,18 +233,18 @@ public class BaseParent {
     }
 
     /**
-     * Retrieves the first object of a collection.
+     * Retrieves the first object of the given collection. The operation is null-safe.
      *
-     * @param coll An original collection
+     * @param coll The original collection
      * @param <S>  The type of elements
-     * @return The found object or null is the collection is empty
+     * @return The found object or null is the collection is empty or null
      */
     public static <S> S first(Collection<S> coll) {
         return CollectionUtils.isEmpty(coll) ? null : coll.iterator().next();
     }
 
     /**
-     * A short-cut method for finding the first item in the given stream.
+     * A shortcut method for finding the first item in the given stream. The function is null-safe.
      *
      * @param stream A stream
      * @param <S>    The type of stream's elements
@@ -262,22 +259,22 @@ public class BaseParent {
      * Filters the given collection according to the specified predicate which
      * can be a lambda expression.
      *
-     * @param coll      An original collection
-     * @param predicate A predicate (can be a lambda expression)
+     * @param coll      The original collection
+     * @param predicate The predicate (can be a lambda expression)
      * @param <S>       The type of collection's items
-     * @return The filtered collection
+     * @return The resulted filtered collection
      */
     public static <S> List<S> filter(Collection<S> coll, Predicate<S> predicate) {
         return coll.stream().filter(predicate).collect(Collectors.toList());
     }
 
     /**
-     * Adds an item to the given collection if the item is not null
+     * Adds an item to the given collection if the item is not null.
      *
-     * @param coll A collection
+     * @param coll The collection
      * @param item Some item
      * @param <S>  The type of the item
-     * @return true, if the item has been added
+     * @return The original collection
      */
     public static <S> Collection<S> safeAdd(Collection<S> coll, S item) {
         if (item != null) {
@@ -288,7 +285,7 @@ public class BaseParent {
 
     /**
      * Adds the given value to the collection if the value is not null
-     * and return the updated collection.
+     * and return true, if the item was successfully added.
      *
      * @param coll The updated collection
      * @param item The item
@@ -305,9 +302,9 @@ public class BaseParent {
     }
 
     /**
-     * Sleeps ignoring {@link InterruptedException}.
+     * Sleeps with ignoring {@link InterruptedException}.
      *
-     * @param millis A number of milliseconds
+     * @param millis The number of milliseconds to sleep
      */
     public static void sleep(long millis) {
         try {
@@ -319,10 +316,10 @@ public class BaseParent {
 
     /**
      * A short-cut method to do the toString() operation with checking the
-     * argument to be a possible null value value.
+     * argument to be a possible null value.
      *
-     * @param s An original object (can be null)
-     * @return A string which is not null
+     * @param s The original object (can be null)
+     * @return The string which is not null
      */
     public static String nullSafe(Object s) {
         return (s == null) ? "" : s.toString();
@@ -343,11 +340,11 @@ public class BaseParent {
 
     /**
      * A null-safe initialization of object. If the original object is not
-     * null, then it is simply returned. But in case of null object, a new
-     * one is created.
+     * null, then it is simply returned. But in case of a null value, a new
+     * one is created using the given class.
      * <p>
      * This approach allows to safely get an instance of the object
-     * even if it is null.
+     * even if it is null without doing special checking.
      * </p>
      *
      * @param o     The original object (possibly, null)
@@ -363,11 +360,11 @@ public class BaseParent {
      * Converts an array of pairs of elements to a Map&lt;K,S&gt; object with
      * casting to K and S types.
      *
-     * @param array Pairs (key, value) given as a plain array
+     * @param array The pairs (key, value) given as a plain array
      * @param <K>   The type of keys
      * @param <T>   The type of values
      * @param <S>   Type of map values
-     * @return A new map
+     * @return The resulted new map
      */
     @SafeVarargs
     @SuppressWarnings("unchecked")
@@ -379,7 +376,6 @@ public class BaseParent {
             int l = (array.length % 2 == 0) ? array.length : (array.length + 1);
 
             for (int i = 0; i < (l / 2); i = i + 1) {
-
                 Object v = (2 * i + 1) >= array.length ? null : array[2 * i + 1];
                 map.put((K) array[2 * i], (S) v);
             }
@@ -388,7 +384,7 @@ public class BaseParent {
     }
 
     /**
-     * A short-cut method for simple mapping from a collection to a map.
+     * A shortcut method for simple grouping and converting from a collection to a map.
      * The simplest usage of the function is something like this:
      * <pre>{@code}
      *      List&lt;SampleObject&gt; s = list( new Sample("xxx", 1), new Sample("yyy", 2) );
@@ -398,13 +394,13 @@ public class BaseParent {
      *
      * </pre>
      *
-     * @param collection  A collection
-     * @param keyMapper   A key mapper
-     * @param valueMapper A value mapper
+     * @param collection  The original collection that needs to be regrouped
+     * @param keyMapper   The map key mapper
+     * @param valueMapper The map value mapper
      * @param <T>         The type of collection items
      * @param <K>         The type of map keys
      * @param <U>         The type of map values
-     * @return A new created map
+     * @return The resulted new map
      */
     public static <T, K, U> Map<K, U> toMap(Collection<T> collection,
                                             Function<? super T, ? extends K> keyMapper,
@@ -414,7 +410,7 @@ public class BaseParent {
     }
 
     /**
-     * A short-cut function to simplify the process of building a map from a
+     * A shortcut function to simplify the process of building a map from a
      * collection when there can be non-unique keys.
      *
      * <pre>{@code}
@@ -425,18 +421,18 @@ public class BaseParent {
      *
      * </pre>
      *
-     * @param collection    The original collection
-     * @param keyMapper     The key mapper
-     * @param valueMapper   The value mapper
-     * @param mergeFunction The function to merge values conflicting by their key
+     * @param collection    The original collection to group
+     * @param keyMapper     The map key mapper
+     * @param valueMapper   The map value mapper
+     * @param mergeFunction The merge function if values have the same key
      * @param <T>           The type of collection item
      * @param <K>           Type of the map key
      * @param <U>           Type of the map value
      * @return A new map
      */
     public static <T, K, U> Map<K, U> toMap(Collection<T> collection, Function<? super T, ? extends K> keyMapper,
-                                            Function<? super T, ? extends U> valueMapper, BinaryOperator<U> mergeFunction) {
-
+                                            Function<? super T, ? extends U> valueMapper,
+                                            BinaryOperator<U> mergeFunction) {
         return collection.stream().collect(Collectors.toConcurrentMap(keyMapper, valueMapper, mergeFunction));
     }
 
@@ -460,9 +456,9 @@ public class BaseParent {
     /**
      * Instantiation of objects.
      *
-     * @param clazz      the class to instantiate
-     * @param paramTypes the constructor arguments
-     * @param args       Any arguments provided
+     * @param clazz      The class to instantiate
+     * @param paramTypes The constructor arguments
+     * @param args       Any arguments that need to be provided
      * @param <S>        The object type
      * @return The resulted new object
      */
@@ -480,56 +476,55 @@ public class BaseParent {
     }
 
     /**
-     * A short-cut for creation of {@link BigDecimal} from a string value.
+     * A shortcut for the creation of {@link BigDecimal} from a string value.
      *
-     * @param numberAsStr String representation for decimal
-     * @return a new {@link BigDecimal}
+     * @param numberAsStr The string representation for a decimal value
+     * @return The resulted new {@link BigDecimal} object
      */
     public static BigDecimal d(String numberAsStr) {
         return new BigDecimal(numberAsStr);
     }
 
     /**
-     * A short-cut for creation of {@link BigDecimal} from double value
+     * A shortcut for the creation of {@link BigDecimal} from a double value
      *
-     * @param value Double value
-     * @return a new {@link BigDecimal}
+     * @param value The double value
+     * @return The resulted new {@link BigDecimal}
      */
     public static BigDecimal d(double value) {
         return d(Double.toString(value));
     }
 
     /**
-     * A short-cut for setting a scale for {@link BigDecimal} using the standard
+     * A shortcut for setting the scale for the given {@link BigDecimal} value using the standard
      * {@link RoundingMode#HALF_UP} mode (so called 'school' rounding).
      *
-     * @param d     A decimal value
+     * @param d     The decimal value
      * @param scale The scale
-     * @return New {@link BigDecimal} in the specified scale
+     * @return The new {@link BigDecimal} in the specified scale
      */
     public static BigDecimal scale(BigDecimal d, int scale) {
         return d.setScale(scale, RoundingMode.HALF_UP);
     }
 
     /**
-     * A short-cut for division with a specific scale for the result.
+     * A shortcut for the division operation with a specific scale for the result.
      *
-     * @param a     A divided value
-     * @param b     A divisor
+     * @param a     The divided value
+     * @param b     The divisor
      * @param scale The scale
-     * @return New {@link BigDecimal} in the specified scale
+     * @return The resulted new {@link BigDecimal} in the specified scale
      */
     public static BigDecimal div(BigDecimal a, BigDecimal b, int scale) {
-
         return a.divide(b, scale, RoundingMode.HALF_UP);
     }
 
     /**
      * Clones the specified object if allowed
      *
-     * @param o   The value
-     * @param <S> Object type
-     * @return Clone (or null, if the original object was null)
+     * @param o   The object to clone
+     * @param <S> The object's type
+     * @return The resulted clone (or null, if the original object was null)
      */
     @SuppressWarnings("unchecked")
     public static <S> S cloneObject(Object o) {
@@ -538,21 +533,21 @@ public class BaseParent {
 
 
     /**
-     * A short-cut for the often used variant
+     * A shortcut for the often used variant
      *
-     * @param s A string
-     * @return true, if the string is NOT empty
+     * @param s The object
+     * @return true, if the string representation of the object is NOT empty
      */
     public static boolean notEmpty(Object s) {
         return !isEmpty(s);
     }
 
     /**
-     * A short-cut for the universal function to check emptiness
+     * A shortcut for the universal function to check emptiness
      * of the given object regardless its type.
      *
-     * @param s A string
-     * @return true, if the string is empty
+     * @param s The object
+     * @return true, if the string representation of the object is empty
      */
     public static boolean isEmpty(Object s) {
         return org.apache.commons.lang3.ObjectUtils.isEmpty(s);
@@ -564,12 +559,12 @@ public class BaseParent {
      * be included in the source collection, otherwise it is 'false' (That means
      * at least one must be included).
      *
-     * @param coll  A source collection
+     * @param coll  The source collection
      * @param all   true, if all inclusion are expected, or false, if at least
      *              one.
      * @param items Expected strings
      * @return true, if the given collection contains the specified items
-     * according to the condition 'conjunction'.
+     * according to the condition 'all'.
      */
     @SafeVarargs
     public static <S> boolean contains(Collection<S> coll, boolean all, S... items) {
@@ -580,8 +575,8 @@ public class BaseParent {
     }
 
     /**
-     * Calculates a total value for the specified stream. The given mapper
-     * function provides a conversion operation from an object of the type S to
+     * Calculates the total value for the specified stream. The given mapper
+     * function provides a conversion operation from a stream item of the type S to
      * a {@link BigDecimal} value.
      *
      * @param stream The stream to use
@@ -594,8 +589,8 @@ public class BaseParent {
     }
 
     /**
-     * Calculates a total value for the specified stream. The given mapper
-     * function provides a conversion operation from an object of the type S to
+     * Calculates the total value for the specified stream. The given mapper
+     * function provides a conversion operation from a stream item of the type S to
      * a {@link BigDecimal} value.
      *
      * @param list   The list of objects
@@ -604,7 +599,6 @@ public class BaseParent {
      * @return The calculated result of decimal value
      */
     public static <S> BigDecimal total(List<S> list, Function<? super S, BigDecimal> mapper) {
-
         return total(list.stream(), mapper);
     }
 
@@ -638,12 +632,12 @@ public class BaseParent {
     // //////////////////////////// TIME FUNCTIONS ///////////////////////////
 
     /**
-     * A reference to default timezone
+     * The default timezone
      */
     public static final ZoneId DEFAULT_TIMEZONE = ZoneOffset.UTC;
 
     /**
-     * A clock if we need to use different clocks (in tests, for example)
+     * The current clock if we need to use different clocks (in tests, for example)
      */
     private static Clock clock;
 
@@ -657,9 +651,10 @@ public class BaseParent {
     }
 
     /**
-     * The current time. It is always represented in UTC.
+     * The current time. It is always represented in DEFAULT_TIMEZONE. The function returns the fixed
+     * clock if it was set.
      *
-     * @return Time represented as {@link ZonedDateTime} object
+     * @return The time represented as {@link ZonedDateTime} object
      */
     public static ZonedDateTime now() {
         return (clock == null) ? ZonedDateTime.now(DEFAULT_TIMEZONE) : ZonedDateTime.now(clock);
@@ -670,7 +665,7 @@ public class BaseParent {
      * Java 8 dates (see https://java.net/jira/browse/JPA_SPEC-63 or
      * https://hibernate.atlassian.net/browse/HHH-8844).
      *
-     * @param dateTime Date time in Java 8 format
+     * @param dateTime The date time in Java 8 format
      * @return The resulted old Date object
      */
     public static Date date(ZonedDateTime dateTime) {
@@ -804,9 +799,9 @@ public class BaseParent {
     }
 
     /**
-     * Reading a file from the class path
+     * Reads the file from the given class path
      *
-     * @param path A path to the file's location
+     * @param path The path to the file's location
      * @return The content as a string
      */
     public static String readAsString(String path) {
@@ -814,13 +809,12 @@ public class BaseParent {
     }
 
     /**
-     * Reading a file from the class path
+     * Reads the file from the class path
      *
-     * @param path A path to the file's location
+     * @param path The path to the file's location
      * @return The content as a byte array
      */
     public static byte[] readAsBytes(String path) {
-
         try {
             return IOUtils.toByteArray(new ClassPathResource(path).getInputStream());
         } catch (IOException ex) {
@@ -828,15 +822,22 @@ public class BaseParent {
         }
     }
 
+    /**
+     * Formats the given date/time according to the given pattern.
+     *
+     * @param dateTime The date/time
+     * @param pattern  The string pattern
+     * @return The resulted formatted date/time
+     */
     public static String formatDateTime(ZonedDateTime dateTime, String pattern) {
         return nullSafe(dateTime, d -> DateTimeFormatter.ofPattern(pattern).format(d)).orElse(null);
     }
 
     /**
-     * Hash string with sha256 algorithm
+     * Hashes a string with the sha256 algorithm
      *
      * @param s The given string
-     * @return hashed string
+     * @return The hashed string
      */
     public static String sha256(String s) {
         return digest(s, "SHA-256");
@@ -878,17 +879,17 @@ public class BaseParent {
     /**
      * Parses the string enum value as a enum but with suppressing all exceptions
      *
-     * @param clazz    A enum class
-     * @param strValue A string value
+     * @param clazz    The enum class
+     * @param strValue The string value to parse
      * @param <S>      The enum type
-     * @return The parsed value
+     * @return The parsed value as an enum object
      */
     public static <S extends Enum<S>> S parseEnum(Class<S> clazz, String strValue) {
         return ParseUtils.parseEnum(clazz, strValue);
     }
 
     /**
-     * Parsing a string via the provided regular expression and returns all found groups as a single string.
+     * Parses a string via the provided regular expression and returns all found groups as a single string.
      *
      * @param text    The text to parse
      * @param pattern The pattern to use
@@ -902,13 +903,13 @@ public class BaseParent {
     }
 
     /**
-     * Parses a string via the provided regular expression and returns the given
+     * Parses a string via the provided regular expression and returns the resulted
      * groups.
      *
-     * @param text    An original text
-     * @param pattern A pattern to use
-     * @param groups  Number of groups in the pattern
-     * @return A list of groups
+     * @param text    The original text
+     * @param pattern The pattern to use
+     * @param groups  The number of groups in the pattern
+     * @return The list of found groups
      */
     public static List<String> regexpGroups(String text, String pattern, Integer... groups) {
         return ParseUtils.regexpGroups(text, pattern, groups);
@@ -928,7 +929,7 @@ public class BaseParent {
     }
 
     /**
-     * Convers the given local date to the default zone 00:00 time.
+     * Converts the given local date to the default zone 00:00 time.
      *
      * @param date The original date
      * @return The resulted zoned date time object
@@ -938,7 +939,7 @@ public class BaseParent {
     }
 
     /**
-     * Convert a calendar to a local date object
+     * Converts a calendar to a local date object
      *
      * @param calendar The calendar
      * @return The resulted local date
