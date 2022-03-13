@@ -641,4 +641,17 @@ class BaseParentTest extends BaseParent {
                 "spring.profiles.active=production\n" +
                 "value=${DGC_VALUE}\n", readAsString("./application.properties"));
     }
+
+    @Test
+    public void abbreviate() {
+        String s = "abcdefghijklmnopqrstuvwxyz";
+        Assert.assertEquals(s, abbreviate(s, 27));
+        Assert.assertEquals(s, abbreviate(s, 26));
+        Assert.assertEquals("abcdefghijklmnopqrstuvwxy", abbreviate(s, 25));
+        Assert.assertEquals("abcdefghij", abbreviate(s, 10));
+        Assert.assertEquals("a", abbreviate(s, 1));
+        Assert.assertEquals("", abbreviate(s, 0));
+
+        Assert.assertNull(abbreviate(null, 0));
+    }
 }

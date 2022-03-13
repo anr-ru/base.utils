@@ -951,4 +951,15 @@ public class BaseParent {
                 calendar.get(Calendar.DAY_OF_MONTH));
     }
 
+    /**
+     * Shortens the given string to the string having the length not exceeding the
+     * given maxLength parameter.
+     *
+     * @param str       The string
+     * @param maxLength The max length
+     * @return The possibly truncated string
+     */
+    public static String abbreviate(String str, int maxLength) {
+        return nullSafe(str, s -> s.substring(0, Math.min(s.length(), maxLength)));
+    }
 }
