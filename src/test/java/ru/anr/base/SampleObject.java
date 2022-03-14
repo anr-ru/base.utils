@@ -26,6 +26,10 @@ public class SampleObject {
      */
     private Integer index;
 
+    private String run(int x, String s, SampleObject o) {
+        return s + x + value + " | " + o.toString();
+    }
+
     /**
      * Construction
      *
@@ -34,7 +38,7 @@ public class SampleObject {
      * @param index
      *            The index
      */
-    public SampleObject(String value, int index) {
+    public SampleObject(String value, Integer index) {
 
         this.value = value;
         this.index = index;
@@ -83,5 +87,13 @@ public class SampleObject {
 
     public BigDecimal asDecimal() {
         return new BigDecimal(this.value);
+    }
+
+    @Override
+    public String toString() {
+        return "SampleObject{" +
+                "value='" + value + '\'' +
+                ", index=" + index +
+                '}';
     }
 }

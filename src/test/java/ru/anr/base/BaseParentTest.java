@@ -509,6 +509,16 @@ class BaseParentTest extends BaseParent {
         Assertions.assertEquals(Integer.valueOf(1), BaseParent.field(o, "index"));
     }
 
+    /**
+     * Testing private methods
+     */
+    @Test
+    public void testMethod() {
+        SampleObject x = new SampleObject("P", 0);
+        SampleObject o = new SampleObject("POINT", -12);
+        Assertions.assertEquals("X2POINT | SampleObject{value='P', index=0}", BaseParent.invoke(o, "run", 2, "X", x));
+    }
+
     @Test
     public void nullSafe() {
 
@@ -645,13 +655,12 @@ class BaseParentTest extends BaseParent {
     @Test
     public void abbreviate() {
         String s = "abcdefghijklmnopqrstuvwxyz";
-        Assert.assertEquals(s, abbreviate(s, 27));
-        Assert.assertEquals(s, abbreviate(s, 26));
-        Assert.assertEquals("abcdefghijklmnopqrstuvwxy", abbreviate(s, 25));
-        Assert.assertEquals("abcdefghij", abbreviate(s, 10));
-        Assert.assertEquals("a", abbreviate(s, 1));
-        Assert.assertEquals("", abbreviate(s, 0));
-
-        Assert.assertNull(abbreviate(null, 0));
+        Assertions.assertEquals(s, abbreviate(s, 27));
+        Assertions.assertEquals(s, abbreviate(s, 26));
+        Assertions.assertEquals("abcdefghijklmnopqrstuvwxy", abbreviate(s, 25));
+        Assertions.assertEquals("abcdefghij", abbreviate(s, 10));
+        Assertions.assertEquals("a", abbreviate(s, 1));
+        Assertions.assertEquals("", abbreviate(s, 0));
+        Assertions.assertNull(abbreviate(null, 0));
     }
 }

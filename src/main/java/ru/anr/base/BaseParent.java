@@ -30,6 +30,7 @@ import org.springframework.util.ReflectionUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
@@ -39,7 +40,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -48,7 +48,7 @@ import java.util.stream.Stream;
 /**
  * The base class which contains a set of useful functions and short-cuts.
  * <p>
- * The main idea is to reduce the number of code lines in child projects when using this
+ * The main idea is to reduce the number of code lines in projects when using this
  * class as the parent.
  *
  * @author Alexey Romanchuk
@@ -219,6 +219,31 @@ public class BaseParent {
         return (S) ReflectionUtils.getField(f, target);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <S> S invoke(Object target, String methodName, Object... args) {
+
+        // Primitive type require the extraction of the type
+        Class<?>[] classes = list(args).stream().map(o -> {
+            Class<?> primClass = extractPrimitive(o.getClass());
+            return primClass == null ? o.getClass() : primClass;
+        }).toArray(Class<?>[]::new);
+
+        Method m = ReflectionUtils.findMethod(target.getClass(), methodName, classes);
+        Assert.notNull(m, "Method " + methodName + " not defined");
+
+        ReflectionUtils.makeAccessible(m);
+        return (S) ReflectionUtils.invokeMethod(m, target, args);
+    }
+
+    private static Class<?> extractPrimitive(Class<?> clazz) {
+        try {
+            return (Class<?>) clazz.getField("TYPE").get(null);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+
     /**
      * Returns the result of the 'equals' operation even if the arguments are
      * null.
@@ -336,6 +361,10 @@ public class BaseParent {
      */
     public static <S, V> Optional<S> nullSafe(V value, Function<V, S> callback) {
         return (value == null) ? Optional.empty() : Optional.ofNullable(callback.apply(value));
+    }
+
+    public static <V> Optional<V> nullSafeOp(V value) {
+        return (value == null) ? Optional.empty() : Optional.of(value);
     }
 
     /**
@@ -620,12 +649,14 @@ public class BaseParent {
      *
      * @param callback The callback to use
      * @param params   A set of parameters
+     * @return The result value of the execution (if there were no error or null)
      */
-    public static void runIgnored(Consumer<Object[]> callback, Object... params) {
+    public static Object runIgnored(Function<Object, Object[]> callback, Object... params) {
         try {
-            callback.accept(params);
+            return callback.apply(params);
         } catch (Throwable ex) {
             error("Ignored error: {}", nullSafe(ex.getMessage()));
+            return null;
         }
     }
 
@@ -960,6 +991,6 @@ public class BaseParent {
      * @return The possibly truncated string
      */
     public static String abbreviate(String str, int maxLength) {
-        return nullSafe(str, s -> s.substring(0, Math.min(s.length(), maxLength)));
+        return nullSafe(str, s -> s.substring(0, Math.min(s.length(), maxLength))).orElse(null);
     }
 }
