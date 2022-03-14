@@ -24,7 +24,7 @@ public class FormatUtils extends BaseParent {
     public static String format(BigDecimal value, int scale, boolean currency, boolean symbolAtStart, String symbol, Locale locale) {
 
         NumberFormat f = NumberFormat.getInstance(locale);
-        int s = nullSafe(0, scale);
+        int s = nullSafeOp(scale).orElse(0);
 
         if (currency) {
             f.setMinimumFractionDigits(s);

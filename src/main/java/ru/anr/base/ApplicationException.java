@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,17 +19,14 @@ package ru.anr.base;
 import org.springframework.core.NestedRuntimeException;
 
 /**
- * An own wrap for Spring NestedRuntimeException.
+ * A wrap for Spring NestedRuntimeException.
  *
  * @author Alexey Romanchuk
  * @created Nov 6, 2014
  */
-
 public class ApplicationException extends NestedRuntimeException {
 
-    /**
-     * Serial ID
-     */
+    // Serial ID
     private static final long serialVersionUID = -2729182111108737798L;
 
     /**
