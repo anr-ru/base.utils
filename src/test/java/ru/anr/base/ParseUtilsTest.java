@@ -22,12 +22,11 @@ public class ParseUtilsTest extends BaseParent {
 
         String xml = "<a b=\"123\"><b><c>1</c><c>2</c></b></a>";
 
-        Assertions.assertEquals("123", ParseUtils.xpath(xml, "//@b"));
-        Assertions.assertEquals("1", ParseUtils.xpath(xml, "//c[1]"));
-        Assertions.assertEquals("2", ParseUtils.xpath(xml, "//c[2]"));
-        Assertions.assertEquals("12", ParseUtils.xpath(xml, "/a/b"));
-
-        Assertions.assertEquals("", ParseUtils.xpath(xml, "//d"));
+        Assertions.assertEquals("123", xpath(xml, "//@b"));
+        Assertions.assertEquals("1", xpath(xml, "//c[1]"));
+        Assertions.assertEquals("2", xpath(xml, "//c[2]"));
+        Assertions.assertEquals("12", xpath(xml, "/a/b"));
+        Assertions.assertEquals("", xpath(xml, "//d"));
     }
 
     /**
@@ -38,15 +37,15 @@ public class ParseUtilsTest extends BaseParent {
 
         String s = "<a b=\"123\"><b><c>1</c><c>2</c></b></a>";
 
-        Assertions.assertEquals("123", ParseUtils.regexp(s, "b=\"(\\d+)\"", 1));
-        Assertions.assertEquals("1", ParseUtils.regexp(s, "<c>(\\d+)</c><c>", 1));
-        Assertions.assertEquals("2", ParseUtils.regexp(s, "</c><c>(\\d+)</c>", 1));
-        Assertions.assertEquals("12", ParseUtils.regexp(s, "<c>(\\d+)</c><c>(\\d+)</c>", 1, 2));
+        Assertions.assertEquals("123", regexp(s, "b=\"(\\d+)\"", 1));
+        Assertions.assertEquals("1", regexp(s, "<c>(\\d+)</c><c>", 1));
+        Assertions.assertEquals("2", regexp(s, "</c><c>(\\d+)</c>", 1));
+        Assertions.assertEquals("12", regexp(s, "<c>(\\d+)</c><c>(\\d+)</c>", 1, 2));
 
-        Assertions.assertNull(ParseUtils.regexp(s, "xxx", 1));
+        Assertions.assertNull(regexp(s, "xxx", 1));
 
-        Assertions.assertEquals(list("1", "2"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c><c>(\\d+)</c>", 1, 2));
-        Assertions.assertEquals(list("1"), ParseUtils.regexpGroups(s, "<c>(\\d+)</c>(<c>\\d[34]</c>)?", 1, 2));
+        Assertions.assertEquals(list("1", "2"), regexpGroups(s, "<c>(\\d+)</c><c>(\\d+)</c>", 1, 2));
+        Assertions.assertEquals(list("1"), regexpGroups(s, "<c>(\\d+)</c>(<c>\\d[34]</c>)?", 1, 2));
     }
 
     private enum XXXEnum {
@@ -59,10 +58,10 @@ public class ParseUtilsTest extends BaseParent {
     @Test
     public void parseEnum() {
 
-        Assertions.assertEquals(XXXEnum.X, ParseUtils.parseEnum(XXXEnum.class, "X"));
-        Assertions.assertEquals(XXXEnum.Y, ParseUtils.parseEnum(XXXEnum.class, "Y"));
-        Assertions.assertNull(ParseUtils.parseEnum(XXXEnum.class, null));
-        Assertions.assertNull(ParseUtils.parseEnum(XXXEnum.class, "Z"));
+        Assertions.assertEquals(XXXEnum.X, parseEnum(XXXEnum.class, "X"));
+        Assertions.assertEquals(XXXEnum.Y, parseEnum(XXXEnum.class, "Y"));
+        Assertions.assertNull(parseEnum(XXXEnum.class, null));
+        Assertions.assertNull(parseEnum(XXXEnum.class, "Z"));
     }
 
     /**

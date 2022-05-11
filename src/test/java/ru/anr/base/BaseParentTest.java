@@ -635,6 +635,7 @@ class BaseParentTest extends BaseParent {
         runIgnored(x -> {
             throw new NullPointerException("NPE");
         }, "1", "2");
+        Assertions.assertEquals("OK", runIgnored(x -> "OK"));
     }
 
     @Test
@@ -643,6 +644,20 @@ class BaseParentTest extends BaseParent {
                 waitCondition("Text", 5, 200, true,
                         args -> false, "1", 2)
         );
+        Assertions.assertFalse(
+                waitCondition("Text", 5, 200, true,
+                        args -> true, "1", 2)
+        );
+
+        Assertions.assertTrue(
+                waitCondition("Text", 5, true,
+                        args -> false, "1", 2)
+        );
+        Assertions.assertFalse(
+                waitCondition("Text", 5, true,
+                        args -> true, "1", 2)
+        );
+
     }
 
     @Test

@@ -183,5 +183,15 @@ class BaseParentTimeTest extends BaseParent {
         Assertions.assertEquals(
                 LocalDate.of(2021, 8, 29),
                 toLocal(calendar));
+
+        calendar = new GregorianCalendar();
+        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+        calendar.set(2021, Calendar.AUGUST, 29, 0, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.ZONE_OFFSET, 0);
+
+        Assertions.assertEquals(
+                calendar.getTime(),
+                calendar(LocalDate.of(2021, 8, 29)).getTime());
     }
 }

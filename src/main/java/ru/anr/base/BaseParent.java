@@ -219,6 +219,15 @@ public class BaseParent {
         return (S) ReflectionUtils.getField(f, target);
     }
 
+    /**
+     * Finds and invokes the given method for the object. The method can be private.
+     *
+     * @param target     The target object
+     * @param methodName The method to find
+     * @param args       The arguments of the method
+     * @param <S>        The type of the resulted value
+     * @return The resulted value of the method
+     */
     @SuppressWarnings("unchecked")
     public static <S> S invoke(Object target, String methodName, Object... args) {
 
@@ -363,6 +372,13 @@ public class BaseParent {
         return (value == null) ? Optional.empty() : Optional.ofNullable(callback.apply(value));
     }
 
+    /**
+     * Returns the empty {@link Optional} object if the given value is null
+     *
+     * @param value The value
+     * @param <V>   The type of the value
+     * @return The resulted {@link Optional} object with the value or empty
+     */
     public static <V> Optional<V> nullSafeOp(V value) {
         return (value == null) ? Optional.empty() : Optional.of(value);
     }
@@ -651,7 +667,7 @@ public class BaseParent {
      * @param params   A set of parameters
      * @return The result value of the execution (if there were no error or null)
      */
-    public static Object runIgnored(Function<Object, Object[]> callback, Object... params) {
+    public static <V> V runIgnored(Function<Object[], V> callback, Object... params) {
         try {
             return callback.apply(params);
         } catch (Throwable ex) {
@@ -693,8 +709,8 @@ public class BaseParent {
 
     /**
      * We have to use old Date object, because Hibernate/JPA does not support
-     * Java 8 dates (see https://java.net/jira/browse/JPA_SPEC-63 or
-     * https://hibernate.atlassian.net/browse/HHH-8844).
+     * Java 8 dates (see <a href="https://java.net/jira/browse/JPA_SPEC-63">...</a> or
+     * <a href="https://hibernate.atlassian.net/browse/HHH-8844">...</a>).
      *
      * @param dateTime The date time in Java 8 format
      * @return The resulted old Date object
@@ -746,7 +762,52 @@ public class BaseParent {
         return z.isBefore(now());
     }
 
-    ////////////////////////////////////////////////////////////
+    /**
+     * Parses the given string as the date according to the pattern. If nothing is parsed, the default value
+     * is used.
+     *
+     * @param strValue The value to parse
+     * @param pattern  The pattern
+     * @return The resulted parsed value
+     */
+    public static Optional<LocalDateTime> parseLocal(String strValue, String pattern) {
+        return nullSafe(strValue, s -> ParseUtils.parseLocal(s, pattern));
+    }
+
+    /**
+     * Converts the given local date to the default zone 00:00 time.
+     *
+     * @param date The original date
+     * @return The resulted zoned date time object
+     */
+    public static ZonedDateTime fromLocal(LocalDate date) {
+        return ZonedDateTime.of(date, LocalTime.MIDNIGHT, DEFAULT_TIMEZONE);
+    }
+
+    /**
+     * Converts a calendar to a local date object
+     *
+     * @param calendar The calendar
+     * @return The resulted local date
+     */
+    public static LocalDate toLocal(Calendar calendar) {
+        return LocalDate.of(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    /**
+     * Converts the given local date to a calendar value.
+     *
+     * @param date The date
+     * @return The resulted calendar
+     */
+    public static Calendar calendar(LocalDate date) {
+        return calendar(fromLocal(date));
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Instant logging (usually for testing)
@@ -946,44 +1007,19 @@ public class BaseParent {
         return ParseUtils.regexpGroups(text, pattern, groups);
     }
 
-
     /**
-     * Parses the given string as the date according to the pattern. If nothing is parsed, the default value
-     * is used.
+     * Parses the provided xml by the specified xpath query
      *
-     * @param strValue The value to parse
-     * @param pattern  The pattern
-     * @return The resulted parsed value
+     * @param xml   The XML to use specified as a string
+     * @param query The xpath query
+     * @return The result as a string
      */
-    public static Optional<LocalDateTime> parseLocal(String strValue, String pattern) {
-        return nullSafe(strValue, s -> ParseUtils.parseLocal(s, pattern));
+    public static String xpath(String xml, String query) {
+        return ParseUtils.xpath(xml, query);
     }
 
     /**
-     * Converts the given local date to the default zone 00:00 time.
-     *
-     * @param date The original date
-     * @return The resulted zoned date time object
-     */
-    public static ZonedDateTime fromLocal(LocalDate date) {
-        return ZonedDateTime.of(date, LocalTime.MIDNIGHT, DEFAULT_TIMEZONE);
-    }
-
-    /**
-     * Converts a calendar to a local date object
-     *
-     * @param calendar The calendar
-     * @return The resulted local date
-     */
-    public static LocalDate toLocal(Calendar calendar) {
-        return LocalDate.of(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.DAY_OF_MONTH));
-    }
-
-    /**
-     * Shortens the given string to the string having the length not exceeding the
+     * Shortens the given string to the string having the length that does not exceed the
      * given maxLength parameter.
      *
      * @param str       The string
@@ -993,4 +1029,31 @@ public class BaseParent {
     public static String abbreviate(String str, int maxLength) {
         return nullSafe(str, s -> s.substring(0, Math.min(s.length(), maxLength))).orElse(null);
     }
+
+    /**
+     * A function for extracting attributes of the model's tree with all necessary not-null checks.
+     *
+     * @param <T>            The type of original value
+     * @param <V>            The type of some field of the dictionary value that can be used as ID
+     * @param <R>            The type of final result value
+     * @param model          The original model to analyze
+     * @param valueExtractor The callback for extracting the value T -&gt; V
+     * @param valueCallback  The callback for converting V -&gt; R
+     * @return The resulted value of type R
+     */
+    public static <T, V, R> R extract(T model, Function<T, V> valueExtractor, Function<V, R> valueCallback) {
+        return nullSafe(model, d -> nullSafe(valueExtractor.apply(d), valueCallback).orElse(null)).orElse(null);
+    }
+
+    /**
+     * Converts the given collection of enums to their string keys
+     *
+     * @param coll The collection
+     * @param <S>  The enum type
+     * @return The list of string keys
+     */
+    public static <S extends Enum<S>> List<String> toStr(Collection<S> coll) {
+        return coll.stream().map(Enum::name).collect(Collectors.toList());
+    }
+
 }
