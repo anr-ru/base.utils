@@ -92,13 +92,22 @@ public final class ParseUtils {
      * @return A list of groups
      */
     public static List<String> regexpGroups(String text, String pattern, Integer... groups) {
-
         Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
-        Matcher m = p.matcher(text);
+        return regexpGroups(text, p, groups);
+    }
 
-        /*
-         * There can be conditional groups like (..)? which give null values
-         */
+    /**
+     * Parses a string via the provided regular expression and returns the given
+     * groups
+     *
+     * @param text   An original text
+     * @param regexp The prepared pattern object
+     * @param groups Numbers of groups in the pattern
+     * @return The list of extracted groups
+     */
+    public static List<String> regexpGroups(String text, Pattern regexp, Integer... groups) {
+        Matcher m = regexp.matcher(text);
+        // There can be conditional groups like (..)? which give null values
         return m.find() ? BaseParent.list(BaseParent.list(groups).stream().map(m::group).filter(Objects::nonNull)) : null;
     }
 

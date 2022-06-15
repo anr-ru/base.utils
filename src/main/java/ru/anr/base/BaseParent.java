@@ -299,7 +299,7 @@ public class BaseParent {
      * @return The resulted filtered collection
      */
     public static <S> List<S> filter(Collection<S> coll, Predicate<S> predicate) {
-        return coll.stream().filter(predicate).collect(Collectors.toList());
+        return coll == null ? null : coll.stream().filter(predicate).collect(Collectors.toList());
     }
 
     /**

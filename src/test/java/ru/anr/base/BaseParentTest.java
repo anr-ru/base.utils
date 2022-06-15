@@ -210,13 +210,17 @@ class BaseParentTest extends BaseParent {
         Predicate<String> predicate = p -> {
 
             if (p.startsWith("x")) {
-                logger.info("found x: {}", p);
+                logger.debug("found x: {}", p);
                 return p.endsWith("y");
             }
             return false;
         };
 
         Assertions.assertEquals(list("xy"), filter(list, predicate));
+
+        // Null and empty
+        Assertions.assertNull(filter(null, p -> true));
+        Assertions.assertTrue(filter(list(), p -> true).isEmpty());
     }
 
     /**
