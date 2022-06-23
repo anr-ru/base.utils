@@ -1,6 +1,3 @@
-/**
- *
- */
 package ru.anr.base;
 
 import java.math.BigDecimal;
@@ -8,10 +5,8 @@ import java.math.BigDecimal;
 /**
  * A test object.
  *
- *
  * @author Alexey Romanchuk
  * @created Nov 3, 2014
- *
  */
 
 public class SampleObject {
@@ -33,10 +28,8 @@ public class SampleObject {
     /**
      * Construction
      *
-     * @param value
-     *            The value
-     * @param index
-     *            The index
+     * @param value The value
+     * @param index The index
      */
     public SampleObject(String value, Integer index) {
 
@@ -59,9 +52,7 @@ public class SampleObject {
     }
 
     /**
-     *
-     * @param value
-     *            the value field
+     * @param value the value field
      */
     public void setValue(String value) {
 
@@ -77,8 +68,7 @@ public class SampleObject {
     }
 
     /**
-     * @param index
-     *            the index to set
+     * @param index the index to set
      */
     public void setIndex(Integer index) {
 

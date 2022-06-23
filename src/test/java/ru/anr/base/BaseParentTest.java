@@ -349,7 +349,7 @@ class BaseParentTest extends BaseParent {
     }
 
     /**
-     * test bytes
+     * Tests for utf8
      */
     @Test
     void testBytes() {
@@ -357,6 +357,16 @@ class BaseParentTest extends BaseParent {
         byte[] b = utf8(TEST_STRING);
         String s1 = utf8(b);
         Assertions.assertEquals(TEST_STRING, s1);
+    }
+
+    /**
+     * Tests for base64
+     */
+    @Test
+    void testBase64() {
+        String encoded = base64(utf8(TEST_STRING));
+        byte[] decoded = base64(encoded);
+        Assertions.assertEquals(TEST_STRING, utf8(decoded));
     }
 
     /**

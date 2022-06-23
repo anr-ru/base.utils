@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -53,7 +53,7 @@ public final class UriUtils {
      * @param port   Port number
      * @param path   Can be a relative path (for instance, '/ping') or a full one (
      *               {@link #getBaseUrl(String, String, int)} is not used) like
-     *               http://localhost:9090/ping
+     *               <a href="http://localhost:9090/ping">...</a>
      * @return A full path to http resource (included schema, host, port,
      * relative path)
      */
@@ -69,7 +69,6 @@ public final class UriUtils {
      * @return true, if presents
      */
     public static boolean hasHost(String path) {
-
         return path.startsWith("http://") || path.startsWith("https://");
     }
 }

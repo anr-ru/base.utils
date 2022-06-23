@@ -26,16 +26,16 @@ public class ModelUtilsTest extends BaseParent {
         UpperModel m = new UpperModel();
 
         // 1. The source value is null
-        Assertions.assertNull(ModelUtils.extractProperty(m.nested, n -> n.id, id -> "@" + id));
+        Assertions.assertNull(extract(m.nested, n -> n.id, id -> "@" + id));
 
         // 2. The child value of the source value is null
         m.nested = new NestedModel();
-        Assertions.assertNull(ModelUtils.extractProperty(m.nested, n -> n.id, id -> "@" + id));
+        Assertions.assertNull(extract(m.nested, n -> n.id, id -> "@" + id));
 
         // 3. The child value is not null
         m.nested = new NestedModel();
         m.nested.id = "SG";
-        Assertions.assertEquals("@SG", ModelUtils.extractProperty(m.nested, c -> c.id, id -> "@" + id));
+        Assertions.assertEquals("@SG", extract(m.nested, c -> c.id, id -> "@" + id));
     }
 
     private enum TestEnum {
@@ -44,6 +44,6 @@ public class ModelUtilsTest extends BaseParent {
 
     @Test
     public void testEnum() {
-        Assertions.assertEquals(list("ONE", "TWO"), ModelUtils.enumToStr(list(TestEnum.ONE, TestEnum.TWO)));
+        Assertions.assertEquals(list("ONE", "TWO"), toStr(list(TestEnum.ONE, TestEnum.TWO)));
     }
 }

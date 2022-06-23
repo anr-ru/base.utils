@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014-2022 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package ru.anr.base;
 
 import java.math.BigDecimal;
@@ -30,6 +45,10 @@ public class FormatUtils extends BaseParent {
             f.setMinimumFractionDigits(s);
             f.setMaximumFractionDigits(s);
         } else {
+            /*
+             * Commodities may have many fraction digits, i.e. 0.12345 g. To shorten the formatted
+             * amount we may omit last zeros, i.e. to write 0.1 g instead of 0.10000 g.
+             */
             f.setMaximumFractionDigits(s);
             f.setMinimumIntegerDigits(1);
         }

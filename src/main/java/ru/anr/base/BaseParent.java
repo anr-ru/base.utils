@@ -92,12 +92,8 @@ public class BaseParent {
      * @param encoding The encoding
      * @return The resulted array of bytes
      */
-    public static byte[] bytes(String s, String encoding) {
-        try {
-            return s.getBytes(encoding);
-        } catch (UnsupportedEncodingException ex) {
-            throw new ApplicationException(ex);
-        }
+    public static byte[] bytes(String s, Charset encoding) {
+        return s.getBytes(encoding);
     }
 
     /**
@@ -107,21 +103,38 @@ public class BaseParent {
      * @return The resulted array of bytes
      */
     public static byte[] utf8(String s) {
-        return bytes(s, DEFAULT_CHARSET.name());
+        return bytes(s, DEFAULT_CHARSET);
     }
 
     /**
-     * Converts bytes to a string with the utf8 encoding without the {@link UnsupportedEncodingException} exception.
+     * Converts bytes to a string with the utf-8 encoding.
      *
      * @param b The array of bytes
      * @return The resulted string
      */
     public static String utf8(byte[] b) {
-        try {
-            return new String(b, DEFAULT_CHARSET.name());
-        } catch (UnsupportedEncodingException ex) {
-            throw new ApplicationException(ex);
-        }
+        return new String(b, DEFAULT_CHARSET);
+    }
+
+
+    /**
+     * Converts the given bytes to Base64 string representation.
+     *
+     * @param bytes The bytes to convert
+     * @return The resulted Base64-encoded string
+     */
+    public static String base64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    /**
+     * Converts the given base64-encoded string back to bytes
+     *
+     * @param s The Base64-encoded string
+     * @return The resulted bytes
+     */
+    public static byte[] base64(String s) {
+        return Base64.getDecoder().decode(s);
     }
 
     /**
@@ -608,6 +621,7 @@ public class BaseParent {
      * @param all   true, if all inclusion are expected, or false, if at least
      *              one.
      * @param items Expected strings
+     * @param <S>   The type of arguments
      * @return true, if the given collection contains the specified items
      * according to the condition 'all'.
      */
@@ -656,7 +670,9 @@ public class BaseParent {
      * @return first key without value or <code>null</code>
      */
     public static <T> Set<T> getEmptyKeys(Map<T, ?> map, Collection<T> keys) {
-        return keys.stream().filter(key -> map.get(key) == null).collect(Collectors.toSet());
+        return keys.stream()
+                .filter(key -> map.get(key) == null)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -665,6 +681,7 @@ public class BaseParent {
      *
      * @param callback The callback to use
      * @param params   A set of parameters
+     * @param <V>      The type of the resulted value
      * @return The result value of the execution (if there were no error or null)
      */
     public static <V> V runIgnored(Function<Object[], V> callback, Object... params) {
@@ -1042,7 +1059,7 @@ public class BaseParent {
      * @return The resulted value of type R
      */
     public static <T, V, R> R extract(T model, Function<T, V> valueExtractor, Function<V, R> valueCallback) {
-        return nullSafe(model, d -> nullSafe(valueExtractor.apply(d), valueCallback).orElse(null)).orElse(null);
+        return ModelUtils.extractProperty(model, valueExtractor, valueCallback);
     }
 
     /**
@@ -1053,7 +1070,7 @@ public class BaseParent {
      * @return The list of string keys
      */
     public static <S extends Enum<S>> List<String> toStr(Collection<S> coll) {
-        return coll.stream().map(Enum::name).collect(Collectors.toList());
+        return ModelUtils.enumToStr(coll);
     }
 
 }
