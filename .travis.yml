@@ -1,23 +1,26 @@
+sudo: false
+dist: trusty
 language: java
 jdk:
   - openjdk11
 
+cache:
+  directories:
+    - "$HOME/.cache"
+
 before_install:
   - cp ./.mvn/ci-settings.xml $HOME/.m2/settings.xml
-  - wget -P $HOME https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-  - tar xzvf $HOME/apache-maven-3.6.3-bin.tar.gz -C $HOME
-  - export PATH=$HOME/apache-maven-3.6.3/bin:$PATH
+  - wget --no-check-certificate https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+  - tar xzvf apache-maven-3.6.3-bin.tar.gz
+  - export PATH=`pwd`/apache-maven-3.6.3/bin:$PATH
   - mvn -v
 
 jobs:
   include:
-    - stage: build
-      script:
-        - "mvn -P ci install"
-
-deploy:
-  provider: script
-  script: "mvn -P ci deploy -DskipTests"
-  cleanup: false
-  on:
-    tags: true
+    - script: "mvn -P ci install"
+    - stage: deploy
+      provider: script
+      script: "mvn -P ci deploy -DskipTests"
+      on:
+        tags: true
+        branch: master
