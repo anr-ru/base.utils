@@ -69,7 +69,7 @@ public class BaseSpringParent extends BaseParent {
     }
 
     /**
-     * Returns a refernece to a bean from the context.
+     * Returns a reference to a bean from the context.
      *
      * @param name  the name of bean
      * @param clazz The bean's class
