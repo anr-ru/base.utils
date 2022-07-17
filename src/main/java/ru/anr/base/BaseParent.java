@@ -40,6 +40,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -684,12 +685,20 @@ public class BaseParent {
      * @param <V>      The type of the resulted value
      * @return The result value of the execution (if there were no error or null)
      */
-    public static <V> V runIgnored(Function<Object[], V> callback, Object... params) {
+    public static <V> V getRunIgnored(Function<Object[], V> callback, Object... params) {
         try {
             return callback.apply(params);
         } catch (Throwable ex) {
             error("Ignored error: {}", nullSafe(ex.getMessage()));
             return null;
+        }
+    }
+
+    public static void runIgnored(Consumer<Object[]> callback, Object... params) {
+        try {
+            callback.accept(params);
+        } catch (Throwable ex) {
+            error("Ignored error: {}", nullSafe(ex.getMessage()));
         }
     }
 

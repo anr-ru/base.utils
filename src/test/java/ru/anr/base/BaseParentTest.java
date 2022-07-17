@@ -649,7 +649,16 @@ class BaseParentTest extends BaseParent {
         runIgnored(x -> {
             throw new NullPointerException("NPE");
         }, "1", "2");
-        Assertions.assertEquals("OK", runIgnored(x -> "OK"));
+        getRunIgnored(x -> {
+            throw new NullPointerException("NPE");
+        }, "1", "2");
+
+        Assertions.assertEquals("OK", getRunIgnored(x -> "OK"));
+
+        runIgnored(x -> {
+            this.abbreviate();
+        }, "1", "2");
+
     }
 
     @Test
