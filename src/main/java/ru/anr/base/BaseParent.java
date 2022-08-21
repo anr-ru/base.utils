@@ -742,7 +742,7 @@ public class BaseParent {
      * @return The resulted old Date object
      */
     public static Date date(ZonedDateTime dateTime) {
-        return Date.from(dateTime.toInstant());
+        return nullSafe(dateTime, d -> Date.from(d.toInstant())).orElse(null);
     }
 
     /**
@@ -753,7 +753,7 @@ public class BaseParent {
      * @return A zoned date-time
      */
     public static ZonedDateTime date(Calendar calendar) {
-        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());
+        return nullSafe(calendar, c -> ZonedDateTime.ofInstant(c.toInstant(), c.getTimeZone().toZoneId())).orElse(null);
     }
 
     /**
@@ -763,7 +763,7 @@ public class BaseParent {
      * @return A calendar object
      */
     public static Calendar calendar(ZonedDateTime dateTime) {
-        return GregorianCalendar.from(dateTime);
+        return nullSafe(dateTime, GregorianCalendar::from).orElse(null);
     }
 
     /**
@@ -774,7 +774,7 @@ public class BaseParent {
      * @return A zoned object
      */
     public static ZonedDateTime date(Date oldDate) {
-        return ZonedDateTime.ofInstant(Instant.ofEpochMilli(oldDate.getTime()), DEFAULT_TIMEZONE);
+        return nullSafe(oldDate, d -> ZonedDateTime.ofInstant(Instant.ofEpochMilli(d.getTime()), DEFAULT_TIMEZONE)).orElse(null);
     }
 
     /**
@@ -807,7 +807,7 @@ public class BaseParent {
      * @return The resulted zoned date time object
      */
     public static ZonedDateTime fromLocal(LocalDate date) {
-        return ZonedDateTime.of(date, LocalTime.MIDNIGHT, DEFAULT_TIMEZONE);
+        return nullSafe(date, d -> ZonedDateTime.of(d, LocalTime.MIDNIGHT, DEFAULT_TIMEZONE)).orElse(null);
     }
 
     /**
@@ -817,10 +817,11 @@ public class BaseParent {
      * @return The resulted local date
      */
     public static LocalDate toLocal(Calendar calendar) {
-        return LocalDate.of(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.DAY_OF_MONTH));
+        return nullSafe(calendar, c -> LocalDate.of(
+                c.get(Calendar.YEAR),
+                c.get(Calendar.MONTH) + 1,
+                c.get(Calendar.DAY_OF_MONTH))
+        ).orElse(null);
     }
 
     /**
@@ -830,7 +831,7 @@ public class BaseParent {
      * @return The resulted calendar
      */
     public static Calendar calendar(LocalDate date) {
-        return calendar(fromLocal(date));
+        return nullSafe(date, d -> calendar(fromLocal(d))).orElse(null);
     }
 
     ///////////////////////////////////////////////////////////////////////////
