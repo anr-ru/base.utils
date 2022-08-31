@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.anrruf</groupId>
         <artifactId>base.platform.parent</artifactId>
-        <version>2.0.0-SNAPSHOT-991587b</version>
+        <version>2.0.3</version>
     </parent>
 
     <artifactId>base.utils</artifactId>
@@ -39,16 +39,6 @@
         <url>https://github.com/anr-ru/base.utils/</url>
         <tag>HEAD</tag>
     </scm>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>io.packagecloud.maven.wagon</groupId>
-                <artifactId>maven-packagecloud-wagon</artifactId>
-                <version>0.0.6</version>
-            </extension>
-        </extensions>
-    </build>
 
     <dependencies>
         <dependency>
