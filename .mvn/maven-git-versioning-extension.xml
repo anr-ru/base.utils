@@ -1,8 +1,8 @@
-<configuration>
+<gitVersioning>
     <preferTags>true</preferTags>
     <branch>
         <pattern>master</pattern>
-        <versionFormat>${version}-${commit.short}</versionFormat>
+        <versionFormat>${version}</versionFormat>
     </branch>
     <branch>
         <pattern>.*</pattern>
@@ -17,4 +17,4 @@
     <commit>
         <versionFormat>${version}-${commit.short}</versionFormat>
     </commit>
-</configuration>
+</gitVersioning>
