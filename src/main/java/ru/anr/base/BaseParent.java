@@ -15,6 +15,7 @@
  */
 package ru.anr.base;
 
+import com.jamesmurty.utils.XMLBuilder;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.collections4.FactoryUtils;
 import org.apache.commons.collections4.FunctorException;
@@ -26,8 +27,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -1044,6 +1050,43 @@ public class BaseParent {
     public static String xpath(String xml, String query) {
         return ParseUtils.xpath(xml, query);
     }
+
+    /**
+     * Fills the variables defined as ${var} with the values given in the variable/value map. Also, it replaces
+     * single quotes (') with double ones (").
+     * <p>
+     * For example, this function allows to use XML templates defined in the code as strings.
+     *
+     * @param template  A string template with variables to replace
+     * @param variables The pairs of variable/value to replace
+     * @return The resulted string
+     */
+    public static String fillString(String template, String... variables) {
+        String rs = template;
+        Map<String, String> map = toMap(variables);
+        for (Map.Entry<String, String> e : map.entrySet()) {
+            rs = rs.replaceAll(("\\$\\{" + e.getKey() + "}"), nullSafe(e.getValue()));
+        }
+        return rs.replaceAll("'", "\"");
+    }
+
+    /**
+     * Removes all white spaces and generates the XML.
+     *
+     * @param rawXML The XML file.
+     * @return The resulted XML.
+     */
+    public static String cleanUpXML(String rawXML) {
+        try {
+            XMLBuilder xmlResult = XMLBuilder.parse(rawXML);
+            StringWriter result = new StringWriter();
+            xmlResult.stripWhitespaceOnlyTextNodes().toWriter(result, new Properties());
+            return result.getBuffer().toString();
+        } catch (ParserConfigurationException | IOException | SAXException | TransformerException | XPathExpressionException ex) {
+            throw new ApplicationException(ex);
+        }
+    }
+
 
     /**
      * Shortens the given string to the string having the length that does not exceed the

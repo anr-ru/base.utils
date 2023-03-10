@@ -701,4 +701,13 @@ class BaseParentTest extends BaseParent {
         Assertions.assertEquals("", abbreviate(s, 0));
         Assertions.assertNull(abbreviate(null, 0));
     }
+
+    @Test
+    public void xml() {
+
+        String xml = "<root>  <a x='${x}'  />\n" + "     <a y='${y}' /> </root>";
+
+        String xml1 = fillString(xml, "x", "123", "y", "321");
+        Assertions.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><root><a x=\"123\"/><a y=\"321\"/></root>", cleanUpXML(xml1));
+    }
 }
