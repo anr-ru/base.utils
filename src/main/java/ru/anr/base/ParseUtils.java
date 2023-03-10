@@ -18,6 +18,8 @@ package ru.anr.base;
 import com.jamesmurty.utils.XMLBuilder;
 import org.xml.sax.SAXException;
 
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -26,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -56,15 +59,68 @@ public final class ParseUtils {
      * @return The result
      */
     public static String xpath(String xml, String query) {
+        return xpath(xml, query, XPathConstants.STRING).toString();
+    }
 
+    /**
+     * Parsing the provided xml by the specified xpath query and the expected result type.
+     *
+     * @param xml        The XML to use specified as a string
+     * @param query      The xpath query
+     * @param resultType The expected result type
+     * @return The result
+     */
+    public static <S> S xpath(String xml, String query, QName resultType) {
+        return xpath(xml, query, resultType, null);
+    }
+
+    /**
+     * Parsing the provided xml by the specified xpath query, the expected result type
+     * and the expected namespace resolver.
+     *
+     * @param xml        The XML to use specified as a string
+     * @param query      The xpath query
+     * @param resultType The expected result type
+     * @param namespaces The namespace resolver
+     * @return The result
+     */
+    @SuppressWarnings("unchecked")
+    public static <S> S xpath(String xml, String query, QName resultType, NamespaceContext namespaces) {
         try {
             XMLBuilder b = XMLBuilder.parse(xml);
-            return b.xpathQuery(query, XPathConstants.STRING).toString();
+            return (S) b.xpathQuery(query, resultType, namespaces);
 
         } catch (SAXException | IOException | XPathExpressionException | ParserConfigurationException ex) {
             throw new ApplicationException(ex);
         }
     }
+
+    /**
+     * Builds a simple NamespaceContext for one prefix.
+     *
+     * @param prefix The prefix
+     * @param urn    The prefix URN
+     * @return The new resulted namespace context object
+     */
+    public static NamespaceContext namespaceResolver(String prefix, String urn) {
+        return new NamespaceContext() {
+            @Override
+            public String getNamespaceURI(String p) {
+                return p.equals(prefix) ? urn : null;
+            }
+
+            @Override
+            public Iterator<String> getPrefixes(String val) {
+                return null;
+            }
+
+            @Override
+            public String getPrefix(String uri) {
+                return null;
+            }
+        };
+    }
+
 
     /**
      * Parsing a string via the provided regular expression

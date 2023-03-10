@@ -2,7 +2,10 @@ package ru.anr.base;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.NodeList;
 
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathConstants;
 import java.time.LocalDateTime;
 
 /**
@@ -18,15 +21,49 @@ public class ParseUtilsTest extends BaseParent {
      * Tests for XML xpath queries
      */
     @Test
-    public void xmlParser() {
+    public void xmlParser() throws TransformerException {
 
-        String xml = "<a b=\"123\"><b><c>1</c><c>2</c></b></a>";
+        // I. No namespace
+        String xml = "<a b=\"123\">" +
+                "<b>" +
+                "<c>1</c>" +
+                "<c>2</c>" +
+                "</b>" +
+                "</a>";
 
+        // 1. Select as strings
         Assertions.assertEquals("123", xpath(xml, "//@b"));
         Assertions.assertEquals("1", xpath(xml, "//c[1]"));
         Assertions.assertEquals("2", xpath(xml, "//c[2]"));
         Assertions.assertEquals("12", xpath(xml, "/a/b"));
         Assertions.assertEquals("", xpath(xml, "//d"));
+
+        // 2. Select as nodes
+        NodeList nodes = ParseUtils.xpath(xml, "/a/b/c", XPathConstants.NODESET);
+        Assertions.assertEquals(2, nodes.getLength());
+
+
+        // II. No namespace
+        xml = "<x:a xmlns:x=\"NAMESPACE\" b=\"123\">" +
+                "<b>" +
+                "<c>1</c>" +
+                "<c>2</c>" +
+                "</b>" +
+                "</x:a>";
+
+        // 1. Select as strings
+        Assertions.assertEquals("123", xpath(xml, "//@b"));
+        Assertions.assertEquals("1", xpath(xml, "//c[1]"));
+        Assertions.assertEquals("2", xpath(xml, "//c[2]"));
+        Assertions.assertEquals("12", ParseUtils.xpath(xml, "/x:a/b",
+                XPathConstants.STRING, ParseUtils.namespaceResolver("x", "NAMESPACE")));
+        Assertions.assertEquals("", xpath(xml, "//d"));
+
+        // 2. Select as nodes
+        nodes = ParseUtils.xpath(xml, "/x:a/b/c",
+                XPathConstants.NODESET, ParseUtils.namespaceResolver("x", "NAMESPACE"));
+        Assertions.assertEquals(2, nodes.getLength());
+
     }
 
     /**
