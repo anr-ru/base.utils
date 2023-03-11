@@ -1062,8 +1062,21 @@ public class BaseParent {
      * @return The resulted string
      */
     public static String fillString(String template, String... variables) {
+        return fillString(template, toMap(variables));
+    }
+
+    /**
+     * Fills the variables defined as ${var} with the values given in the variable/value map. Also, it replaces
+     * single quotes (') with double ones (").
+     * <p>
+     * For example, this function allows to use XML templates defined in the code as strings.
+     *
+     * @param template A string template with variables to replace
+     * @param map      The pairs of variable/value to replace
+     * @return The resulted string
+     */
+    public static String fillString(String template, Map<String, String> map) {
         String rs = template;
-        Map<String, String> map = toMap(variables);
         for (Map.Entry<String, String> e : map.entrySet()) {
             rs = rs.replaceAll(("\\$\\{" + e.getKey() + "}"), nullSafe(e.getValue()));
         }
