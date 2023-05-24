@@ -795,8 +795,8 @@ public class BaseParent {
     }
 
     /**
-     * Parses the given string as the date according to the pattern. If nothing is parsed, the default value
-     * is used.
+     * Parses the given string as a local date-time according to the pattern. If nothing is parsed, the null option
+     * is returned.
      *
      * @param strValue The value to parse
      * @param pattern  The pattern
@@ -804,6 +804,18 @@ public class BaseParent {
      */
     public static Optional<LocalDateTime> parseLocal(String strValue, String pattern) {
         return nullSafe(strValue, s -> ParseUtils.parseLocal(s, pattern));
+    }
+
+    /**
+     * Parses the given string as the date according to the pattern. If nothing is parsed, the null option
+     * is returned.
+     *
+     * @param strValue The value to parse
+     * @param pattern  The pattern (like 'yyyy-MM-dd' or 'dd.MM.yyyy'
+     * @return The resulted parsed value
+     */
+    public static Optional<LocalDate> parseLocalDate(String strValue, String pattern) {
+        return nullSafe(strValue, s -> ParseUtils.parseLocalDate(s, pattern));
     }
 
     /**

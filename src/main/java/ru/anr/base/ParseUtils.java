@@ -206,4 +206,21 @@ public final class ParseUtils {
         }
         return t;
     }
+
+    /**
+     * Parses the given string as a date with the use of the given format pattern.
+     *
+     * @param value The value as a string
+     * @param pattern The pattern
+     * @return The resulted parsed local date or null if it was not parsed
+     */
+    public static LocalDate parseLocalDate(String value, String pattern) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+            try {
+                return LocalDate.parse(value, formatter);
+            } catch (DateTimeParseException ex2) {
+                return null;
+            }
+    }
+
 }

@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathConstants;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -106,10 +107,19 @@ public class ParseUtilsTest extends BaseParent {
      */
     @Test
     public void parseDate() {
+        // Date and time
         Assertions.assertEquals(LocalDateTime.of(2020, 5, 14, 0, 0),
                 parseLocal("2020-05-14", "yyyy-MM-dd").orElse(null));
         Assertions.assertEquals(LocalDateTime.of(2020, 5, 14, 5, 12),
                 parseLocal("2020-05-14 05:12", "yyyy-MM-dd HH:mm").orElse(null));
+
+        // Date
+        Assertions.assertEquals(LocalDate.of(2020, 5, 14),
+                parseLocalDate("2020-05-14", "yyyy-MM-dd").orElse(null));
+        Assertions.assertEquals(LocalDate.of(2020, 5, 14),
+                parseLocalDate("14.05.2020", "dd.MM.yyyy").orElse(null));
+        Assertions.assertEquals(LocalDate.of(2020, 5, 14),
+                parseLocalDate("14.05.20", "dd.MM.yy").orElse(null));
     }
 
     @Test()
