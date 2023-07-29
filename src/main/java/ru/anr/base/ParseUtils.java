@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2022 the original author or authors.
+ * Copyright 2014-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -69,6 +69,8 @@ public final class ParseUtils {
      * @param query      The xpath query
      * @param resultType The expected result type
      * @return The result
+     *
+     * @param <S> The result type
      */
     public static <S> S xpath(String xml, String query, QName resultType) {
         return xpath(xml, query, resultType, null);
@@ -83,6 +85,8 @@ public final class ParseUtils {
      * @param resultType The expected result type
      * @param namespaces The namespace resolver
      * @return The result
+     * @param <S> The result type
+     *
      */
     @SuppressWarnings("unchecked")
     public static <S> S xpath(String xml, String query, QName resultType, NamespaceContext namespaces) {
@@ -192,7 +196,6 @@ public final class ParseUtils {
      * @return The parsed local date/time object
      */
     public static LocalDateTime parseLocal(String value, String pattern) {
-        LocalDateTime t;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         try {
             return LocalDateTime.parse(value, formatter);
@@ -201,10 +204,10 @@ public final class ParseUtils {
                 LocalDate d = LocalDate.parse(value, formatter);
                 return d.atStartOfDay();
             } catch (DateTimeParseException ex2) {
-                t = null;
+                // ignore
             }
         }
-        return t;
+        return null;
     }
 
     /**
