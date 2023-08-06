@@ -1151,4 +1151,16 @@ public class BaseParent {
         return ModelUtils.enumToStr(coll);
     }
 
+    /**
+     * Converts the given array of enums to their string keys
+     *
+     * @param states The states to convert
+     * @param <S>  The enum type
+     * @return The list of string keys
+     */
+    @SafeVarargs
+    public static <S extends Enum<S>> List<String> toStr(S... states) {
+        return toStr(list(states));
+    }
+
 }

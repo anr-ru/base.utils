@@ -45,5 +45,6 @@ public class ModelUtilsTest extends BaseParent {
     @Test
     public void testEnum() {
         Assertions.assertEquals(list("ONE", "TWO"), toStr(list(TestEnum.ONE, TestEnum.TWO)));
+        Assertions.assertEquals(list("ONE", "TWO"), toStr(TestEnum.ONE, TestEnum.TWO));
     }
 }
