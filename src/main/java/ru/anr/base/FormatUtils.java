@@ -46,8 +46,8 @@ public class FormatUtils extends BaseParent {
             f.setMaximumFractionDigits(s);
         } else {
             /*
-             * Commodities may have many fraction digits, i.e. 0.12345 g. To shorten the formatted
-             * amount we may omit last zeros, i.e. to write 0.1 g instead of 0.10000 g.
+             * Commodities may have many fraction digits, i.e., 0.12345 g. To shorten the formatted
+             *  amount, we may omit last zeros, i.e., to write 0.1 g instead of 0.10000 g.
              */
             f.setMaximumFractionDigits(s);
             f.setMinimumIntegerDigits(1);

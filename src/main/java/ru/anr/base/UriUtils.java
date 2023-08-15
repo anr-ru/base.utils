@@ -63,7 +63,7 @@ public final class UriUtils {
     }
 
     /**
-     * Is a host present in the url
+     * Is a host present in the url?
      *
      * @param path Url path
      * @return true, if presents
