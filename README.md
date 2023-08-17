@@ -6,7 +6,7 @@
 
 Base utilities for all projects.
 
-The main idea of the project are [BaseParent](./src/main/java/ru/anr/base/BaseParent.java) and
+The main idea of the project is in [BaseParent](./src/main/java/ru/anr/base/BaseParent.java) and
 [BaseSpringParent](./src/main/java/ru/anr/base/BaseSpringParent.java) (a child of BaseParent) classes which have
 lots of auxiliary functions (or short-cut functions). You can just start your classes hierarchy from these classes
 or import them statically.
@@ -57,9 +57,9 @@ To start, please add the dependency below to your maven pom file.
 <depepencies>
     ...
     <dependency>
-        <groupId>ru.anr</groupId>
+        <groupId>org.anrruf</groupId>
         <artifactId>base.utils</artifactId>
-        <version>2.5.0</version>
+        <version>2.6.0</version>
     </dependency>
     ...
 </dependencies>
