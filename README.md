@@ -59,7 +59,7 @@ To start, please add the dependency below to your maven pom file.
     <dependency>
         <groupId>org.anrruf</groupId>
         <artifactId>base.utils</artifactId>
-        <version>2.6.0</version>
+        <version>2.6.1</version>
     </dependency>
     ...
 </dependencies>
