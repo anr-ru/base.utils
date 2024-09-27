@@ -164,6 +164,8 @@ class BaseParentTimeTest extends BaseParent {
         Assertions.assertEquals(now(), t);
 
         setClock(null); // Reset
+        sleep(1000);
+        Assertions.assertNotEquals(now(), t); // the time goes as usual
     }
 
     @Test

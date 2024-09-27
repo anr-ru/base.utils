@@ -718,7 +718,7 @@ public class BaseParent {
     /**
      * The current clock if we need to use different clocks (in tests, for example)
      */
-    private static Clock clock;
+    private static final ThreadLocal<Clock> clock = new ThreadLocal<>();
 
     /**
      * Sets or changes the current clock
@@ -726,7 +726,7 @@ public class BaseParent {
      * @param c A clock
      */
     public static void setClock(Clock c) {
-        clock = c;
+        clock.set(c);
     }
 
     /**
@@ -736,7 +736,7 @@ public class BaseParent {
      * @return The time represented as {@link ZonedDateTime} object
      */
     public static ZonedDateTime now() {
-        return (clock == null) ? ZonedDateTime.now(DEFAULT_TIMEZONE) : ZonedDateTime.now(clock);
+        return (clock.get() == null) ? ZonedDateTime.now(DEFAULT_TIMEZONE) : ZonedDateTime.now(clock.get());
     }
 
     /**
@@ -1155,7 +1155,7 @@ public class BaseParent {
      * Converts the given array of enums to their string keys
      *
      * @param states The states to convert
-     * @param <S>  The enum type
+     * @param <S>    The enum type
      * @return The list of string keys
      */
     @SafeVarargs
